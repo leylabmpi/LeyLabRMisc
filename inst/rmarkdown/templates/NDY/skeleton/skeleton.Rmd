@@ -7,7 +7,7 @@ output:
     code_folding: hide
     toc: true
     toc_float: true
-    toc_depth: 2
+    toc_depth: 4
     df_print: paged
     keep_md: true
 ---
@@ -16,15 +16,9 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_chunk$set(dpi = 200)
 knitr::opts_chunk$set(fig.align = "center")
+knitr::opts_chunk$set(rows.print = 5)
+knitr::opts_chunk$set(max.print = 100)
 ```
-
-***
-
-<center>
-[![LeyLab](LeyLab_logo.png)](https://leylab.com/)
-</center>
-
-***
 
 # Introduction
 
