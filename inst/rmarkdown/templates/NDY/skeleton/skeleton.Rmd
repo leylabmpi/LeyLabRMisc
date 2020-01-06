@@ -1,6 +1,6 @@
 ---
 title: "00_analysis"
-author: "Nick Youngblut"
+author: "`r Sys.info()['user']`"
 date: "`r Sys.Date()`"
 output:
   html_document:
