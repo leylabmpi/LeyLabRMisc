@@ -1,28 +1,52 @@
 #' Elegant negation of %in%
 '%!in%' = Negate('%in%')
 
-#' convert to numeric
+#' convert to numeric while avoiding factor conversion issues
+#'
+#' @param x an interable
+#' @return a numeric object
 as.Num = function(x){
   as.numeric(as.character(x))
 }
 
 #' simple dataframe summary
+#'
+#' @param df dataframe object
+#' @param n Number of lines to print
+#' @return a dataframe object
 dfhead = function(df, n=3){
   df %>% dim %>% print
   df %>% head(n=n)
 }
 
 #' global change of plot size options
-dims = function(width=5, height=5, res=300){
-  options(repr.plot.width=width, repr.plot.height=height, repr.plot.res = res)
+#'
+#' This is most useful for working with IRkernl in Jupyter notebooks
+#'
+#' @param w figure width
+#' @param h figure height
+#' @param res figure resolution (DPI)
+#' @return NULL
+dims = function(w=5, h=5, res=300){
+  options(repr.plot.width=w, repr.plot.height=h, repr.plot.res = res)
 }
 
 #' changing number of rows/columns shown when printing a data frame
+#'
+#' This is most useful for working with IRkernl in Jupyter notebooks
+#'
+#' @param nrows number of rows to print
+#' @param ncols number of columns to print
+#' @return NULL
 df.dims = function(nrows=4, ncols=20){
   options(repr.matrix.max.rows=nrows, repr.matrix.max.cols=ncols)
 }
 
-#' make directory
+#' A helper function for creating a directory (recursively)
+#'
+#' @param dir path for the new directory (will create recursively)
+#' @param quite quite output
+#' @return NULL
 make_dir = function(dir, quiet=FALSE){
   if(! dir.exists(dir)){
     dir.create(dir, recursive = TRUE, showWarnings=FALSE)
@@ -34,14 +58,20 @@ make_dir = function(dir, quiet=FALSE){
       cat('Directory already exists:', dir, '\n')
     }
   }
-  if !dir.exists(dir){
+  if (!dir.exists(dir)){
     stop('Could not create directory!')
   }
 }
 
-
-
 #' bash job using conda env
+#'
+#' The conda setup is assumed to be in your ~/.bashrc
+#'
+#' @param cmd bash command in a string format
+#' @param conda_env the conda env to use
+#' @param stdout print the stdout from the command?
+#' @param stderr print the stderr from the command?
+#' @returns stdout/stderr
 bash_job = function(cmd, conda_env, stdout=TRUE, stderr=TRUE){
   # cmd : string; commandline job (eg., 'ls -thlc')
   # conda_env : string; conda environment name
@@ -50,25 +80,44 @@ bash_job = function(cmd, conda_env, stdout=TRUE, stderr=TRUE){
   system2('bash', cmd, stdout=stdout, stderr=stderr)
 }
 
-#' "cat {file}" in R
+#' pretty printing of a text file via cat
+#'
+#' This is most useful for working with IRkernl in Jupyter notebooks
+#'
+#' @param file_name the name of the file to print
+#' @return NULL
 cat_file = function(file_name){
   cmd = paste('cat', file_name, collapse=' ')
   system(cmd, intern=TRUE) %>% paste(collapse='\n') %>% cat
 }
 
 
-#' send and email
+#' A helper function to send an email via the mail bash cmd
+#'
+#' @param body The email body
+#' @param subject The email subject line
+#' @param email The email address
+#' @return The output of the system() call
 send_email = function(body, subject='R job complete', email='nyoungblut@tuebingen.mpg.de'){
   cmd = sprintf('echo %s | mail -s "%s" "%s"', body, subject, email)
   system(cmd)
 }
 
-#' conda list in R
+#' "conda list" in R
+#'
+#' This is most useful for working with IRkernl in Jupyter notebooks
+#' @param conda_env The name of the conda env to list
+#' @return NULL
 condaInfo = function(conda_env){
   cat(paste(bash_job('conda list', conda_env), collapse='\n'))
 }
 
-#' snakemake conda info (sessionInfo)
+#' snakemake conda info
+#'
+#' @param config_file The path to the config file
+#' @param pipeline_dir The path to the pipeline_directory
+#' @param conda_env The conda env that has snakemake installed
+#' @return The environment info
 snakemakeInfo = function(config_file, pipeline_dir, conda_env){
   snakefile = file.path(pipeline_dir, 'Snakefile')
   cmd = sprintf('snakemake --list-conda-envs --configfile %s --directory %s --snakefile %s -F',
@@ -89,6 +138,11 @@ snakemakeInfo = function(config_file, pipeline_dir, conda_env){
 }
 
 #' pipeline sessionInfo
+#'
+#' sessionInfo for LeyLab snakemake pipelines
+#' @param pipeline_path The path to the pipeline directory
+#' @param head_n The number of lines to print from the readme
+#' @return NULL
 pipelineInfo = function(pipeline_path, head_n=10){
   # readme
   readme_path = file.path(pipeline_path, 'README.md')
@@ -106,6 +160,8 @@ pipelineInfo = function(pipeline_path, head_n=10){
 }
 
 #' create UUID for figure file name
+#' @param full Full length uuid or trimmed to just 24 char?
+#' @return character object
 fig_uuid = function(full=FALSE){
   baseuuid = paste(sample(c(letters[1:6],0:9),30,replace=TRUE),collapse="")
 
@@ -132,6 +188,9 @@ fig_uuid = function(full=FALSE){
 }
 
 #' Dump an R object as text to a temp file and get the md5sum of the file
+#'
+#' @param Robj Any R object
+#' @return md5sum
 Robj_md5sum = function(Robj){
   F = tempfile()
   dput(Robj, file=F)
@@ -140,6 +199,18 @@ Robj_md5sum = function(Robj){
 
 
 #' plot figure and save the figure grob object to a file at the same time
+#'
+#' This is most useful for working with IRkernl in Jupyter notebooks
+#'
+#' @param p Plot object (ggplot2, base, etc)
+#' @param file File name to write
+#' @param path Path to write to
+#' @param suffix File name suffix (eg., '.png')
+#' @param saveObj Write the Robj to a file?
+#' @param saveImg Write the image to a file?
+#' @param width Figure width. If NA, uses global options
+#' @param height Figure height. If NA, uses global options
+#' @return NULL
 Plot = function(p, file=NULL, path=NULL, suffix='', saveObj=TRUE, saveImg=FALSE, width=NA, height=NA, ...){
   # file path
   if(is.null(path)){
@@ -197,7 +268,13 @@ Plot = function(p, file=NULL, path=NULL, suffix='', saveObj=TRUE, saveImg=FALSE,
 
 
 
-# Extract data from ggplot object
+#' Extract data from ggplot object
+#'
+#' The data is written to files
+#'
+#' @param plot_object A ggplot object
+#' @param output_path Where to write the output
+#' @return NULL
 extract_pltdt = function(plot_object, output_path){
   require(ggplot2)
   # Extract data tables

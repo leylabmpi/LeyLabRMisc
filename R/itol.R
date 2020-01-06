@@ -1,8 +1,12 @@
 #' create itol symbol file
-#' df = dataframe
-#'   *) the rownames should correspond with the tree internal node labels
-#'   *) other columns should be: symbol,size,color,fill,position,[label]
-itol_symbol = function(df, dataset_label, out_file, out_dir=NULL, legend=NULL, MAXIMUM_SIZE=50){
+#'
+#' @param df Dataframe, in which the rownames should correspond with the tree internal node labels, and other columns should be: symbol,size,color,fill,position,(label)
+#' @param dataset_label What to label the itol dataset
+#' @param out_file Name of the output file
+#' @param out_dir Where to write the output
+#' @param MAXIMUM_SIZE The max size of the symbols
+#' @return NULL
+itol_symbol = function(df, dataset_label, out_file, out_dir=NULL, MAXIMUM_SIZE=50){
   if(! is.null(out_dir)){
     out_file = file.path(out_dir, out_file)
   }
@@ -13,24 +17,6 @@ itol_symbol = function(df, dataset_label, out_file, out_dir=NULL, legend=NULL, M
   cat('COLOR #ff0000\n', file=out_file, append=TRUE)
   cat(sprintf('MAXIMUM_SIZE %s\n', MAXIMUM_SIZE), file=out_file, append=TRUE)
 
-  # # legend
-  # cat(sprintf('LEGEND_TITLE %s\n', dataset_label), file=out_file, append=TRUE)
-  # if(is.null(legend)){
-  #     shapes = rep(1, colnames(df) %>% length)
-  #     cols = gsub('FF$', '', rainbow(length(shapes)))
-  #     labs = paste(gsub(' ', '_', colnames(df)), collapse=' ')
-  # } else {
-  #     stopifnot(all(colnames(legend) %in% c('shapes', 'colors', 'labels')))
-  #     shapes = legend$shapes %>% as.character
-  #     cols = legend$colors %>% as.character
-  #     labs = legend$labels %>% as.character
-  # }
-  # cat(sprintf('LEGEND_SHAPES %s\n', paste(shapes, collapse=' ')),
-  #     file=out_file, append=TRUE)
-  # cat(sprintf('LEGEND_COLORS %s\n', paste(cols, collapse=' ')),
-  #     file=out_file, append=TRUE)
-  # cat(sprintf('LEGEND_LABELS %s\n', paste(labs, collapse=' ')), file=out_file, append=TRUE)
-
   # Data
   cat('DATA\n', file=out_file, append=TRUE)
   write.table(df, file=out_file, append=TRUE, sep=' ',
@@ -40,7 +26,13 @@ itol_symbol = function(df, dataset_label, out_file, out_dir=NULL, legend=NULL, M
 
 
 #' create itol multi-bar file
-#' df = dataframe; the rownames should correspond with the tree labels
+#' @param df Dataframe, in which the rownames should correspond with the tree labels
+#' @param dataset_label What to label the itol dataset
+#' @param out_file Name of the output file
+#' @param out_dir Where to write the output
+#' @param legend A list that includes shapes, colors, and labels
+#' @param WIDTH Bar width
+#' @return NULL
 itol_multibar = function(df, dataset_label, out_file, out_dir=NULL, legend=NULL, WIDTH=200){
   if(! is.null(out_dir)){
     out_file = file.path(out_dir, out_file)
@@ -93,7 +85,13 @@ itol_multibar = function(df, dataset_label, out_file, out_dir=NULL, legend=NULL,
 
 
 #' create itol boxplot file
-#' df = dataframe; the rownames should correspond with the tree labels; the columns must specify: minimum,q1,median,q3,maximum,extreme_value1,extreme_value2
+#'
+#' @param df Dataframe, in which the rownames should correspond with the tree labels; the columns must specify: minimum,q1,median,q3,maximum,extreme_value1,extreme_value2
+#' @param dataset_label What to label the itol dataset
+#' @param out_file Name of the output file
+#' @param out_dir Where to write the output
+#' @param key_color The color for the legend key
+#' @return NULL
 itol_boxplot = function(df, dataset_label, out_file, out_dir=NULL, key_color='#ff0000'){
   if(! is.null(out_dir)){
     out_file = file.path(out_dir, out_file)
@@ -112,10 +110,15 @@ itol_boxplot = function(df, dataset_label, out_file, out_dir=NULL, key_color='#f
 }
 
 #' create itol heatmap file
-#' df = dataframe; the rownames should correspond with the tree labels; all columns should be numeric values for the heatmap
-#' dataset_label = label for the dataset
-#' tree = tree used for ordering the heatmap columns; if NULL, the dist_method will be used to create the tree
-#' color_scheme = heatmap color scheme. color = blue-orange-yellow; bw=white-grey-black
+#'
+#' @param df Dataframe, in which the rownames should correspond with the tree labels; all columns should be numeric values for the heatmap
+#' @param dataset_label What to label the itol dataset
+#' @param out_file Name of the output file
+#' @param out_dir Where to write the output
+#' @param tree Tree object used for ordering the heatmap columns; if NULL, the dist_method will be used to create the tree
+#' @param dist_method vegan::vegdist method for creating the correlation dendrogram
+#' @param color_scheme Heatmap color scheme. color = blue-orange-yellow; bw=white-grey-black
+#' @return NULL
 itol_heatmap = function(df, dataset_label, out_file, out_dir=NULL, tree=NULL,
                         dist_method='bray', color_scheme=c('color', 'bw')){
   if(! is.null(out_dir)){
@@ -165,10 +168,14 @@ itol_heatmap = function(df, dataset_label, out_file, out_dir=NULL, tree=NULL,
   cat('File written:', out_file, '\n')
 }
 
-#' create itol colorstrip
-#' df = dataframe; the rownames should correspond with the tree labels; the plotting parameter should be column 1
-#' dataset_label = label for the dataset
-#' legend = specify particular legend
+#' create itol colorstrip file
+#'
+#' @param df Dataframe, in which the rownames should correspond with the tree labels; the plotting parameter should be column 1
+#' @param dataset_label What to label the itol dataset
+#' @param out_file Name of the output file
+#' @param out_dir Where to write the output
+#' @param legend Specify particular legend
+#' @return NULL
 itol_colorstrip = function(df, dataset_label, out_file, out_dir=NULL, legend=NULL){
   df = data.frame(tip = rownames(df),
                   feature = as.character(df[,1]))
@@ -220,7 +227,13 @@ itol_colorstrip = function(df, dataset_label, out_file, out_dir=NULL, legend=NUL
 }
 
 #' create itol external shape file
-#' df = dataframe; the rownames should correspond with the tree labels; other columns should be values corresponding to symbol size
+#'
+#' @param df Dataframe, in which the rownames should correspond with the tree labels; other columns should be values corresponding to symbol size
+#' @param dataset_label What to label the itol dataset
+#' @param out_file Name of the output file
+#' @param out_dir Where to write the output
+#' @param legend Specify particular legend
+#' @return NULL
 itol_externalshape = function(df, dataset_label, out_file, out_dir=NULL, legend=NULL, WIDTH=200){
   if(! is.null(out_dir)){
     out_file = file.path(out_dir, out_file)
