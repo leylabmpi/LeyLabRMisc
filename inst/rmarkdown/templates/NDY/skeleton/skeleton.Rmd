@@ -1,0 +1,86 @@
+---
+title: "00_analysis"
+author: "Nick Youngblut"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    code_folding: hide
+    toc: true
+    toc_float: true
+    toc_depth: 2
+    df_print: paged
+    keep_md: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(dpi = 200)
+knitr::opts_chunk$set(fig.align = "center")
+```
+
+***
+
+<center>
+[![LeyLab](LeyLab_logo.png)](https://leylab.com/)
+</center>
+
+***
+
+# Summary
+
+What is the purpose of this doc?
+
+# Setup
+
+**Paths & Params**
+
+```{r paths-params}
+work_dir = '/path/to/working/dir/'
+infile = '/path/to/input/table'
+threads = 8
+```
+
+**Libraries**
+
+```{r lib load, message=FALSE}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+```
+
+**Misc init**
+
+```{r misc init}
+set.seed(8374)   
+```
+
+# Analysis
+
+Loading & processing data...
+
+Example table
+
+```{r example table}
+mtcars
+```
+
+
+Example plot
+
+```{r example plot, fig.width=7, fig.height=4, fig.cap="Here is a really important caption briefly explaining the figure"}
+plot(pressure)
+# for 2 figures in 2 columns: {r out.width=c('50%', '50%'), fig.show='hold'}
+```
+
+
+# Summary
+
+Conclusions about the analysis...
+
+***
+
+# SessionInfo
+
+```{r sessionInfo}
+sessionInfo()
+```
