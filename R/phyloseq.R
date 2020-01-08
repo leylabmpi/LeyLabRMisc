@@ -5,7 +5,7 @@
 #' @param physeq_obj The phyloseq object
 #' @param physeq_func Which object do you want ('otu_table', 'tax_table', or 'sample_data')
 #' @param long Do you want the table in "long" format ("gathered")
-#' @return A dataframe
+#' @return A tibble
 phyloseq2df = function(physeq_obj, physeq_func, long=FALSE){
   require(dplyr)
   tbl = physeq_obj %>%
@@ -25,17 +25,15 @@ phyloseq2df = function(physeq_obj, physeq_func, long=FALSE){
   if(func_str == 'otu_table' && long == TRUE){
     tbl = tbl %>%
       gather(Sample, Count, -OTU)
-  } else
-    if(func_str == 'tax_table' && long == TRUE){
-      tbl = tbl %>%
-        gather(Tax_level, Tax_name, -OTU)
-    } else
-      if(func_str == 'sample_data' && long == TRUE){
-        tbl = tbl %>%
-          gather(Metadata_key, Metadata_value, -Sample)
-      }
+  } else if(func_str == 'tax_table' && long == TRUE){
+    tbl = tbl %>%
+      gather(Tax_level, Tax_name, -OTU)
+  } else if(func_str == 'sample_data' && long == TRUE){
+    tbl = tbl %>%
+      gather(Metadata_key, Metadata_value, -Sample)
+  }
 
-  return(tbl)
+  return(suppressWarnings(tbl %>% as_tibble))
 }
 
 #' phyloseq::estimate_richness, but includes Faith's PD
