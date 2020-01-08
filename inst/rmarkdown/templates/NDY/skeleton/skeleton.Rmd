@@ -9,7 +9,6 @@ output:
     toc_float: true
     toc_depth: 4
     df_print: paged
-    keep_md: true
 ---
 
 ```{r setup, include=FALSE}
