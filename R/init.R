@@ -27,7 +27,7 @@ dfhead = function(df, n=3){
 #' @param h figure height
 #' @param res figure resolution (DPI)
 #' @return NULL
-p.dims = function(w=5, h=5, res=120){
+p.dims = function(w=5, h=5, res=200){
   options(repr.plot.width = w, repr.plot.height = h, repr.plot.res = res)
 }
 
