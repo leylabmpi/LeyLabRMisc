@@ -27,8 +27,8 @@ dfhead = function(df, n=3){
 #' @param h figure height
 #' @param res figure resolution (DPI)
 #' @return NULL
-dims = function(w=5, h=5, res=120){
-  options(repr.plot.width=w, repr.plot.height=h, repr.plot.res = res)
+p.dims = function(w=5, h=5, res=120){
+  options(repr.plot.width = w, repr.plot.height = h, repr.plot.res = res)
 }
 
 #' changing number of rows/columns shown when printing a data frame
