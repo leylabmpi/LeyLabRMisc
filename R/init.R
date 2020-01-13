@@ -66,18 +66,28 @@ make_dir = function(dir, quiet=FALSE){
 #' bash job using conda env
 #'
 #' The conda setup is assumed to be in your ~/.bashrc
+#' If print_output == TRUE: the stdout/stderr will be printed instead of returned
+#' Else: the stdout/stderr with be returned by the function
+#' stderr/stdout is printed unless print_output==FALSE
 #'
-#' @param cmd bash command in a string format
-#' @param conda_env the conda env to use
-#' @param stdout print the stdout from the command?
-#' @param stderr print the stderr from the command?
-#' @returns stdout/stderr
-bash_job = function(cmd, conda_env, stdout=TRUE, stderr=TRUE){
+#' @param cmd The bash command in a string format
+#' @param conda_env The conda env to use
+#' @param stdout Print the stdout from the command?
+#' @param stderr Print the stderr from the command?
+#' @param quiet No printing
+#' @returns NULL
+bash_job = function(cmd, conda_env, stdout=TRUE, stderr=TRUE, print_output=TRUE){
   # cmd : string; commandline job (eg., 'ls -thlc')
   # conda_env : string; conda environment name
   cmd = sprintf('. ~/.bashrc; conda activate %s; %s', conda_env, cmd)
   cmd = sprintf('-c "%s"', cmd)
-  system2('bash', cmd, stdout=stdout, stderr=stderr)
+  ret = system2('bash', cmd, stdout=stdout, stderr=stderr)
+  if(print_output==TRUE){
+    cat(paste(ret, collapse='\n'))
+    return(NULL)
+  } else {
+    return(ret)
+  }
 }
 
 #' pretty printing of a text file via cat

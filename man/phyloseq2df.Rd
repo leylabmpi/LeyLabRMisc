@@ -14,7 +14,7 @@ phyloseq2df(physeq_obj, physeq_func, long = FALSE)
 \item{long}{Do you want the table in "long" format ("gathered")}
 }
 \value{
-A dataframe
+A tibble
 }
 \description{
 A helper function for converting OTU, taxonomy, and metadata to dataframes

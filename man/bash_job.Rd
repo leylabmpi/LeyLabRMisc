@@ -4,20 +4,22 @@
 \alias{bash_job}
 \title{bash job using conda env}
 \usage{
-bash_job(cmd, conda_env, stdout = TRUE, stderr = TRUE)
+bash_job(cmd, conda_env, stdout = TRUE, stderr = TRUE, print_output = TRUE)
 }
 \arguments{
-\item{cmd}{bash command in a string format}
+\item{cmd}{The bash command in a string format}
 
-\item{conda_env}{the conda env to use}
+\item{conda_env}{The conda env to use}
 
-\item{stdout}{print the stdout from the command?}
+\item{stdout}{Print the stdout from the command?}
 
-\item{stderr}{print the stderr from the command?}
-}
-\value{
-stdout/stderr
+\item{stderr}{Print the stderr from the command?}
+
+\item{quiet}{No printing}
 }
 \description{
 The conda setup is assumed to be in your ~/.bashrc
+If print_output == TRUE: the stdout/stderr will be printed instead of returned
+Else: the stdout/stderr with be returned by the function
+stderr/stdout is printed unless print_output==FALSE
 }
