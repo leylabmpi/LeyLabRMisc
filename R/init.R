@@ -207,6 +207,42 @@ Robj_md5sum = function(Robj){
   as.character(tools::md5sum(c(F)))
 }
 
+#' writing table convience function
+#'
+#' This is most useful for working with IRkernl in Jupyter notebooks
+#'
+#' @param df Data.frame to write out
+#' @param file Output file path
+#' @param ... Passed to write.table
+#' @return NULL
+write_table = function(df, file, ...){
+    write.table(df, file=file, ...)
+    cat('File written:', file, '\n')
+}
+
+#' Determine counts of setdiff, intersect, & union of 2 vectors
+#'
+#' @param x vector1
+#' @param y vector2
+#' @return NULL
+overlap = function(x, y){
+  cat('intersect(x,y):', length(intersect(x,y)), '\n')
+  cat('setdiff(x,y):', length(setdiff(x,y)), '\n')
+  cat('setdiff(y,x):', length(setdiff(y,x)), '\n')
+  cat('union(x,y):', length(union(x,y)), '\n')
+}
+
+#' list.files with full.names=TRUE & recursive=TRUE
+#'
+#' @param path a character vector of full path names; the default corresponds to the working directory,
+#' @param pattern an optional regular expression. Only file names which match the regular expression will be returned.
+#' @param full.names 	a logical value. If TRUE, the directory path is prepended to the file names to give a relative file path. If FALSE, the file names (rather than paths) are returned
+#' @param recursive logical. Should the listing recurse into directories?
+#' @return A character vector containing the names of the files in the specified directories
+list_files = function(path, pattern=NULL, full.names=TRUE, recursive=TRUE, ...){
+  list.files(path, pattern, full.names = full.names, recursive = recursive, ...)
+}
+
 
 #' plot figure and save the figure grob object to a file at the same time
 #'

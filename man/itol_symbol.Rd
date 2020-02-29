@@ -18,5 +18,5 @@ itol_symbol(df, dataset_label, out_file, out_dir = NULL, MAXIMUM_SIZE = 50)
 \item{MAXIMUM_SIZE}{The max size of the symbols}
 }
 \description{
-create itol symbol file
+https://itol.embl.de/help.cgi#symbols
 }

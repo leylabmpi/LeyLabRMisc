@@ -25,5 +25,5 @@ itol_externalshape(
 \item{legend}{Specify particular legend}
 }
 \description{
-create itol external shape file
+https://itol.embl.de/help.cgi#shapes
 }

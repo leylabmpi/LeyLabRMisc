@@ -27,5 +27,5 @@ itol_multibar(
 \item{WIDTH}{Bar width}
 }
 \description{
-create itol multi-bar file
+https://itol.embl.de/help.cgi#multibar
 }

@@ -2,8 +2,7 @@
 % Please edit documentation in R/itol.R
 \name{itol_simplebar}
 \alias{itol_simplebar}
-\title{create itol simple-bar file
-df = dataframe; the rownames should correspond with the tree labels}
+\title{create itol simple-bar file}
 \usage{
 itol_simplebar(
   df,
@@ -14,7 +13,19 @@ itol_simplebar(
   WIDTH = 200
 )
 }
+\arguments{
+\item{df}{Dataframe, the rownames should correspond with the tree labels}
+
+\item{dataset_label}{What to label the itol dataset}
+
+\item{out_file}{Name of the output file}
+
+\item{out_dir}{Where to write the output}
+
+\item{legend}{Specify particular legend}
+
+\item{WIDTH}{Bar width}
+}
 \description{
-create itol simple-bar file
-df = dataframe; the rownames should correspond with the tree labels
+https://itol.embl.de/help.cgi#bar
 }

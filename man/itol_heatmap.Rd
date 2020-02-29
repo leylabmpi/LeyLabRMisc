@@ -30,5 +30,5 @@ itol_heatmap(
 \item{color_scheme}{Heatmap color scheme. color = blue-orange-yellow; bw=white-grey-black}
 }
 \description{
-create itol heatmap file
+https://itol.embl.de/help.cgi#heatmap
 }

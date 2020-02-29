@@ -1,5 +1,7 @@
 #' create itol symbol file
 #'
+#' https://itol.embl.de/help.cgi#symbols
+#'
 #' @param df Dataframe, in which the rownames should correspond with the tree internal node labels, and other columns should be: symbol,size,color,fill,position,(label)
 #' @param dataset_label What to label the itol dataset
 #' @param out_file Name of the output file
@@ -24,8 +26,10 @@ itol_symbol = function(df, dataset_label, out_file, out_dir=NULL, MAXIMUM_SIZE=5
   cat('File written:', out_file, '\n')
 }
 
-
 #' create itol multi-bar file
+#'
+#' https://itol.embl.de/help.cgi#multibar
+#'
 #' @param df Dataframe, in which the rownames should correspond with the tree labels
 #' @param dataset_label What to label the itol dataset
 #' @param out_file Name of the output file
@@ -86,6 +90,8 @@ itol_multibar = function(df, dataset_label, out_file, out_dir=NULL, legend=NULL,
 
 #' create itol boxplot file
 #'
+#' https://itol.embl.de/help.cgi#boxplot
+#'
 #' @param df Dataframe, in which the rownames should correspond with the tree labels; the columns must specify: minimum,q1,median,q3,maximum,extreme_value1,extreme_value2
 #' @param dataset_label What to label the itol dataset
 #' @param out_file Name of the output file
@@ -110,6 +116,8 @@ itol_boxplot = function(df, dataset_label, out_file, out_dir=NULL, key_color='#f
 }
 
 #' create itol heatmap file
+#'
+#' https://itol.embl.de/help.cgi#heatmap
 #'
 #' @param df Dataframe, in which the rownames should correspond with the tree labels; all columns should be numeric values for the heatmap
 #' @param dataset_label What to label the itol dataset
@@ -170,6 +178,8 @@ itol_heatmap = function(df, dataset_label, out_file, out_dir=NULL, tree=NULL,
 
 #' create itol colorstrip file
 #'
+#' https://itol.embl.de/help.cgi#strip
+#'
 #' @param df Dataframe, in which the rownames should correspond with the tree labels; the plotting parameter should be column 1
 #' @param dataset_label What to label the itol dataset
 #' @param out_file Name of the output file
@@ -228,6 +238,8 @@ itol_colorstrip = function(df, dataset_label, out_file, out_dir=NULL, legend=NUL
 
 #' create itol external shape file
 #'
+#' https://itol.embl.de/help.cgi#shapes
+#'
 #' @param df Dataframe, in which the rownames should correspond with the tree labels; other columns should be values corresponding to symbol size
 #' @param dataset_label What to label the itol dataset
 #' @param out_file Name of the output file
@@ -285,7 +297,16 @@ itol_externalshape = function(df, dataset_label, out_file, out_dir=NULL, legend=
 }
 
 #' create itol simple-bar file
-#' df = dataframe; the rownames should correspond with the tree labels
+#'
+#' https://itol.embl.de/help.cgi#bar
+#'
+#' @param df Dataframe, the rownames should correspond with the tree labels
+#' @param dataset_label What to label the itol dataset
+#' @param out_file Name of the output file
+#' @param out_dir Where to write the output
+#' @param legend Specify particular legend
+#' @param WIDTH Bar width
+#' @return NULL
 itol_simplebar = function(df, dataset_label, out_file, out_dir=NULL, legend=NULL, WIDTH=200){
   if(! is.null(out_dir)){
     out_file = file.path(out_dir, out_file)

@@ -4,7 +4,7 @@
 \alias{p.dims}
 \title{global change of plot size options}
 \usage{
-p.dims(w = 5, h = 5, res = 120)
+p.dims(w = 5, h = 5, res = 200)
 }
 \arguments{
 \item{w}{figure width}

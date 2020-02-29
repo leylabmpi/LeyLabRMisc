@@ -18,5 +18,5 @@ itol_colorstrip(df, dataset_label, out_file, out_dir = NULL, legend = NULL)
 \item{legend}{Specify particular legend}
 }
 \description{
-create itol colorstrip file
+https://itol.embl.de/help.cgi#strip
 }

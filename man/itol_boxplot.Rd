@@ -24,5 +24,5 @@ itol_boxplot(
 \item{key_color}{The color for the legend key}
 }
 \description{
-create itol boxplot file
+https://itol.embl.de/help.cgi#boxplot
 }
