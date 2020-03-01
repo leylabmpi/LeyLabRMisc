@@ -11,6 +11,12 @@ write_table(df, file, sep = "\\t", quote = FALSE, row.names = FALSE, ...)
 
 \item{file}{Output file path}
 
+\item{sep}{the field separator string. Values within each row of x are separated by this string}
+
+\item{quote}{a logical value (TRUE or FALSE) or a numeric vector. If TRUE, any character or factor columns will be surrounded by double quotes.}
+
+\item{row.names}{either a logical value indicating whether the row names of x are to be written along with x, or a character vector of row names to be written.}
+
 \item{...}{Passed to write.table}
 }
 \description{
