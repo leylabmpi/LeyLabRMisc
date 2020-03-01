@@ -4,7 +4,7 @@
 \alias{write_table}
 \title{writing table convience function}
 \usage{
-write_table(df, file, ...)
+write_table(df, file, sep = "\\t", quote = FALSE, row.names = FALSE, ...)
 }
 \arguments{
 \item{df}{Data.frame to write out}

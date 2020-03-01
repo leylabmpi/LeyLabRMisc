@@ -215,8 +215,8 @@ Robj_md5sum = function(Robj){
 #' @param file Output file path
 #' @param ... Passed to write.table
 #' @return NULL
-write_table = function(df, file, ...){
-    write.table(df, file=file, ...)
+write_table = function(df, file, sep='\t', quote=FALSE, row.names=FALSE, ...){
+    write.table(df, file=file, sep=sep, quote=quote, row.names=row.names, ...)
     cat('File written:', file, '\n')
 }
 
