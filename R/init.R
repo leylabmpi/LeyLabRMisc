@@ -235,6 +235,18 @@ overlap = function(x, y){
   cat('union(x,y):', length(union(x,y)), '\n')
 }
 
+#' Pretty print number of unique elements in a vector
+#'
+#' The result will be cat'ed to the screen
+#'
+#' @param x a vector
+#' @param label what do call the items in the vector (eg., "samples")
+#' @returns NULL
+unique_n = function(x, label='items'){
+  cat(sprintf('No. of unique %s:', label),
+      length(unique(x)), '\n')
+}
+
 #' list.files with full.names=TRUE & recursive=TRUE
 #'
 #' @param path a character vector of full path names; the default corresponds to the working directory,
