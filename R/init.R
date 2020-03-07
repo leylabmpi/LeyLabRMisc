@@ -106,9 +106,14 @@ cat_file = function(file_name){
 #'
 #' @param body The email body
 #' @param subject The email subject line
-#' @param email The email address
+#' @param email The email address. If NULL, then username used
+#' @param email_ext The part after the "at" symbol
 #' @return The output of the system() call
-send_email = function(body, subject='R job complete', email='nyoungblut@tuebingen.mpg.de'){
+send_email = function(body, subject='R job complete', email=NULL, email_ext='tuebingen.mpg.de'){
+  if(is.null(email)){
+    email = sprintf('%s@%s', Sys.info()['user'], email_ext)
+  }
+  message(sprintf('Sending email to: %s', email))
   cmd = sprintf('echo %s | mail -s "%s" "%s"', body, subject, email)
   system(cmd)
 }

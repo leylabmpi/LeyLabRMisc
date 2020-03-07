@@ -13,6 +13,7 @@ read_bracken = function(F, to_remove='_num'){
   if (! to_remove %in% c('_num', '_frac')){
     stop('to_remove must be "_num" or "_frac"')
   }
+  to_keep = ifelse(to_remove == '_num', '_frac', '_num')
   tax_levs = c('Domain', 'Phylum', 'Class', 'Order', 'Family', 'Genus', 'Species')
   df = data.table::fread(F, sep='\t') %>%
     as_tibble %>%
@@ -20,7 +21,8 @@ read_bracken = function(F, to_remove='_num'){
     dplyr::mutate(taxonomy = gsub(';[pcofgs]__', ';', taxonomy),
            taxonomy = gsub('^d__', '', taxonomy)) %>%
     tidyr::separate(taxonomy, tax_levs, sep=';') %>%
-    tidyr::gather(Sample, Abundance, ends_with('_frac'))
+    tidyr::gather(Sample, Abundance, ends_with(to_keep)) %>%
+    dplyr::mutate(Sample = gsub(paste0(to_keep, '$'), '', Sample))
 
   return(df)
 }

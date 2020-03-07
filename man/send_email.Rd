@@ -7,7 +7,8 @@
 send_email(
   body,
   subject = "R job complete",
-  email = "nyoungblut@tuebingen.mpg.de"
+  email = NULL,
+  email_ext = "tuebingen.mpg.de"
 )
 }
 \arguments{
@@ -15,7 +16,9 @@ send_email(
 
 \item{subject}{The email subject line}
 
-\item{email}{The email address}
+\item{email}{The email address. If NULL, then username used}
+
+\item{email_ext}{The part after the "at" symbol}
 }
 \value{
 The output of the system() call
