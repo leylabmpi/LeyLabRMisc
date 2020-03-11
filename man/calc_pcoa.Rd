@@ -13,5 +13,7 @@ calc_pcoa(dist_mtx)
 data.frame
 }
 \description{
-Simple wrapper for cmdscale to provide data.frame formatted table
+Simple wrapper for cmdscale to provide data.frame formatted table.
+If the distance matrices contain NAs, the samples containing NAs
+will be removed (with a warning).
 }

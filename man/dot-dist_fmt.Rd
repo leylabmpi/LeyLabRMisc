@@ -6,6 +6,16 @@
 \usage{
 .dist_fmt(dist, PC1_perc_exp, PC2_perc_exp)
 }
+\arguments{
+\item{dist}{str, distance metric}
+
+\item{PC1_perc_exp}{float, percent variance explained for PC1}
+
+\item{PC2_perc_exp}{float, percent variance explained for PC2}
+}
+\value{
+str, formatted as "metric, <PC1_perc_exp>%, <PC2_perc_exp>%"
+}
 \description{
 creating a string with distance & percent explained
 }

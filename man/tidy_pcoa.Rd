@@ -11,7 +11,9 @@ tidy_pcoa(
   abundance_col,
   dists = c("bray", "jaccard"),
   tree = NULL,
-  threads = 1
+  threads = 1,
+  threads_unifrac = 1,
+  dist_file = NULL
 )
 }
 \arguments{
@@ -23,16 +25,25 @@ tidy_pcoa(
 
 \item{abundance_col}{the column specifying the taxon abundances in each sample (no quotes needed)}
 
-\item{dists}{vector of beta-diversity distances ('wunifrac' = weighted UniFrac, 'unifrac' = unweighted Unifrac, see vegan::vegsist for others)}
+\item{dists}{vector of beta-diversity distances ('wunifrac' = weighted UniFrac, 'unifrac' = unweighted Unifrac; see vegan::vegsist for others)}
 
 \item{tree}{phylogeny for UniFrac calculations. It can have more tips that what is in the data.frame}
 
-\item{threads}{number of parallel calculations (1 thread per distance)}
+\item{threads}{number of parallel calculations of each distance metric (1 thread per distance)}
+
+\item{threads_unifrac}{number of threads to use for wunifrac & unifrac calculations}
+
+\item{dist_file}{file name for saving the distance matrices (qs serialization; use ".qs" for the file extension)}
 }
 \value{
 data.frame
 }
 \description{
 Perform PCoA in a "tidy" way.
-If multiple methods provided, all PCoA results will be combined into one data.frame.
+If multiple diversity metrics are provided (eg., "bray" and "jaccard"),
+all PCoA results will be combined into one data.frame.
+}
+\details{
+Weighted/Unweighted UniFrac is calculated via the rbiom R package. All other
+beta-diversity metrics are calculated via the vegan R package.
 }

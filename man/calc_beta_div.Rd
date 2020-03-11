@@ -2,23 +2,25 @@
 % Please edit documentation in R/multivar.R
 \name{calc_beta_div}
 \alias{calc_beta_div}
-\title{vegdist + UniFrac}
+\title{vegdist + UniFrac calculation}
 \usage{
-calc_beta_div(df, method, tree)
+calc_beta_div(df, method, tree, threads = 1)
 }
 \arguments{
-\item{df}{sample x taxon dataframe. colnmaes (taxa) must match the tree if the tree is provided}
+\item{df}{sample x taxon dataframe. colnmaes (taxa) must match the tree tip labels if the tree is provided}
 
 \item{method}{distance method (vegdist or UniFrac)}
 
 \item{tree}{phylogeny with tips matching the df colnames}
+
+\item{threads}{threads used for UniFrac calculations with rbiom}
 }
 \value{
 data.frame
 }
 \description{
-A wrapper around vegan::vegdist and GUniFrac
-For unifrac: "wunifrac" = weighted unifrac, "unifrac" = unweighted unifrac
+A wrapper around vegan::vegdist and rbiom (rbiom used for UniFrac calculations).
+For unifrac: "wunifrac" = weighted unifrac, "unifrac" = unweighted unifrac.
 The function returns a tidy dataframe of PCoA axes (PC1 & PC2),
 percent variance explained for each PC.
 }

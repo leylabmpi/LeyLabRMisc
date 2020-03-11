@@ -1,6 +1,3 @@
-#' Elegant negation of %in%
-'%!in%' = Negate('%in%')
-
 #' convert to numeric while avoiding factor conversion issues
 #'
 #' @param x an interable
