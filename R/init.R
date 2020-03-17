@@ -351,3 +351,9 @@ extract_pltdt = function(plot_object, output_path){
   write.table(raw_data, raw_filename, sep = "\t", quote = F, row.names = F)
   write.table(figure_data, figure_filename, sep = "\t", quote = F, row.names = F)
 }
+
+#' rowMeans that works inside a dplyr::mutate() call
+row_means = function(..., na.rm=TRUE) rowMeans(cbind(...), na.rm=na.rm)
+
+#' rowSums that works inside a dplyr::mutate() call
+row_sums = function(..., na.rm=TRUE) rowSums(cbind(...), na.rm=na.rm)
