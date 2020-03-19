@@ -6,6 +6,22 @@ as.Num = function(x){
   as.numeric(as.character(x))
 }
 
+#' Summary for numeric vectors that includes sd and stderr
+#'
+#' sd = standard deviation
+#' stderr = standard error of the mean (sd(x) / sqrt(length(x)))
+#'
+#' @param x a numeric vector
+#' @return a matrix
+summary_x = function(x, rnd=3){
+  x = summary(x) %>% as.matrix
+  y = matrix(round(sd(x), rnd), dimnames=list('sd', 'V1'))
+  z = matrix(round(sd(x) / sqrt(length(x)), rnd), dimnames=list('sd_err_of_mean', 'V1'))
+  x = t(rbind(rbind(x,y), z))
+  row.names(x) = NULL
+  return(x)
+}
+
 #' simple dataframe summary
 #'
 #' @param df dataframe object
