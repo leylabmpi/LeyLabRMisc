@@ -4,10 +4,14 @@
 \alias{summary_x}
 \title{Summary for numeric vectors that includes sd and stderr}
 \usage{
-summary_x(x, rnd = 3)
+summary_x(x, label = NULL, rnd = 3)
 }
 \arguments{
 \item{x}{a numeric vector}
+
+\item{label}{row name label for the output. If NULL, then the label will be the input object label.}
+
+\item{rnd}{number of digits to round sd and stderr to}
 }
 \value{
 a matrix

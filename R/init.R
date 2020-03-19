@@ -12,13 +12,19 @@ as.Num = function(x){
 #' stderr = standard error of the mean (sd(x) / sqrt(length(x)))
 #'
 #' @param x a numeric vector
+#' @param label row name label for the output. If NULL, then the label will be the input object label.
+#' @param rnd number of digits to round sd and stderr to
 #' @return a matrix
-summary_x = function(x, rnd=3){
-  x = summary(x) %>% as.matrix
-  y = matrix(round(sd(x), rnd), dimnames=list('sd', 'V1'))
-  z = matrix(round(sd(x) / sqrt(length(x)), rnd), dimnames=list('sd_err_of_mean', 'V1'))
+summary_x = function(x, label=NULL, rnd=3){
+  if(is.null(label)){
+    label = deparse(substitute(x))
+  }
+  x = as.matrix(summary(x))
+  sd_x = sd(x)
+  y = matrix(round(sd_x, rnd), dimnames=list('sd', 'V1'))
+  z = matrix(round(sd_x / sqrt(length(x)), rnd), dimnames=list('sd_err_of_mean', 'V1'))
   x = t(rbind(rbind(x,y), z))
-  row.names(x) = NULL
+  row.names(x) = label
   return(x)
 }
 
