@@ -13,7 +13,9 @@ tidy_pcoa(
   tree = NULL,
   threads = 1,
   threads_unifrac = 1,
-  dist_file = NULL
+  k = 2,
+  dist_mtx_file = NULL,
+  pcoa_file = NULL
 )
 }
 \arguments{
@@ -33,7 +35,11 @@ tidy_pcoa(
 
 \item{threads_unifrac}{number of threads to use for wunifrac & unifrac calculations}
 
-\item{dist_file}{file name for saving the distance matrices (qs serialization; use ".qs" for the file extension)}
+\item{k}{passed to cmdscale}
+
+\item{dist_mtx_file}{file name for saving the distance matrices (qs serialization; use ".qs" for the file extension)}
+
+\item{pcoa_file}{file name for saving the raw pcoa results}
 }
 \value{
 data.frame

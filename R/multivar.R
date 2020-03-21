@@ -6,7 +6,7 @@
 #'
 #' @param dist_mtx distance matrix object
 #' @return data.frame
-calc_pcoa = function(dist_mtx){
+calc_PCoA = function(dist_mtx, k=2){
   # filtering NAs
   dist_mtx = as.matrix(dist_mtx)
   n_NAs = rowSums(is.na(dist_mtx)) + colSums(is.na(dist_mtx))
@@ -16,15 +16,11 @@ calc_pcoa = function(dist_mtx){
     dist_mtx = dist_mtx[rowSums(is.na(dist_mtx)) == 0, colSums(is.na(dist_mtx)) == 0, drop = FALSE]
     warning('Number of samples filtered due to NAs in dist matrix: ', n_samps - nrow(dist_mtx))
   }
-  pcoa = cmdscale(as.dist(dist_mtx), k=2, eig=TRUE)
-  dist_mtx = NULL
-  df = pcoa$points %>% as.data.frame
-  colnames(df) = c('PC1', 'PC2')
-  df$PC1_perc_exp = as.vector(pcoa$eig[1])/sum(pcoa$eig) * 100
-  df$PC2_perc_exp = as.vector(pcoa$eig[2])/sum(pcoa$eig) * 100
-  df$sample = rownames(df)
-  return(df)
+  # cmdscale
+  pcoa = cmdscale(as.dist(dist_mtx), k=k, eig=TRUE)
+  return(pcoa)
 }
+
 
 #' vegdist + UniFrac calculation
 #'
@@ -43,6 +39,7 @@ calc_beta_div = function(df, method, tree, threads=1){
                'kulczynski', 'jaccard', 'gower', 'altGower', 'morisita',
                'horn', 'mountford', 'raup', 'binomial', 'chao', 'cao',
                'mahalanobis')
+  message('Calculating distance: ', method)
   if(method %in% vegDists){
     # standard vegdist diversity
     d = vegan::vegdist(df, method=method)
@@ -78,10 +75,14 @@ calc_beta_div = function(df, method, tree, threads=1){
 #' @param dist str, distance metric
 #' @param PC1_perc_exp float, percent variance explained for PC1
 #' @param PC2_perc_exp float, percent variance explained for PC2
+#' @param label1 First PC label
+#' @param label2 Seconda PC label
 #' @return str, formatted as "metric, <PC1_perc_exp>%, <PC2_perc_exp>%"
-.dist_fmt = function(dist, PC1_perc_exp, PC2_perc_exp){
-  glue::glue('{dist}, PC1: {PC1}%, PC2: {PC2}%',
+.dist_fmt = function(dist, PC1_perc_exp, PC2_perc_exp, label1=1, label2=2){
+  glue::glue('{dist}, PC{PC_L1}: {PC1}%, PC{PC_L2}: {PC2}%',
              dist=dist,
+             PC_L1 = label1,
+             PC_L2 = label2,
              PC1=round(PC1_perc_exp, 1),
              PC2=round(PC2_perc_exp, 1))
 }
@@ -94,12 +95,23 @@ calc_beta_div = function(df, method, tree, threads=1){
 #' @param file file name to save to
 #' @param threads number of threads used for serializing
 #' @return the input distance matrix or list of distance matrices
-qsave_dist_mtx = function(x, file, threads=1){
+qsave_obj = function(x, file, msg = 'Writing file to: ', threads=1){
   if(!is.null(file)){
-    message('Writing distance matrices to: ', file)
+    message(msg, file)
     qs::qsave(x, file=file, nthreads=threads)
   }
   return(x)
+}
+
+.tidy_PCoA = function(pcoa, k=2){
+  df = pcoa$points %>% as.data.frame
+  colnames(df) = gsub('^', 'PC', 1:k)
+  for(i in 1:k){
+    x = glue::glue('PC{k}_perc_exp', k=i)
+    df[,x] = as.vector(pcoa$eig[i])/sum(pcoa$eig) * 100
+  }
+  df$sample = rownames(df)
+  return(df)
 }
 
 #' PCoA on a 'long' (tidy) tibble, and a long tibble is returned
@@ -119,11 +131,14 @@ qsave_dist_mtx = function(x, file, threads=1){
 #' @param tree phylogeny for UniFrac calculations. It can have more tips that what is in the data.frame
 #' @param threads number of parallel calculations of each distance metric (1 thread per distance)
 #' @param threads_unifrac number of threads to use for wunifrac & unifrac calculations
-#' @param dist_file file name for saving the distance matrices (qs serialization; use ".qs" for the file extension)
+#' @param k passed to cmdscale
+#' @param dist_mtx_file file name for saving the distance matrices (qs serialization; use ".qs" for the file extension)
+#' @param pcoa_file file name for saving the raw pcoa results
 #' @return data.frame
 tidy_pcoa = function(df, taxon_col, sample_col, abundance_col,
                      dists = c('bray', 'jaccard'), tree = NULL,
-                     threads=1, threads_unifrac=1, dist_file = NULL){
+                     threads=1, threads_unifrac=1, k=2,
+                     dist_mtx_file = NULL, pcoa_file = NULL){
   require(dplyr)
   # convert long to wide
   sample_col_str = rlang::as_string(ensym(sample_col))
@@ -147,11 +162,17 @@ tidy_pcoa = function(df, taxon_col, sample_col, abundance_col,
   df = dists %>%
     plyr::llply(function(x) calc_beta_div(df_w, method=x, tree=tree, threads=threads_unifrac),
                 .parallel=threads > 1) %>%
-    qsave_dist_mtx(file=dist_file, threads=threads) %>%
-    lapply(calc_pcoa) %>%
+    qsave_obj(file=dist_mtx_file, msg='Writing distance matrices to: ', threads=threads) %>%
+    lapply(calc_PCoA, k=k) %>%
+    qsave_obj(file=pcoa_file, msg='Writing PCoA objects to: ', threads=threads) %>%
+    lapply(.tidy_PCoA, k=k) %>%
     data.table::rbindlist(use.names=TRUE, fill=TRUE, idcol='distance') %>%
     as_tibble %>%
-    dplyr::mutate(distance_percExp = mapply(.dist_fmt, distance, PC1_perc_exp, PC2_perc_exp))
+    dplyr::mutate(distance_percExp12 = mapply(.dist_fmt, distance, PC1_perc_exp, PC2_perc_exp),
+                  distance_percExp13 = mapply(.dist_fmt, distance, PC1_perc_exp, PC3_perc_exp,
+                                              label1=1, label2=3),
+                  distance_percExp23 = mapply(.dist_fmt, distance, PC2_perc_exp, PC3_perc_exp,
+                                              label1=2, label2=3))
 
   return(df)
 }

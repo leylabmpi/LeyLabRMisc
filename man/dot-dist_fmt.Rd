@@ -4,7 +4,7 @@
 \alias{.dist_fmt}
 \title{creating a string with distance & percent explained}
 \usage{
-.dist_fmt(dist, PC1_perc_exp, PC2_perc_exp)
+.dist_fmt(dist, PC1_perc_exp, PC2_perc_exp, label1 = 1, label2 = 2)
 }
 \arguments{
 \item{dist}{str, distance metric}
@@ -12,6 +12,10 @@
 \item{PC1_perc_exp}{float, percent variance explained for PC1}
 
 \item{PC2_perc_exp}{float, percent variance explained for PC2}
+
+\item{label1}{First PC label}
+
+\item{label2}{Seconda PC label}
 }
 \value{
 str, formatted as "metric, <PC1_perc_exp>%, <PC2_perc_exp>%"
