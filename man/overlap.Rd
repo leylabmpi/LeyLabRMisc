@@ -12,5 +12,5 @@ overlap(x, y)
 \item{y}{vector2}
 }
 \description{
-Determine counts of setdiff, intersect, & union of 2 vectors
+The output is printed text of intersect, each-way setdiff, and union.
 }

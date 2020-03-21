@@ -2,7 +2,7 @@
 % Please edit documentation in R/init.R
 \name{dfhead}
 \alias{dfhead}
-\title{simple dataframe summary}
+\title{A simple dataframe summary}
 \usage{
 dfhead(df, n = 3)
 }
@@ -15,5 +15,5 @@ dfhead(df, n = 3)
 a dataframe object
 }
 \description{
-simple dataframe summary
+A simple dataframe summary
 }

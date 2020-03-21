@@ -1,28 +1,46 @@
-#' function for reading in bracken taxonomy files
+#' Function for reading in a bracken taxonomy table
 #'
-#' Either columns ending in "_num" or "_frac" will be removed (just raw or fractional abundances).
 #' The table will be converted to long form (sample ~ abundance).
-#' Taxonomy will be split into separate levels
-#' @param F Path to bracken table file
-#' @param to_remove Remove either columns ending in "_num" or "_frac"
-#' @return tibble
-read_bracken = function(F, to_remove='_num'){
-  require(data.table)
-  require(dplyr)
-  require(tidyr)
-  if (! to_remove %in% c('_num', '_frac')){
-    stop('to_remove must be "_num" or "_frac"')
+#' Only "_frac" or "_num" columns will be kept (see "keep_frac").
+#' Taxonomy will be split into separate levels (see "tax_levs").
+#'
+#' @param infile Path to bracken table file
+#' @param is_gzip Is the table file gzip'ed?
+#' @param n_lines Number of lines to read. If < 1, all lines will be read.
+#' @param keep_frac If TRUE, keep all columns ending in "_frac"; otherwise, keep "_num" columns.
+#' @param tax_levs Taxonomic levels to separate the taxonomy column into.
+#' @return data.table
+read_bracken = function(infile, is_gzip=FALSE, n_lines=0, keep_frac=TRUE,
+                        tax_levs = c('Domain', 'Phylum', 'Class', 'Order',
+                                     'Family', 'Genus', 'Species')){
+  if(n_lines > 0){
+    n_lines = glue::glue('| head -n {n}', n=n_lines)
+  } else {
+    n_lines = ''
   }
-  to_keep = ifelse(to_remove == '_num', '_frac', '_num')
-  tax_levs = c('Domain', 'Phylum', 'Class', 'Order', 'Family', 'Genus', 'Species')
-  df = data.table::fread(F, sep='\t') %>%
-    as_tibble %>%
-    dplyr::select(-taxIDs, -ends_with('_num')) %>%
-    dplyr::mutate(taxonomy = gsub(';[pcofgs]__', ';', taxonomy),
-           taxonomy = gsub('^d__', '', taxonomy)) %>%
-    tidyr::separate(taxonomy, tax_levs, sep=';') %>%
-    tidyr::gather(Sample, Abundance, ends_with(to_keep)) %>%
-    dplyr::mutate(Sample = gsub(paste0(to_keep, '$'), '', Sample))
+  if(is_gzip){
+    cmd = glue::glue('gunzip -c {file} {n_lines}',
+                     file=infile, n_lines=n_lines)
+  } else {
+    cmd = glue::glue('cat {file} {n_lines}',
+                     file=infile, n_lines=n_lines)
+  }
+  if(keep_frac){
+    to_rm = '_num'
+    to_keep = '_frac'
+  } else {
+    to_rm = '_frac'
+    to_keep = '_num'
+  }
+  dt = data.table::fread(cmd=cmd, sep='\t', check.names=TRUE) %>%
+    tidytable::dt_select(-taxIDs, -dt_ends_with(!!to_rm)) %>%
+    tidytable::dt_mutate(taxonomy = gsub(';[pcofgs]__', ';', taxonomy),
+                         taxonomy = gsub('^d__', '', taxonomy)) %>%
+    tidytable::dt_separate(taxonomy, tax_levs, sep=';') %>%
+    tidytable::dt_pivot_longer(cols=dt_ends_with(!!to_keep),
+                               names_to='Sample',
+                               values_to='Abundance') %>%
+    tidytable::dt_mutate(Sample = gsub('(_frac|_num)$', '', Sample))
 
-  return(df)
+  return(dt)
 }

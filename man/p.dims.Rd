@@ -2,7 +2,7 @@
 % Please edit documentation in R/init.R
 \name{p.dims}
 \alias{p.dims}
-\title{global change of plot size options}
+\title{Global change of plot size options}
 \usage{
 p.dims(w = 5, h = 5, res = 200)
 }

@@ -2,20 +2,32 @@
 % Please edit documentation in R/mg_profiling.R
 \name{read_bracken}
 \alias{read_bracken}
-\title{function for reading in bracken taxonomy files}
+\title{Function for reading in a bracken taxonomy table}
 \usage{
-read_bracken(F, to_remove = "_num")
+read_bracken(
+  infile,
+  is_gzip = FALSE,
+  n_lines = 0,
+  keep_frac = TRUE,
+  tax_levs = c("Domain", "Phylum", "Class", "Order", "Family", "Genus", "Species")
+)
 }
 \arguments{
-\item{F}{Path to bracken table file}
+\item{infile}{Path to bracken table file}
 
-\item{to_remove}{Remove either columns ending in "_num" or "_frac"}
+\item{is_gzip}{Is the table file gzip'ed?}
+
+\item{n_lines}{Number of lines to read. If < 1, all lines will be read.}
+
+\item{keep_frac}{If TRUE, keep all columns ending in "_frac"; otherwise, keep "_num" columns.}
+
+\item{tax_levs}{Taxonomic levels to separate the taxonomy column into.}
 }
 \value{
-tibble
+data.table
 }
 \description{
-Either columns ending in "_num" or "_frac" will be removed (just raw or fractional abundances).
 The table will be converted to long form (sample ~ abundance).
-Taxonomy will be split into separate levels
+Only "_frac" or "_num" columns will be kept (see "keep_frac").
+Taxonomy will be split into separate levels (see "tax_levs").
 }

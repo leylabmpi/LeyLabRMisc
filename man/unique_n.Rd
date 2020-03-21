@@ -4,13 +4,16 @@
 \alias{unique_n}
 \title{Pretty print number of unique elements in a vector}
 \usage{
-unique_n(x, label = "items")
+unique_n(x, label = "items", sel_col = NULL)
 }
 \arguments{
-\item{x}{a vector}
+\item{x}{a vector or data.table. If data.table, sel_col must not be NULL}
 
-\item{label}{what do call the items in the vector (eg., "samples")}
+\item{label}{what to call the items in the vector (eg., "samples")}
+
+\item{sel_col}{If x=data.table, which column to assess?}
 }
 \description{
-The result will be cat'ed to the screen
+The result will be cat'ed to the screen.
+tidytable compatable. Maje
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/init.R
 \name{df.dims}
 \alias{df.dims}
-\title{changing number of rows/columns shown when printing a data frame}
+\title{Changing number of rows/columns shown when printing a data frame}
 \usage{
 df.dims(nrows = 4, ncols = 20)
 }
