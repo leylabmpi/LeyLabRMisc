@@ -45,43 +45,27 @@ To use a template:
 * Restart R
 * Go to `File => New File => R Markdow ... => From Template`
 
+# Examples
+
+## Metagenomes
+
+### Reading in bracken tables
+
+```
+library(dplyr)
+library(ggplot2)
+library(data.table)
+library(tidytable)
+library(LeyLabRMisc)
+# listing files
+brk_cls_files = list_files(profile_dir, 'all-combined-bracken.tsv') 
+brk_cls_files %>% length
+# reading tables
+brk_cls = brk_cls_files %>% file_list(-2) %>%
+    plyr::llply(read_bracken) %>%
+    data.table::rbindlist(use.names=TRUE, idcol='dataset')
+brk_cls
+```
 
 # TODO
 
-## Fix
-
-```
-#' Determine counts of setdiff, intersect, & union of 2 vectors (or data.tables)
-#'
-#' The output is printed text of intersect, each-way setdiff, and union.
-#' Data.table compatible! Just make sure to provide sel_col_x and/or sel_col_y
-#'
-#' @param x vector1 or data.table. If data.table, sel_col_x must not be NULL
-#' @param y vector2 or data.table. If data.table, sel_col_y must not be NULL
-#' @param sel_col_x If x = data.table, which column to assess?
-#' @param sel_col_y If y = data.table, which column to assess?
-#' @return NULL
-#'
-overlap = function(x, y, sel_col_x=NULL, sel_col_y=NULL){
-  if(any((class(x)) == 'data.table')){
-    if(is.null(sel_col_x)){
-      stop('sel_col_x cannot be NULL for data.table objects')
-    }
-    sel_col_x = ggplot2::enexpr(sel_col_x)
-    x = tidytable::dt_distinct(x, !!sel_col_x)
-    x = tidytable::dt_pull(x, !!sel_col_x)
-  }
-  if(any((class(y)) == 'data.table')){
-    if(is.null(sel_col_y)){
-      stop('sel_col_y cannot be NULL for data.table objects')
-    }
-    sel_col_y = ggplot2::enexpr(sel_col_y)
-    y = tidytable::dt_distinct(y, !!sel_col_y)
-    y = tidytable::dt_pull(y, !!sel_col_y)
-  }
-  cat('intersect(x,y):', length(intersect(x,y)), '\n')
-  cat('setdiff(x,y):', length(setdiff(x,y)), '\n')
-  cat('setdiff(y,x):', length(setdiff(y,x)), '\n')
-  cat('union(x,y):', length(union(x,y)), '\n')
-}
-```

@@ -79,20 +79,6 @@ df.dims = function(nrows=4, ncols=20){
   options(repr.matrix.max.rows=nrows, repr.matrix.max.cols=ncols)
 }
 
-#' Determine counts of setdiff, intersect, & union of 2 vectors
-#'
-#' The output is printed text of intersect, each-way setdiff, and union.
-#'
-#' @param x vector1
-#' @param y vector2
-#' @return NULL
-overlap = function(x, y){
-  cat('intersect(x,y):', length(intersect(x,y)), '\n')
-  cat('setdiff(x,y):', length(setdiff(x,y)), '\n')
-  cat('setdiff(y,x):', length(setdiff(y,x)), '\n')
-  cat('union(x,y):', length(union(x,y)), '\n')
-}
-
 #' Pretty print number of unique elements in a vector
 #'
 #' The result will be cat'ed to the screen.
@@ -104,10 +90,12 @@ overlap = function(x, y){
 #' @returns NULL
 unique_n = function(x, label='items', sel_col=NULL){
   if(any((class(x)) == 'data.table')){
+    tryCatch({
+      sel_col = ggplot2::enexpr(sel_col)
+    })
     if(is.null(sel_col)){
       stop('sel_col cannot be NULL for data.table objects')
     }
-    sel_col = ggplot2::enexpr(sel_col)
     x = tidytable::dt_distinct(x, !!sel_col)
     x = tidytable::dt_pull(x, !!sel_col)
   }
@@ -115,6 +103,43 @@ unique_n = function(x, label='items', sel_col=NULL){
       length(unique(x)), '\n')
 }
 
+#' Determine counts of setdiff, intersect, & union of 2 vectors (or data.tables)
+#'
+#' The output is printed text of intersect, each-way setdiff, and union.
+#' Data.table compatible! Just make sure to provide sel_col_x and/or sel_col_y
+#'
+#' @param x vector1 or data.table. If data.table, sel_col_x must not be NULL
+#' @param y vector2 or data.table. If data.table, sel_col_y must not be NULL
+#' @param sel_col_x If x = data.table, which column to assess?
+#' @param sel_col_y If y = data.table, which column to assess?
+#' @return NULL
+#'
+overlap = function(x, y, sel_col_x=NULL, sel_col_y=NULL){
+  if(any((class(x)) == 'data.table')){
+    tryCatch({
+      sel_col_x = ggplot2::enexpr(sel_col_x)
+    })
+    if(is.null(sel_col_x)){
+      stop('sel_col_x cannot be NULL for data.table objects')
+    }
+    x = tidytable::dt_distinct(x, !!sel_col_x)
+    x = tidytable::dt_pull(x, !!sel_col_x)
+  }
+  if(any((class(y)) == 'data.table')){
+    tryCatch({
+      sel_col_y = ggplot2::enexpr(sel_col_y)
+    })
+    if(is.null(sel_col_y)){
+      stop('sel_col_y cannot be NULL for data.table objects')
+    }
+    y = tidytable::dt_distinct(y, !!sel_col_y)
+    y = tidytable::dt_pull(y, !!sel_col_y)
+  }
+  cat('intersect(x,y):', length(intersect(x,y)), '\n')
+  cat('setdiff(x,y):', length(setdiff(x,y)), '\n')
+  cat('setdiff(y,x):', length(setdiff(y,x)), '\n')
+  cat('union(x,y):', length(union(x,y)), '\n')
+}
 
 #' rowMeans that works inside a dplyr::mutate() call
 row_means = function(..., na.rm=TRUE){

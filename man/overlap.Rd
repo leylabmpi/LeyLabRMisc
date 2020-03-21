@@ -2,15 +2,20 @@
 % Please edit documentation in R/init.R
 \name{overlap}
 \alias{overlap}
-\title{Determine counts of setdiff, intersect, & union of 2 vectors}
+\title{Determine counts of setdiff, intersect, & union of 2 vectors (or data.tables)}
 \usage{
-overlap(x, y)
+overlap(x, y, sel_col_x = NULL, sel_col_y = NULL)
 }
 \arguments{
-\item{x}{vector1}
+\item{x}{vector1 or data.table. If data.table, sel_col_x must not be NULL}
 
-\item{y}{vector2}
+\item{y}{vector2 or data.table. If data.table, sel_col_y must not be NULL}
+
+\item{sel_col_x}{If x = data.table, which column to assess?}
+
+\item{sel_col_y}{If y = data.table, which column to assess?}
 }
 \description{
 The output is printed text of intersect, each-way setdiff, and union.
+Data.table compatible! Just make sure to provide sel_col_x and/or sel_col_y
 }
