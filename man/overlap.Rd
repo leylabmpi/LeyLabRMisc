@@ -4,7 +4,13 @@
 \alias{overlap}
 \title{Determine counts of setdiff, intersect, & union of 2 vectors (or data.tables)}
 \usage{
-overlap(x, y, sel_col_x = NULL, sel_col_y = NULL)
+overlap(
+  x,
+  y,
+  sel_col_x = NULL,
+  sel_col_y = NULL,
+  to_return = c("counts", "diff_x", "diff_y", "diff_fuzzy")
+)
 }
 \arguments{
 \item{x}{vector1 or data.table. If data.table, sel_col_x must not be NULL}
@@ -14,6 +20,8 @@ overlap(x, y, sel_col_x = NULL, sel_col_y = NULL)
 \item{sel_col_x}{If x = data.table, which column to assess?}
 
 \item{sel_col_y}{If y = data.table, which column to assess?}
+
+\item{to_return}{"counts" = print overlap counts; "diff_x-or-y" = return setdiff; "diff_fuzzy" = return closest matches for those that differ (ordered best to worst)}
 }
 \description{
 The output is printed text of intersect, each-way setdiff, and union.

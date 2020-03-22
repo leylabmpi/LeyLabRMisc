@@ -89,7 +89,7 @@ df.dims = function(nrows=4, ncols=20){
 #' @param sel_col If x=data.table, which column to assess?
 #' @returns NULL
 unique_n = function(x, label='items', sel_col=NULL){
-  if(any((class(x)) == 'data.table')){
+  if(class(x)[1] == 'data.table'){
     tryCatch({
       sel_col = ggplot2::enexpr(sel_col)
     })
@@ -112,10 +112,18 @@ unique_n = function(x, label='items', sel_col=NULL){
 #' @param y vector2 or data.table. If data.table, sel_col_y must not be NULL
 #' @param sel_col_x If x = data.table, which column to assess?
 #' @param sel_col_y If y = data.table, which column to assess?
+#' @param to_return "counts" = print overlap counts; "diff_x-or-y" = return setdiff; "diff_fuzzy" = return closest matches for those that differ (ordered best to worst)
 #' @return NULL
 #'
-overlap = function(x, y, sel_col_x=NULL, sel_col_y=NULL){
-  if(any((class(x)) == 'data.table')){
+overlap = function(x, y, sel_col_x=NULL, sel_col_y=NULL,
+                   to_return=c('counts', 'diff_x', 'diff_y', 'diff_fuzzy')){
+  if(class(x)[1] == 'data.frame'){
+    x = as.data.table(x)
+  }
+  if(class(y)[1] == 'data.frame'){
+    y = as.data.table(y)
+  }
+  if(class(x)[1] == 'data.table'){
     tryCatch({
       sel_col_x = ggplot2::enexpr(sel_col_x)
     })
@@ -125,7 +133,7 @@ overlap = function(x, y, sel_col_x=NULL, sel_col_y=NULL){
     x = tidytable::dt_distinct(x, !!sel_col_x)
     x = tidytable::dt_pull(x, !!sel_col_x)
   }
-  if(any((class(y)) == 'data.table')){
+  if(class(y)[1] == 'data.table'){
     tryCatch({
       sel_col_y = ggplot2::enexpr(sel_col_y)
     })
@@ -135,10 +143,24 @@ overlap = function(x, y, sel_col_x=NULL, sel_col_y=NULL){
     y = tidytable::dt_distinct(y, !!sel_col_y)
     y = tidytable::dt_pull(y, !!sel_col_y)
   }
-  cat('intersect(x,y):', length(intersect(x,y)), '\n')
-  cat('setdiff(x,y):', length(setdiff(x,y)), '\n')
-  cat('setdiff(y,x):', length(setdiff(y,x)), '\n')
-  cat('union(x,y):', length(union(x,y)), '\n')
+  if(to_return[1] == 'counts'){
+    # comparison
+    cat('intersect(x,y):', length(intersect(x,y)), '\n')
+    cat('setdiff(x,y):', length(setdiff(x,y)), '\n')
+    cat('setdiff(y,x):', length(setdiff(y,x)), '\n')
+    cat('union(x,y):', length(union(x,y)), '\n')
+  } else if (to_return[1] == 'diff_x'){
+    return(setdiff(x, y))
+  } else if (to_return[1] == 'diff_y'){
+    return(setdiff(y, x))
+  } else if (to_return[1] == 'diff_fuzzy'){
+    d = cbind(expand.grid(x,y), as.vector(adist(x,y)))
+    colnames(d) = c('x', 'y', 'dist')
+    d = d[d$dist != 0,]
+    return(d[order(d$dist),])
+  } else {
+    stop('"to_return" value not recognized')
+  }
 }
 
 #' rowMeans that works inside a dplyr::mutate() call
