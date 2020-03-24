@@ -89,7 +89,7 @@ df.dims = function(nrows=4, ncols=20){
 #' @param sel_col If x=data.table, which column to assess?
 #' @returns NULL
 unique_n = function(x, label='items', sel_col=NULL){
-  if(class(x)[1] == 'data.table'){
+  if(class(x)[1] %in% c('tidytable', 'data.table')){
     tryCatch({
       sel_col = ggplot2::enexpr(sel_col)
     })
