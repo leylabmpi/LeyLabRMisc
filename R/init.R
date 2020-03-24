@@ -123,7 +123,7 @@ overlap = function(x, y, sel_col_x=NULL, sel_col_y=NULL,
   if(class(y)[1] == 'data.frame'){
     y = as.data.table(y)
   }
-  if(class(x)[1] == 'data.table'){
+  if(class(x)[1] %in% c('tidytable', 'data.table')){
     tryCatch({
       sel_col_x = ggplot2::enexpr(sel_col_x)
     })
@@ -133,7 +133,7 @@ overlap = function(x, y, sel_col_x=NULL, sel_col_y=NULL,
     x = tidytable::dt_distinct(x, !!sel_col_x)
     x = tidytable::dt_pull(x, !!sel_col_x)
   }
-  if(class(y)[1] == 'data.table'){
+  if(class(y)[1] %in% c('tidytable', 'data.table')){
     tryCatch({
       sel_col_y = ggplot2::enexpr(sel_col_y)
     })
