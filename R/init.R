@@ -100,7 +100,7 @@ unique_n = function(x, label='items', sel_col=NULL){
     x = tidytable::dt_pull(x, !!sel_col)
   }
   cat(sprintf('No. of unique %s:', label),
-      length(unique(x)), '\n')
+      length(base::unique(x)), '\n')
 }
 
 #' Determine counts of setdiff, intersect, & union of 2 vectors (or data.tables)
@@ -118,10 +118,10 @@ unique_n = function(x, label='items', sel_col=NULL){
 overlap = function(x, y, sel_col_x=NULL, sel_col_y=NULL,
                    to_return=c('counts', 'diff_x', 'diff_y', 'diff_fuzzy')){
   if(class(x)[1] == 'data.frame'){
-    x = as.data.table(x)
+    x = data.table::as.data.table(x)
   }
   if(class(y)[1] == 'data.frame'){
-    y = as.data.table(y)
+    y = data.table::as.data.table(y)
   }
   if(class(x)[1] %in% c('tidytable', 'data.table')){
     tryCatch({
@@ -145,10 +145,10 @@ overlap = function(x, y, sel_col_x=NULL, sel_col_y=NULL,
   }
   if(to_return[1] == 'counts'){
     # comparison
-    cat('intersect(x,y):', length(intersect(x,y)), '\n')
-    cat('setdiff(x,y):', length(setdiff(x,y)), '\n')
-    cat('setdiff(y,x):', length(setdiff(y,x)), '\n')
-    cat('union(x,y):', length(union(x,y)), '\n')
+    cat('intersect(x,y):', length(base::intersect(x,y)), '\n')
+    cat('setdiff(x,y):', length(base::setdiff(x,y)), '\n')
+    cat('setdiff(y,x):', length(base::setdiff(y,x)), '\n')
+    cat('union(x,y):', length(base::union(x,y)), '\n')
   } else if (to_return[1] == 'diff_x'){
     return(setdiff(x, y))
   } else if (to_return[1] == 'diff_y'){
