@@ -6,44 +6,14 @@ as.Num = function(x){
   as.numeric(as.character(x))
 }
 
-#' Summary for numeric vectors that includes sd and stderr
-#'
-#' sd = standard deviation
-#' stderr = standard error of the mean (sd(x) / sqrt(length(x)))
-#'
-#' @param x a numeric vector
-#' @param label row name label for the output. If NULL, then the label will be the input object label.
-#' @param rnd number of digits to round sd and stderr to
-#' @return a matrix
-summary_x = function(x, label=NULL, rnd=3){
-  if(is.null(label)){
-    label = deparse(substitute(x))
-  }
-  x = as.matrix(summary(x))
-  sd_x = sd(x)
-  y = matrix(round(sd_x, rnd), dimnames=list('sd', 'V1'))
-  z = matrix(round(sd_x / sqrt(length(x)), rnd), dimnames=list('sd_err_of_mean', 'V1'))
-  x = t(rbind(rbind(x,y), z))
-  row.names(x) = label
-  return(x)
+#' rowMeans that works inside a dplyr::mutate() call
+row_means = function(..., na.rm=TRUE){
+  rowMeans(cbind(...), na.rm=na.rm)
 }
 
-#' Simple wrapper around data.table::fread
-#'
-#' @param infile input file name
-#' @param cmd command instead of input file (eg., "gunzip -c INFILE")
-#' @param sep value delimiter
-#' @param check.names format check column names
-#' @param ... passed to data.table::fread
-#' @return data.table
-Fread = function(infile=NULL, cmd=NULL, sep='\t', check.names=TRUE, ...){
-  if(is.null(infile) & is.null(cmd)){
-    stop('infile and cmd cannot both be NULL')
-  } else if(is.null(cmd)){
-    return(data.table::fread(infile, sep=sep, check.names=check.names, ...))
-  } else if(is.null(infile)){
-    return(data.table::fread(cmd=cmd, sep=sep, check.names=check.names, ...))
-  }
+#' rowSums that works inside a dplyr::mutate() call
+row_sums = function(..., na.rm=TRUE){
+  rowSums(cbind(...), na.rm=na.rm)
 }
 
 #' A simple dataframe summary
@@ -79,6 +49,64 @@ df.dims = function(nrows=4, ncols=20){
   options(repr.matrix.max.rows=nrows, repr.matrix.max.cols=ncols)
 }
 
+#' Simple wrapper around data.table::fread
+#'
+#' @param infile input file name
+#' @param cmd command instead of input file (eg., "gunzip -c INFILE")
+#' @param sep value delimiter
+#' @param check.names format check column names
+#' @param ... passed to data.table::fread
+#' @return data.table
+Fread = function(infile=NULL, cmd=NULL, sep='\t', check.names=TRUE, ...){
+  if(is.null(infile) & is.null(cmd)){
+    stop('infile and cmd cannot both be NULL')
+  } else if(is.null(cmd)){
+    return(data.table::fread(infile, sep=sep, check.names=check.names, ...))
+  } else if(is.null(infile)){
+    return(data.table::fread(cmd=cmd, sep=sep, check.names=check.names, ...))
+  }
+}
+
+#' Summary for numeric vectors that includes sd and stderr
+#'
+#' sd = standard deviation
+#' stderr = standard error of the mean (sd(x) / sqrt(length(x)))
+#'
+#' @param x a numeric vector
+#' @param label row name label for the output. If NULL, then the label will be the input object label.
+#' @param sel_col If "x" is data.table or data.frame, which column to assess?
+#' @param rnd number of digits to round sd and stderr to
+#' @return a matrix
+summary_x = function(x, label=NULL, sel_col=NULL, rnd=3){
+  if(is.null(label)){
+    label = deparse(substitute(x))
+  }
+  if(any(c('tidytable', 'data.table') %in% class(x))){
+    tryCatch({
+      sel_col = ggplot2::enexpr(sel_col)
+    })
+    if(is.null(sel_col)){
+      stop('sel_col cannot be NULL for data.table objects')
+    }
+    x = tidytable::dt_pull(x, !!sel_col)
+  } else if(any(c('data.frame') %in% class(x))){
+    tryCatch({
+      sel_col = dplyr::enquo(sel_col)
+    })
+    if(is.null(sel_col)){
+      stop('sel_col cannot be NULL for data.frame objects')
+    }
+    x = dplyr::pull(x, !!sel_col)
+  }
+  x = as.matrix(summary(x))
+  sd_x = sd(x)
+  y = matrix(round(sd_x, rnd), dimnames=list('sd', 'V1'))
+  z = matrix(round(sd_x / sqrt(length(x)), rnd), dimnames=list('sd_err_of_mean', 'V1'))
+  x = t(rbind(rbind(x,y), z))
+  row.names(x) = label
+  return(x)
+}
+
 #' Pretty print number of unique elements in a vector
 #'
 #' The result will be cat'ed to the screen.
@@ -86,10 +114,10 @@ df.dims = function(nrows=4, ncols=20){
 #'
 #' @param x a vector or data.table. If data.table, sel_col must not be NULL
 #' @param label what to call the items in the vector (eg., "samples")
-#' @param sel_col If x=data.table, which column to assess?
+#' @param sel_col If x is data.table or data.frame, which column to assess?
 #' @returns NULL
 unique_n = function(x, label='items', sel_col=NULL){
-  if(class(x)[1] %in% c('tidytable', 'data.table')){
+  if(any(c('tidytable', 'data.table') %in% class(x))){
     tryCatch({
       sel_col = ggplot2::enexpr(sel_col)
     })
@@ -98,6 +126,14 @@ unique_n = function(x, label='items', sel_col=NULL){
     }
     x = tidytable::dt_distinct(x, !!sel_col)
     x = tidytable::dt_pull(x, !!sel_col)
+  } else if(any(c('data.frame') %in% class(x))){
+    tryCatch({
+      sel_col = dplyr::enquo(sel_col)
+    })
+    if(is.null(sel_col)){
+      stop('sel_col cannot be NULL for data.frame objects')
+    }
+    x = dplyr::pull(x, !!sel_col)
   }
   cat(sprintf('No. of unique %s:', label),
       length(base::unique(x)), '\n')
@@ -117,13 +153,13 @@ unique_n = function(x, label='items', sel_col=NULL){
 #'
 overlap = function(x, y, sel_col_x=NULL, sel_col_y=NULL,
                    to_return=c('counts', 'diff_x', 'diff_y', 'diff_fuzzy')){
-  if(class(x)[1] == 'data.frame'){
+  if(is.data.frame(x)){
     x = data.table::as.data.table(x)
   }
-  if(class(y)[1] == 'data.frame'){
+  if(is.data.frame(y)){
     y = data.table::as.data.table(y)
   }
-  if(class(x)[1] %in% c('tidytable', 'data.table')){
+  if(any(c('tidytable', 'data.table') %in% class(x))){
     tryCatch({
       sel_col_x = ggplot2::enexpr(sel_col_x)
     })
@@ -133,7 +169,7 @@ overlap = function(x, y, sel_col_x=NULL, sel_col_y=NULL,
     x = tidytable::dt_distinct(x, !!sel_col_x)
     x = tidytable::dt_pull(x, !!sel_col_x)
   }
-  if(class(y)[1] %in% c('tidytable', 'data.table')){
+  if(any(c('tidytable', 'data.table') %in% class(x))){
     tryCatch({
       sel_col_y = ggplot2::enexpr(sel_col_y)
     })
@@ -142,6 +178,22 @@ overlap = function(x, y, sel_col_x=NULL, sel_col_y=NULL,
     }
     y = tidytable::dt_distinct(y, !!sel_col_y)
     y = tidytable::dt_pull(y, !!sel_col_y)
+  } else if(any(c('data.frame') %in% class(x))){
+    tryCatch({
+      sel_col_x = dplyr::enquo(sel_col_x)
+    })
+    if(is.null(sel_col_x)){
+      stop('sel_col_x cannot be NULL for data.frame objects')
+    }
+    x = dplyr::pull(x, !!sel_col_x)
+  } else if(any(c('data.frame') %in% class(y))){
+    tryCatch({
+      sel_col_y = dplyr::enquo(sel_col_y)
+    })
+    if(is.null(sel_col_y)){
+      stop('sel_col_y cannot be NULL for data.frame objects')
+    }
+    y = dplyr::pull(y, !!sel_col_y)
   }
   if(to_return[1] == 'counts'){
     # comparison
@@ -154,6 +206,8 @@ overlap = function(x, y, sel_col_x=NULL, sel_col_y=NULL,
   } else if (to_return[1] == 'diff_y'){
     return(setdiff(y, x))
   } else if (to_return[1] == 'diff_fuzzy'){
+    x = base::setdiff(x,y)
+    y = base::setdiff(y,x)
     d = cbind(expand.grid(x,y), as.vector(adist(x,y)))
     colnames(d) = c('x', 'y', 'dist')
     d = d[d$dist != 0,]
@@ -161,14 +215,4 @@ overlap = function(x, y, sel_col_x=NULL, sel_col_y=NULL,
   } else {
     stop('"to_return" value not recognized')
   }
-}
-
-#' rowMeans that works inside a dplyr::mutate() call
-row_means = function(..., na.rm=TRUE){
-  rowMeans(cbind(...), na.rm=na.rm)
-}
-
-#' rowSums that works inside a dplyr::mutate() call
-row_sums = function(..., na.rm=TRUE){
-  rowSums(cbind(...), na.rm=na.rm)
 }
