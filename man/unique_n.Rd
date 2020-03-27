@@ -11,7 +11,7 @@ unique_n(x, label = "items", sel_col = NULL)
 
 \item{label}{what to call the items in the vector (eg., "samples")}
 
-\item{sel_col}{If x=data.table, which column to assess?}
+\item{sel_col}{If x is data.table or data.frame, which column to assess?}
 }
 \description{
 The result will be cat'ed to the screen.

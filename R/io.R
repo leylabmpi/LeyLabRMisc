@@ -9,6 +9,24 @@ list_files = function(path, pattern=NULL, full.names=TRUE, recursive=TRUE, ...){
   list.files(path, pattern, full.names = full.names, recursive = recursive, ...)
 }
 
+#' Simple wrapper around data.table::fread
+#'
+#' @param infile input file name
+#' @param cmd command instead of input file (eg., "gunzip -c INFILE")
+#' @param sep value delimiter
+#' @param check.names format check column names
+#' @param ... passed to data.table::fread
+#' @return data.table
+Fread = function(infile=NULL, cmd=NULL, sep='\t', check.names=TRUE, ...){
+  if(is.null(infile) & is.null(cmd)){
+    stop('infile and cmd cannot both be NULL')
+  } else if(is.null(cmd)){
+    return(data.table::fread(infile, sep=sep, check.names=check.names, ...))
+  } else if(is.null(infile)){
+    return(data.table::fread(cmd=cmd, sep=sep, check.names=check.names, ...))
+  }
+}
+
 #' splitting path and returning just one item in the vector
 #'
 #' @param file_path File path
@@ -37,7 +55,6 @@ files_to_list = function(files, label_index=-1){
   names(L) = as.character(sapply(files, path_get_label, index=label_index))
   return(L)
 }
-
 
 #' writing table convience function
 #'

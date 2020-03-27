@@ -26,18 +26,6 @@ dfhead = function(df, n=3){
   head(df, n=n)
 }
 
-#' Global change of plot size options
-#'
-#' This is most useful for working with IRkernl in Jupyter notebooks
-#'
-#' @param w figure width
-#' @param h figure height
-#' @param res figure resolution (DPI)
-#' @return NULL
-p.dims = function(w=5, h=5, res=200){
-  options(repr.plot.width = w, repr.plot.height = h, repr.plot.res = res)
-}
-
 #' Changing number of rows/columns shown when printing a data frame
 #'
 #' This is most useful for working with IRkernl in Jupyter notebooks
@@ -49,23 +37,6 @@ df.dims = function(nrows=4, ncols=20){
   options(repr.matrix.max.rows=nrows, repr.matrix.max.cols=ncols)
 }
 
-#' Simple wrapper around data.table::fread
-#'
-#' @param infile input file name
-#' @param cmd command instead of input file (eg., "gunzip -c INFILE")
-#' @param sep value delimiter
-#' @param check.names format check column names
-#' @param ... passed to data.table::fread
-#' @return data.table
-Fread = function(infile=NULL, cmd=NULL, sep='\t', check.names=TRUE, ...){
-  if(is.null(infile) & is.null(cmd)){
-    stop('infile and cmd cannot both be NULL')
-  } else if(is.null(cmd)){
-    return(data.table::fread(infile, sep=sep, check.names=check.names, ...))
-  } else if(is.null(infile)){
-    return(data.table::fread(cmd=cmd, sep=sep, check.names=check.names, ...))
-  }
-}
 
 #' Summary for numeric vectors that includes sd and stderr
 #'

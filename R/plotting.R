@@ -1,3 +1,15 @@
+#' Global change of plot size options
+#'
+#' This is most useful for working with IRkernl in Jupyter notebooks
+#'
+#' @param w figure width
+#' @param h figure height
+#' @param res figure resolution (DPI)
+#' @return NULL
+p.dims = function(w=5, h=5, res=200){
+  options(repr.plot.width = w, repr.plot.height = h, repr.plot.res = res)
+}
+
 #' plot figure and save the figure grob object to a file at the same time
 #'
 #' This is most useful for working with IRkernl in Jupyter notebooks
