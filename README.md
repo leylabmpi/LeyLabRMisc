@@ -26,8 +26,9 @@ Feel free to contribute! Just clone the repo, make some changes, commit, and cre
 * If this repo will be inside another git repo, then use `git submodule`
   * See [this stack overflow post](https://stackoverflow.com/questions/1811730/how-do-i-work-with-a-git-repository-within-another-repository)
 
-# Functions
+# Manual & Tutorials
 
+* [Manual pdf](./LeyLabRMisc_0.1.3.pdf)
 * Jupyter notebooks
   * [general commands](./notebooks/LeyLabRMisc_tutorial.ipynb)
 
@@ -53,6 +54,7 @@ library(ggplot2)
 library(data.table)
 library(tidytable)
 library(LeyLabRMisc)
+
 # listing files
 brk_cls_files = list_files(profile_dir, 'all-combined-bracken.tsv') 
 brk_cls_files %>% length
