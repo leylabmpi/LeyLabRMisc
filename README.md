@@ -28,12 +28,8 @@ Feel free to contribute! Just clone the repo, make some changes, commit, and cre
 
 # Functions
 
-* `R/init.R`
-  * General functions that could be sourced at the start of a Jupyter Notebook or Rmarkdown file
-* `R/itol.R`
-  * Functions for creating input files for iTOL
-* `R/phyloseq.R`
-  * Helper functions for working with phyloseq
+* Jupyter notebooks
+  * [general commands](./notebooks/LeyLabRMisc_tutorial.ipynb)
 
 # Templates
 
