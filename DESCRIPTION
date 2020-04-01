@@ -8,4 +8,4 @@ Description: Ley Lab misc R functions, rmd templates, etc.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
