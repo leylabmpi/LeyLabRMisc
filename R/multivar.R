@@ -1,3 +1,37 @@
+# calculate Faith's PD
+.calc_pd = function(mtx, tree){
+  mtx %>%
+    apply(2, function(x) ifelse(is.na(x) | x <= 0, 0, 1)) %>%
+    PhyloMeasures::pd.query(tree, ., standardize = FALSE,
+                            null.model="uniform",
+                            reps=100, seed=3982)
+}
+
+#' Calculate common alpha-diversity metrics
+#'
+#' Faith's Phylogenetic Diversity ("PD") can be calculated only
+#' if a tree is provided. The tree can have extra tips, but there
+#' must be tip labels for all taxa in the provided table.
+#'
+#' @param df sample x taxon abundance table (usual format for vegan)
+#' @param tree tree with tips matching taxa in the abundance table (only needed for PD)
+#' @param index which of the indices to calculate? (nobs = no. of observations, shannon = Shannon Index, PD = Faith's PD)
+#' @return a data.frame of alpha diversity values (and sample names)
+calc_alpha_div = function(df, tree=NULL, index=c('nobs', 'shannon', 'PD')){
+  res = list()
+  res[['Sample']] = rownames(df)
+  if('nobs' %in% index){
+    res[['nobs']] = apply(df, 1, function(x) sum(x > 0)) %>% as.vector
+  }
+  if('shannon' %in% index){
+    res[['shannon']] = vegan::diversity(df, index='shannon') %>% as.vector
+  }
+  if('PD' %in% index & !is.null(tree)){
+    res[['PD']] = .calc_pd(df, tree) %>% as.vector
+  }
+  return(do.call(cbind, res))
+}
+
 #' Wrapper for cmdscale
 #'
 #' Simple wrapper for cmdscale to provide data.frame formatted table.
@@ -78,7 +112,7 @@ calc_beta_div = function(df, method, tree, threads=1){
 #' @param label1 First PC label
 #' @param label2 Seconda PC label
 #' @return str, formatted as "metric, <PC1_perc_exp>%, <PC2_perc_exp>%"
-.dist_fmt = function(dist, PC1_perc_exp, PC2_perc_exp, label1=1, label2=2){
+dist_format = function(dist, PC1_perc_exp, PC2_perc_exp, label1=1, label2=2){
   glue::glue('{dist}, PC{PC_L1}: {PC1}%, PC{PC_L2}: {PC2}%',
              dist=dist,
              PC_L1 = label1,
@@ -103,6 +137,7 @@ qsave_obj = function(x, file, msg = 'Writing file to: ', threads=1){
   return(x)
 }
 
+# format PCoA object
 .tidy_PCoA = function(pcoa, k=2){
   df = pcoa$points %>% as.data.frame
   colnames(df) = gsub('^', 'PC', 1:k)
@@ -168,10 +203,10 @@ tidy_pcoa = function(df, taxon_col, sample_col, abundance_col,
     lapply(.tidy_PCoA, k=k) %>%
     data.table::rbindlist(use.names=TRUE, fill=TRUE, idcol='distance') %>%
     as_tibble %>%
-    dplyr::mutate(distance_percExp12 = mapply(.dist_fmt, distance, PC1_perc_exp, PC2_perc_exp),
-                  distance_percExp13 = mapply(.dist_fmt, distance, PC1_perc_exp, PC3_perc_exp,
+    dplyr::mutate(distance_percExp12 = mapply(dist_format, distance, PC1_perc_exp, PC2_perc_exp),
+                  distance_percExp13 = mapply(dist_format, distance, PC1_perc_exp, PC3_perc_exp,
                                               label1=1, label2=3),
-                  distance_percExp23 = mapply(.dist_fmt, distance, PC2_perc_exp, PC3_perc_exp,
+                  distance_percExp23 = mapply(dist_format, distance, PC2_perc_exp, PC3_perc_exp,
                                               label1=2, label2=3))
 
   return(df)

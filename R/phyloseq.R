@@ -121,14 +121,13 @@ estimate_richness_phy = function (physeq, split = TRUE, measures = NULL){
   return(out)
 }
 
-
 #' Helper Function for rarefaction analysis
 #'
 #' @param psdata phyloseq object
 #' @param measures Which diversity measures
 #' @param depth The sampling depth
 #' @return molten alpha diversity object
-.estimate_rarified_richness <- function(psdata, measures, depth) {
+estimate_rarified_richness <- function(psdata, measures, depth) {
   if(max(sample_sums(psdata)) < depth) return()
   psdata <- prune_samples(sample_sums(psdata) >= depth, psdata)
 
@@ -154,7 +153,7 @@ estimate_richness_phy = function (physeq, split = TRUE, measures = NULL){
 #' @return A dataframe
 calculate_rarefaction_curves <- function(psdata, measures, depths, parallel=FALSE) {
   names(depths) <- depths # this enables automatic addition of the Depth to the output by ldply
-  rarefaction_curve_data <- plyr::ldply(depths, .estimate_rarified_richness, psdata = psdata,
+  rarefaction_curve_data <- plyr::ldply(depths, estimate_rarified_richness, psdata = psdata,
                                         measures = measures, .id = 'Depth',
                                         .progress = ifelse(interactive(), 'text', 'none'),
                                         .parallel = parallel)

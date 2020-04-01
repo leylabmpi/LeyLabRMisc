@@ -3,6 +3,7 @@
 #' The table will be converted to long form (sample ~ abundance).
 #' Only "_frac" or "_num" columns will be kept (see "keep_frac").
 #' Taxonomy will be split into separate levels (see "tax_levs").
+#' tidytable (w/ data.table) used to speed the process up.
 #'
 #' @param infile Path to bracken table file
 #' @param is_gzip Is the table file gzip'ed?
