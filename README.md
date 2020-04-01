@@ -5,6 +5,11 @@ Misc R functions, rmarkdown templates, etc. for making life a bit easier in the 
 
 Feel free to contribute! Just clone the repo, make some changes, commit, and create a pull request.
 
+# Contributors
+
+* Nick Youngblut <nyoungb2@gmail.com>
+* Jacobo de la Cuesta <jacobo.delacuesta@tuebingen.mpg.de>
+
 # Install
 
 ## `renv` R package
