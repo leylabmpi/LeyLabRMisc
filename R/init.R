@@ -187,3 +187,11 @@ overlap = function(x, y, sel_col_x=NULL, sel_col_y=NULL,
     stop('"to_return" value not recognized')
   }
 }
+
+#' Returns the sizes of R objects
+#'
+#' @param Robj Vector with the names of R objects as characters
+#' @return A list with the name of R objects as names and the formatted size of the objects
+size_objects <- function(Robj){
+    sapply(Robj,function(x){format(object.size(get(x)), units = 'auto')})
+}
