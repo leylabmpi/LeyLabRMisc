@@ -215,9 +215,12 @@ tidy_pcoa = function(df, taxon_col, sample_col, abundance_col,
     dplyr::mutate(distance_percExp12 = mapply(dist_format, distance, PC1_perc_exp, PC2_perc_exp,
                                               label1=1, label2=2),
                   distance_percExp13 = mapply(dist_format, distance, PC1_perc_exp, PC3_perc_exp,
-                                              label1=1, label2=3),
-                  distance_percExp23 = mapply(dist_format, distance, PC2_perc_exp, PC3_perc_exp,
-                                              label1=2, label2=3))
+                                              label1=1, label2=3))
+  if(k > 2){
+      df = dplyr::mutate(df, distance_percExp23 = mapply(dist_format, distance,
+                                                         PC2_perc_exp, PC3_perc_exp,
+                                                         label1=2, label2=3))
+  }
 
   return(df)
 }
