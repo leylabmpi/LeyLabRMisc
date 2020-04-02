@@ -55,7 +55,6 @@ calc_PCoA = function(dist_mtx, k=2){
   return(pcoa)
 }
 
-
 #' vegdist + UniFrac calculation
 #'
 #' A wrapper around vegan::vegdist and rbiom (rbiom used for UniFrac calculations).
@@ -63,16 +62,24 @@ calc_PCoA = function(dist_mtx, k=2){
 #' The function returns a tidy dataframe of PCoA axes (PC1 & PC2),
 #' percent variance explained for each PC.
 #'
-#' @param df sample x taxon dataframe. colnmaes (taxa) must match the tree tip labels if the tree is provided
-#' @param method distance method (vegdist or UniFrac)
-#' @param tree phylogeny with tips matching the df colnames
+#' Unifrac is calculated with the https://github.com/cmmr/rbiom package
+#' (requires bioconductor packages).
+#'
+#' @param df sample x taxon dataframe. Colnames (taxa) must match the tree tip labels if the tree is provided
+#' @param tree phylogeny with tips matching the df colnames (only needed for wunifrac & unifrac methods)
+#' @param method distance method (vegdist distances; wunifrac=Weighted Unifrac; unifrac=Unweighted Unifrac)
 #' @param threads threads used for UniFrac calculations with rbiom
 #' @return data.frame
-calc_beta_div = function(df, method, tree, threads=1){
+calc_beta_div = function(df, tree=NULL,
+                         method = c('wunifrac', 'unifrac', 'manhattan', 'euclidean', 'canberra', 'clark', 'bray',
+                                    'kulczynski', 'jaccard', 'gower', 'altGower', 'morisita',
+                                    'horn', 'mountford', 'raup', 'binomial', 'chao', 'cao', 'mahalanobis'),
+                         threads=1){
   vegDists = c('manhattan', 'euclidean', 'canberra', 'clark', 'bray',
                'kulczynski', 'jaccard', 'gower', 'altGower', 'morisita',
                'horn', 'mountford', 'raup', 'binomial', 'chao', 'cao',
                'mahalanobis')
+  method = method[1]
   message('Calculating distance: ', method)
   if(method %in% vegDists){
     # standard vegdist diversity

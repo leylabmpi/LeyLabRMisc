@@ -4,14 +4,21 @@
 \alias{calc_beta_div}
 \title{vegdist + UniFrac calculation}
 \usage{
-calc_beta_div(df, method, tree, threads = 1)
+calc_beta_div(
+  df,
+  tree = NULL,
+  method = c("wunifrac", "unifrac", "manhattan", "euclidean", "canberra", "clark",
+    "bray", "kulczynski", "jaccard", "gower", "altGower", "morisita", "horn", "mountford",
+    "raup", "binomial", "chao", "cao", "mahalanobis"),
+  threads = 1
+)
 }
 \arguments{
-\item{df}{sample x taxon dataframe. colnmaes (taxa) must match the tree tip labels if the tree is provided}
+\item{df}{sample x taxon dataframe. Colnames (taxa) must match the tree tip labels if the tree is provided}
 
-\item{method}{distance method (vegdist or UniFrac)}
+\item{tree}{phylogeny with tips matching the df colnames (only needed for wunifrac & unifrac methods)}
 
-\item{tree}{phylogeny with tips matching the df colnames}
+\item{method}{distance method (vegdist distances; wunifrac=Weighted Unifrac; unifrac=Unweighted Unifrac)}
 
 \item{threads}{threads used for UniFrac calculations with rbiom}
 }
@@ -23,4 +30,8 @@ A wrapper around vegan::vegdist and rbiom (rbiom used for UniFrac calculations).
 For unifrac: "wunifrac" = weighted unifrac, "unifrac" = unweighted unifrac.
 The function returns a tidy dataframe of PCoA axes (PC1 & PC2),
 percent variance explained for each PC.
+}
+\details{
+Unifrac is calculated with the https://github.com/cmmr/rbiom package
+(requires bioconductor packages).
 }
