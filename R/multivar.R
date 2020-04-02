@@ -32,30 +32,7 @@ calc_alpha_div = function(df, tree=NULL, index=c('nobs', 'shannon', 'PD')){
   return(do.call(cbind, res))
 }
 
-#' Wrapper for cmdscale
-#'
-#' Simple wrapper for cmdscale to provide data.frame formatted table.
-#' If the distance matrices contain NAs, the samples containing NAs
-#' will be removed (with a warning).
-#'
-#' @param dist_mtx distance matrix object
-#' @return data.frame
-calc_PCoA = function(dist_mtx, k=2){
-  # filtering NAs
-  dist_mtx = as.matrix(dist_mtx)
-  n_NAs = rowSums(is.na(dist_mtx)) + colSums(is.na(dist_mtx))
-  n_samps = nrow(dist_mtx)
-  if(n_NAs > 0){
-    warning('Number of NAs in dist matrix: ', n_NAs)
-    dist_mtx = dist_mtx[rowSums(is.na(dist_mtx)) == 0, colSums(is.na(dist_mtx)) == 0, drop = FALSE]
-    warning('Number of samples filtered due to NAs in dist matrix: ', n_samps - nrow(dist_mtx))
-  }
-  # cmdscale
-  pcoa = cmdscale(as.dist(dist_mtx), k=k, eig=TRUE)
-  return(pcoa)
-}
-
-#' vegdist + UniFrac calculation
+#' beta-diversity calculation
 #'
 #' A wrapper around vegan::vegdist and rbiom (rbiom used for UniFrac calculations).
 #' For unifrac: "wunifrac" = weighted unifrac, "unifrac" = unweighted unifrac.
@@ -64,6 +41,8 @@ calc_PCoA = function(dist_mtx, k=2){
 #'
 #' Unifrac is calculated with the https://github.com/cmmr/rbiom package
 #' (requires bioconductor packages).
+#'
+#' If the goal is PCoA, then see the "tidy_PCoA" function.
 #'
 #' @param df sample x taxon dataframe. Colnames (taxa) must match the tree tip labels if the tree is provided
 #' @param tree phylogeny with tips matching the df colnames (only needed for wunifrac & unifrac methods)
@@ -145,7 +124,7 @@ qsave_obj = function(x, file, msg = 'Writing file to: ', threads=1){
 }
 
 # format PCoA object
-.tidy_PCoA = function(pcoa, k=2){
+.tidy_PCoA = function(pcoa, k=3){
   df = pcoa$points %>% as.data.frame
   colnames(df) = gsub('^', 'PC', 1:k)
   for(i in 1:k){
@@ -154,6 +133,29 @@ qsave_obj = function(x, file, msg = 'Writing file to: ', threads=1){
   }
   df$sample = rownames(df)
   return(df)
+}
+
+#' Wrapper for cmdscale
+#'
+#' Simple wrapper for cmdscale to provide data.frame formatted table.
+#' If the distance matrices contain NAs, the samples containing NAs
+#' will be removed (with a warning).
+#'
+#' @param dist_mtx distance matrix object
+#' @return data.frame
+calc_PCoA = function(dist_mtx, k=2){
+  # filtering NAs
+  dist_mtx = as.matrix(dist_mtx)
+  n_NAs = rowSums(is.na(dist_mtx)) + colSums(is.na(dist_mtx))
+  n_samps = nrow(dist_mtx)
+  if(n_NAs > 0){
+    warning('Number of NAs in dist matrix: ', n_NAs)
+    dist_mtx = dist_mtx[rowSums(is.na(dist_mtx)) == 0, colSums(is.na(dist_mtx)) == 0, drop = FALSE]
+    warning('Number of samples filtered due to NAs in dist matrix: ', n_samps - nrow(dist_mtx))
+  }
+  # cmdscale
+  pcoa = cmdscale(as.dist(dist_mtx), k=k, eig=TRUE)
+  return(pcoa)
 }
 
 #' PCoA on a 'long' (tidy) tibble, and a long tibble is returned
@@ -176,10 +178,10 @@ qsave_obj = function(x, file, msg = 'Writing file to: ', threads=1){
 #' @param k passed to cmdscale
 #' @param dist_mtx_file file name for saving the distance matrices (qs serialization; use ".qs" for the file extension)
 #' @param pcoa_file file name for saving the raw pcoa results
-#' @return data.frame
+#' @return a tibble of PCoA info for all selected "dists"
 tidy_pcoa = function(df, taxon_col, sample_col, abundance_col,
-                     dists = c('bray', 'jaccard'), tree = NULL,
-                     threads=1, threads_unifrac=1, k=2,
+                     dists = c('bray', 'jaccard', 'wunifrac', 'unifrac'),
+                     tree = NULL, threads=1, threads_unifrac=1, k=2,
                      dist_mtx_file = NULL, pcoa_file = NULL){
   require(dplyr)
   # convert long to wide
@@ -210,7 +212,8 @@ tidy_pcoa = function(df, taxon_col, sample_col, abundance_col,
     lapply(.tidy_PCoA, k=k) %>%
     data.table::rbindlist(use.names=TRUE, fill=TRUE, idcol='distance') %>%
     as_tibble %>%
-    dplyr::mutate(distance_percExp12 = mapply(dist_format, distance, PC1_perc_exp, PC2_perc_exp),
+    dplyr::mutate(distance_percExp12 = mapply(dist_format, distance, PC1_perc_exp, PC2_perc_exp,
+                                              label1=1, label2=2),
                   distance_percExp13 = mapply(dist_format, distance, PC1_perc_exp, PC3_perc_exp,
                                               label1=1, label2=3),
                   distance_percExp23 = mapply(dist_format, distance, PC2_perc_exp, PC3_perc_exp,
