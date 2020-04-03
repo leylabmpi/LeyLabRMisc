@@ -7,13 +7,14 @@
 path_get_label(file_path, index)
 }
 \arguments{
-\item{file_path}{File path}
+\item{file_path}{File path(s). If vector or list of paths provided, then a list will be returned}
 
-\item{index}{Which item in the path to return? 1-indexing. If <1, samples selected from the end.}
+\item{index}{Which item in the path to return? 1-indexing. If <1, samples selected from the end. "O" will select the file name.}
 }
 \value{
-string
+string if 1 path, else list
 }
 \description{
-splitting path and returning just one item in the vector
+This is useful for merging tables in which the individual table ID
+is within the file path.
 }

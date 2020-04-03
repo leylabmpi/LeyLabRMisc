@@ -2,7 +2,7 @@
 % Please edit documentation in R/multivar.R
 \name{calc_beta_div}
 \alias{calc_beta_div}
-\title{vegdist + UniFrac calculation}
+\title{beta-diversity calculation}
 \usage{
 calc_beta_div(
   df,
@@ -34,4 +34,6 @@ percent variance explained for each PC.
 \details{
 Unifrac is calculated with the https://github.com/cmmr/rbiom package
 (requires bioconductor packages).
+
+If the goal is PCoA, then see the "tidy_PCoA" function.
 }

@@ -29,10 +29,20 @@ Fread = function(infile=NULL, cmd=NULL, sep='\t', check.names=TRUE, ...){
 
 #' splitting path and returning just one item in the vector
 #'
-#' @param file_path File path
-#' @param index Which item in the path to return? 1-indexing. If <1, samples selected from the end.
-#' @return string
+#' This is useful for merging tables in which the individual table ID
+#' is within the file path.
+#'
+#' @param file_path File path(s). If vector or list of paths provided, then a list will be returned
+#' @param index Which item in the path to return? 1-indexing. If <1, samples selected from the end. "O" will select the file name.
+#' @return string if 1 path, else list
 path_get_label = function(file_path, index){
+  # if multiple input
+  if(length(file_path) > 1){
+    labs = lapply(as.list(file_path), function(x) path_get_label(x, index=index))
+    file_path = setNames(as.list(file_path), labs)
+    return(file_path)
+  }
+  # else just return 1
   file_path = unlist(strsplit(file_path, '/'))
   if(index < 1){
     index = length(file_path) + index

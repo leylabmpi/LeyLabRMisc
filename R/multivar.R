@@ -78,6 +78,9 @@ calc_beta_div = function(df, tree=NULL,
       if(length(to_rm) > 0){
         tree = ape::drop.tip(tree, to_rm)
       }
+      if(length(intersect(tree$tip.label, colnames(df))) < ncol(df)){
+        stop('tree tip labels and df colnames do not match!')
+      }
       ## UniFrac calc
       if(method == 'wunifrac'){
         return(rbiom::unifrac(t(as.matrix(df)), tree=tree, weighted=TRUE))

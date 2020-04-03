@@ -9,7 +9,7 @@ tidy_pcoa(
   taxon_col,
   sample_col,
   abundance_col,
-  dists = c("bray", "jaccard"),
+  dists = c("bray", "jaccard", "wunifrac", "unifrac"),
   tree = NULL,
   threads = 1,
   threads_unifrac = 1,
@@ -42,7 +42,7 @@ tidy_pcoa(
 \item{pcoa_file}{file name for saving the raw pcoa results}
 }
 \value{
-data.frame
+a tibble of PCoA info for all selected "dists"
 }
 \description{
 Perform PCoA in a "tidy" way.
