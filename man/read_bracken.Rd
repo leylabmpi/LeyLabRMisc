@@ -6,8 +6,7 @@
 \usage{
 read_bracken(
   infile,
-  is_gzip = FALSE,
-  n_lines = 0,
+  nrows = Inf,
   keep_frac = TRUE,
   tax_levs = c("Domain", "Phylum", "Class", "Order", "Family", "Genus", "Species")
 )
@@ -15,9 +14,7 @@ read_bracken(
 \arguments{
 \item{infile}{Path to bracken table file}
 
-\item{is_gzip}{Is the table file gzip'ed?}
-
-\item{n_lines}{Number of lines to read. If < 1, all lines will be read.}
+\item{nrows}{Number of table rows to read. If Inf, all lines will be read.}
 
 \item{keep_frac}{If TRUE, keep all columns ending in "_frac"; otherwise, keep "_num" columns.}
 
