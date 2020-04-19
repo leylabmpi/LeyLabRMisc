@@ -9,15 +9,11 @@
 #' @param nrows Number of table rows to read. If Inf, all lines will be read.
 #' @param keep_frac If TRUE, keep all columns ending in "_frac"; otherwise, keep "_num" columns.
 #' @param tax_levs Taxonomic levels to separate the taxonomy column into.
+#' @param ... Params passed to fread()
 #' @return data.table
-read_bracken = function(infile, nrows=Inf, keep_frac=TRUE,
+read_bracken = function(infile, nrows=Inf, keep_frac=TRUE, n_lines=Inf,
                         tax_levs = c('Domain', 'Phylum', 'Class', 'Order',
-                                     'Family', 'Genus', 'Species')){
-  if(n_lines > 0){
-    n_lines = glue::glue('| head -n {n}', n=n_lines)
-  } else {
-    n_lines = ''
-  }
+                                     'Family', 'Genus', 'Species'), ...){
   if(keep_frac){
     to_rm = '_num'
     to_keep = '_frac'
@@ -25,7 +21,7 @@ read_bracken = function(infile, nrows=Inf, keep_frac=TRUE,
     to_rm = '_frac'
     to_keep = '_num'
   }
-  dt = data.table::fread(infile, sep='\t', nrows=nrows, check.names=TRUE) %>%
+  dt = data.table::fread(infile, sep='\t', nrows=nrows, check.names=TRUE, ...) %>%
     tidytable::dt_select(-taxIDs, -dt_ends_with(!!to_rm)) %>%
     tidytable::dt_mutate(taxonomy = gsub(';[pcofgs]__', ';', taxonomy),
                          taxonomy = gsub('^d__', '', taxonomy)) %>%

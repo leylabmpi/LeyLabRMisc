@@ -8,7 +8,9 @@ read_bracken(
   infile,
   nrows = Inf,
   keep_frac = TRUE,
-  tax_levs = c("Domain", "Phylum", "Class", "Order", "Family", "Genus", "Species")
+  n_lines = Inf,
+  tax_levs = c("Domain", "Phylum", "Class", "Order", "Family", "Genus", "Species"),
+  ...
 )
 }
 \arguments{
@@ -19,6 +21,8 @@ read_bracken(
 \item{keep_frac}{If TRUE, keep all columns ending in "_frac"; otherwise, keep "_num" columns.}
 
 \item{tax_levs}{Taxonomic levels to separate the taxonomy column into.}
+
+\item{...}{Params passed to fread()}
 }
 \value{
 data.table
