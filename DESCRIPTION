@@ -1,7 +1,7 @@
 Package: LeyLabRMisc
 Type: Package
 Title: Ley Lab misc R functions, rmd templates, etc.
-Version: 0.1.4
+Version: 0.1.5
 Author: Nick Youngblut
 Maintainer: Nick Youngblut <nyoungb2@gmail.com>
 Description: Ley Lab misc R functions, rmd templates, etc.

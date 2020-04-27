@@ -17,6 +17,7 @@ ml_tax_HFE(brk, tax_level, corr_cutoff = 0.7, threads = 2, quiet = TRUE)
 data.table of filtered features
 }
 \description{
-For each clade (defined by tax_level), aggregate species abundances to genus, family, ..., to tax_level,
-then filter out taxa that correlate strongly (just one selected)
+For each clade (defined by tax_level), aggregate species abundances at each taxonomic
+level up to the user-defined "tax_level", then filter out taxa that correlate strongly
+(just one taxon is selected of those that correlate).
 }
