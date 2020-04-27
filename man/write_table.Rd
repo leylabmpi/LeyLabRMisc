@@ -7,7 +7,7 @@
 write_table(df, file, sep = "\\t", quote = FALSE, row.names = FALSE, ...)
 }
 \arguments{
-\item{df}{Data.frame to write out}
+\item{df}{data.frame or data.table to write out}
 
 \item{file}{Output file path}
 
@@ -17,8 +17,9 @@ write_table(df, file, sep = "\\t", quote = FALSE, row.names = FALSE, ...)
 
 \item{row.names}{either a logical value indicating whether the row names of x are to be written along with x, or a character vector of row names to be written.}
 
-\item{...}{Passed to write.table}
+\item{...}{Passed to write.table (if data.frame) or fwrite (if data.table)}
 }
 \description{
-This is most useful for working with IRkernl in Jupyter notebooks
+This is most useful for working with IRkernl in Jupyter notebooks.
+If a data.table is provided, then fwrite is used; otherwise, write.table is used.
 }

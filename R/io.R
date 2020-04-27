@@ -68,17 +68,22 @@ files_to_list = function(files, label_index=-1){
 
 #' writing table convience function
 #'
-#' This is most useful for working with IRkernl in Jupyter notebooks
+#' This is most useful for working with IRkernl in Jupyter notebooks.
+#' If a data.table is provided, then fwrite is used; otherwise, write.table is used.
 #'
-#' @param df Data.frame to write out
+#' @param df data.frame or data.table to write out
 #' @param file Output file path
 #' @param sep the field separator string. Values within each row of x are separated by this string
 #' @param quote a logical value (TRUE or FALSE) or a numeric vector. If TRUE, any character or factor columns will be surrounded by double quotes.
 #' @param row.names either a logical value indicating whether the row names of x are to be written along with x, or a character vector of row names to be written.
-#' @param ... Passed to write.table
+#' @param ... Passed to write.table (if data.frame) or fwrite (if data.table)
 #' @return NULL
 write_table = function(df, file, sep="\t", quote=FALSE, row.names=FALSE, ...){
-  write.table(df, file=file, sep=sep, quote=quote, row.names=row.names, ...)
+  if('data.table' %in% class(df)){
+    data.table::fwrite(df, file=file, sep=sep, quote=quote, row.names=row.names, ...)
+  } else {
+    write.table(df, file=file, sep=sep, quote=quote, row.names=row.names, ...)
+  }
   cat('File written:', file, '\n')
 }
 
