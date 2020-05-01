@@ -124,12 +124,6 @@ unique_n = function(x, label='items', sel_col=NULL){
 #'
 overlap = function(x, y, sel_col_x=NULL, sel_col_y=NULL,
                    to_return=c('counts', 'diff_x', 'diff_y', 'diff_fuzzy')){
-  if(is.data.frame(x)){
-    x = data.table::as.data.table(x)
-  }
-  if(is.data.frame(y)){
-    y = data.table::as.data.table(y)
-  }
   if(any(c('tidytable', 'data.table') %in% class(x))){
     tryCatch({
       sel_col_x = ggplot2::enexpr(sel_col_x)
