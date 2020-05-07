@@ -11,7 +11,7 @@
 #' @param tax_levs Taxonomic levels to separate the taxonomy column into.
 #' @param ... Params passed to fread()
 #' @return data.table
-read_bracken = function(infile, nrows=Inf, keep_frac=TRUE, n_lines=Inf,
+read_bracken = function(infile, nrows=Inf, keep_frac=TRUE,
                         tax_levs = c('Domain', 'Phylum', 'Class', 'Order',
                                      'Family', 'Genus', 'Species'), ...){
   if(keep_frac){
@@ -33,3 +33,4 @@ read_bracken = function(infile, nrows=Inf, keep_frac=TRUE, n_lines=Inf,
 
   return(dt)
 }
+
