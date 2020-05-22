@@ -147,12 +147,12 @@ itol_heatmap = function(df, dataset_label, out_file, out_dir=NULL, tree=NULL,
   ## colors
   cat('COLOR_NAN #eae8e8\n', file=out_file, append=TRUE)
   cat('USE_MID_COLOR 1\n', file=out_file, append=TRUE)
-  if(color_scheme == 'color'){
+  if(color_scheme[1] == 'color'){
     cat('COLOR_MIN #0000ff\n', file=out_file, append=TRUE)
     cat('COLOR_MAX #ffff00\n', file=out_file, append=TRUE)
     cat('COLOR_MID #ff8000\n', file=out_file, append=TRUE)
   } else
-    if(color_scheme == 'bw'){
+    if(color_scheme[1] == 'bw'){
       cat('COLOR_MIN #ffffff\n', file=out_file, append=TRUE)
       cat('COLOR_MAX #cccccc\n', file=out_file, append=TRUE)
       cat('COLOR_MID #000000\n', file=out_file, append=TRUE)
