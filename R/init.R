@@ -37,7 +37,6 @@ df.dims = function(nrows=4, ncols=20){
   options(repr.matrix.max.rows=nrows, repr.matrix.max.cols=ncols)
 }
 
-
 #' Summary for numeric vectors that includes sd and stderr
 #'
 #' sd = standard deviation
@@ -86,8 +85,9 @@ summary_x = function(x, label=NULL, sel_col=NULL, rnd=3){
 #' @param x a vector or data.table. If data.table, sel_col must not be NULL
 #' @param label what to call the items in the vector (eg., "samples")
 #' @param sel_col If x is data.table or data.frame, which column to assess?
+#' @param ret Return the unique values?
 #' @returns NULL
-unique_n = function(x, label='items', sel_col=NULL){
+unique_n = function(x, label='items', sel_col=NULL, ret=FALSE){
   if(any(c('tidytable', 'data.table') %in% class(x))){
     tryCatch({
       sel_col = ggplot2::enexpr(sel_col)
@@ -108,6 +108,9 @@ unique_n = function(x, label='items', sel_col=NULL){
   }
   cat(sprintf('No. of unique %s:', label),
       length(base::unique(x)), '\n')
+  if(ret==TRUE){
+    return(base::unique(x))
+  }
 }
 
 #' Determine counts of setdiff, intersect, & union of 2 vectors (or data.tables)
@@ -120,10 +123,12 @@ unique_n = function(x, label='items', sel_col=NULL){
 #' @param sel_col_x If x = data.table, which column to assess?
 #' @param sel_col_y If y = data.table, which column to assess?
 #' @param to_return "counts" = print overlap counts; "diff_x-or-y" = return setdiff; "diff_fuzzy" = return closest matches for those that differ (ordered best to worst)
+#' @param diff Alternative to "to_return". "x" or "y" = return setdiff; "int" = intersect, "union" = union
 #' @return NULL
 #'
 overlap = function(x, y, sel_col_x=NULL, sel_col_y=NULL,
-                   to_return=c('counts', 'diff_x', 'diff_y', 'diff_fuzzy')){
+                   to_return = c('counts', 'diff_x', 'diff_y', 'diff_fuzzy'),
+                   diff = c(NULL, 'x', 'y', 'int', 'union')){
   if(any(c('tidytable', 'data.table') %in% class(x))){
     tryCatch({
       sel_col_x = ggplot2::enexpr(sel_col_x)
@@ -160,15 +165,15 @@ overlap = function(x, y, sel_col_x=NULL, sel_col_y=NULL,
     }
     y = dplyr::pull(y, !!sel_col_y)
   }
-  if(to_return[1] == 'counts'){
+  if(to_return[1] == 'counts' & is.null(diff[1])){
     # comparison
     cat('intersect(x,y):', length(base::intersect(x,y)), '\n')
     cat('setdiff(x,y):', length(base::setdiff(x,y)), '\n')
     cat('setdiff(y,x):', length(base::setdiff(y,x)), '\n')
     cat('union(x,y):', length(base::union(x,y)), '\n')
-  } else if (to_return[1] == 'diff_x'){
+  } else if (to_return[1] == 'diff_x' | diff[1] == 'x'){
     return(setdiff(x, y))
-  } else if (to_return[1] == 'diff_y'){
+  } else if (to_return[1] == 'diff_y' | diff[1] == 'y'){
     return(setdiff(y, x))
   } else if (to_return[1] == 'diff_fuzzy'){
     x = base::setdiff(x,y)
@@ -177,6 +182,10 @@ overlap = function(x, y, sel_col_x=NULL, sel_col_y=NULL,
     colnames(d) = c('x', 'y', 'dist')
     d = d[d$dist != 0,]
     return(d[order(d$dist),])
+  } else if (diff[1] == 'int'){
+    return(intersect(x,y))
+  } else if (diff[1] == 'union'){
+    return(union(x,y))
   } else {
     stop('"to_return" value not recognized')
   }

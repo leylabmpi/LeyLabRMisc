@@ -34,7 +34,7 @@ itol_symbol = function(df, dataset_label, out_file, out_dir=NULL, MAXIMUM_SIZE=5
 #' @param dataset_label What to label the itol dataset
 #' @param out_file Name of the output file
 #' @param out_dir Where to write the output
-#' @param legend A list that includes shapes, colors, and labels
+#' @param legend A list that includes shapes, colors, and labels (see \code{\link{itol_colorstrip}})
 #' @param WIDTH Bar width
 #' @return NULL
 itol_multibar = function(df, dataset_label, out_file, out_dir=NULL, legend=NULL, WIDTH=200){
@@ -180,12 +180,27 @@ itol_heatmap = function(df, dataset_label, out_file, out_dir=NULL, tree=NULL,
 #'
 #' https://itol.embl.de/help.cgi#strip
 #'
+#' Custom Legend: requires a data.frame with the number of rows equaling the number of unique
+#' values in the legend.
+#' \itemize{
+#'   \item "shapes" => numeric (see \href{https://itol.embl.de/help.cgi#dsLeg}{the itol docs})
+#'   \item "colors" => hexidecimal (see \href{https://www.color-hex.com/}{this website for examples})
+#'   \item "labels" => legend labels
+#' }
+#'
 #' @param df Dataframe, in which the rownames should correspond with the tree labels; the plotting parameter should be column 1
 #' @param dataset_label What to label the itol dataset
 #' @param out_file Name of the output file
 #' @param out_dir Where to write the output
-#' @param legend Specify particular legend
+#' @param legend Custom legend (see the function description)
 #' @return NULL
+#'
+#' @examples
+#' # creating a custom legend
+#' legend = data.frame(unique(iris$Species),
+#' colors = c('#00FF00', '#FFCC33', '#FF0000'),
+#' shapes = rep(1, length(unique(iris$Species))))
+#' legend
 itol_colorstrip = function(df, dataset_label, out_file, out_dir=NULL, legend=NULL){
   df = data.frame(tip = rownames(df),
                   feature = as.character(df[,1]))
@@ -244,7 +259,7 @@ itol_colorstrip = function(df, dataset_label, out_file, out_dir=NULL, legend=NUL
 #' @param dataset_label What to label the itol dataset
 #' @param out_file Name of the output file
 #' @param out_dir Where to write the output
-#' @param legend Specify particular legend
+#' @param legend Specify particular legend (see \code{\link{itol_colorstrip}})
 #' @return NULL
 itol_externalshape = function(df, dataset_label, out_file, out_dir=NULL, legend=NULL, WIDTH=200){
   if(! is.null(out_dir)){
@@ -304,7 +319,7 @@ itol_externalshape = function(df, dataset_label, out_file, out_dir=NULL, legend=
 #' @param dataset_label What to label the itol dataset
 #' @param out_file Name of the output file
 #' @param out_dir Where to write the output
-#' @param legend Specify particular legend
+#' @param legend Specify particular legend (see \code{\link{itol_colorstrip}})
 #' @param WIDTH Bar width
 #' @return NULL
 itol_simplebar = function(df, dataset_label, out_file, out_dir=NULL, legend=NULL, WIDTH=200){

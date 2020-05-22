@@ -9,7 +9,8 @@ overlap(
   y,
   sel_col_x = NULL,
   sel_col_y = NULL,
-  to_return = c("counts", "diff_x", "diff_y", "diff_fuzzy")
+  to_return = c("counts", "diff_x", "diff_y", "diff_fuzzy"),
+  diff = c(NULL, "x", "y", "int", "union")
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ overlap(
 \item{sel_col_y}{If y = data.table, which column to assess?}
 
 \item{to_return}{"counts" = print overlap counts; "diff_x-or-y" = return setdiff; "diff_fuzzy" = return closest matches for those that differ (ordered best to worst)}
+
+\item{diff}{Alternative to "to_return". "x" or "y" = return setdiff; "int" = intersect, "union" = union}
 }
 \description{
 The output is printed text of intersect, each-way setdiff, and union.

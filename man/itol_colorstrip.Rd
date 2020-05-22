@@ -15,8 +15,24 @@ itol_colorstrip(df, dataset_label, out_file, out_dir = NULL, legend = NULL)
 
 \item{out_dir}{Where to write the output}
 
-\item{legend}{Specify particular legend}
+\item{legend}{Custom legend (see the function description)}
 }
 \description{
 https://itol.embl.de/help.cgi#strip
+}
+\details{
+Custom Legend: requires a data.frame with the number of rows equaling the number of unique
+values in the legend.
+\itemize{
+  \item "shapes" => numeric (see \href{https://itol.embl.de/help.cgi#dsLeg}{the itol docs})
+  \item "colors" => hexidecimal (see \href{https://www.color-hex.com/}{this website for examples})
+  \item "labels" => legend labels
+}
+}
+\examples{
+# creating a custom legend
+legend = data.frame(unique(iris$Species),
+colors = c('#00FF00', '#FFCC33', '#FF0000'),
+shapes = rep(1, length(unique(iris$Species))))
+legend
 }

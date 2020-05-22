@@ -22,7 +22,7 @@ itol_externalshape(
 
 \item{out_dir}{Where to write the output}
 
-\item{legend}{Specify particular legend}
+\item{legend}{Specify particular legend (see \code{\link{itol_colorstrip}})}
 }
 \description{
 https://itol.embl.de/help.cgi#shapes

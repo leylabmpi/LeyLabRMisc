@@ -8,7 +8,6 @@ read_bracken(
   infile,
   nrows = Inf,
   keep_frac = TRUE,
-  n_lines = Inf,
   tax_levs = c("Domain", "Phylum", "Class", "Order", "Family", "Genus", "Species"),
   ...
 )

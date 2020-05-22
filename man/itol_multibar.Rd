@@ -22,7 +22,7 @@ itol_multibar(
 
 \item{out_dir}{Where to write the output}
 
-\item{legend}{A list that includes shapes, colors, and labels}
+\item{legend}{A list that includes shapes, colors, and labels (see \code{\link{itol_colorstrip}})}
 
 \item{WIDTH}{Bar width}
 }
