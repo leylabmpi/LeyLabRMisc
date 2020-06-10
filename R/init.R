@@ -122,14 +122,15 @@ unique_n = function(x, label='items', sel_col=NULL, ret=FALSE){
 #' @param y vector2 or data.table. If data.table, sel_col_y must not be NULL
 #' @param sel_col_x If x = data.table, which column to assess?
 #' @param sel_col_y If y = data.table, which column to assess?
-#' @param to_return "counts" = print overlap counts; "diff_x-or-y" = return setdiff; "diff_fuzzy" = return closest matches for those that differ (ordered best to worst)
+#' @param to_return (depreciated) "counts" = print overlap counts; "diff_x-or-y" = return setdiff; "diff_fuzzy" = return closest matches for those that differ (ordered best to worst)
 #' @param diff Alternative to "to_return". "x" or "y" = return setdiff; "int" = intersect, "union" = union
 #' @return NULL
 #'
 overlap = function(x, y, sel_col_x=NULL, sel_col_y=NULL,
                    to_return = c('counts', 'diff_x', 'diff_y', 'diff_fuzzy'),
-                   diff = c(NULL, 'x', 'y', 'int', 'union')){
+                   diff = c(NA, 'x', 'y', 'int', 'union')){
   if(any(c('tidytable', 'data.table') %in% class(x))){
+    require(tidytable)
     tryCatch({
       sel_col_x = ggplot2::enexpr(sel_col_x)
     })
@@ -139,7 +140,8 @@ overlap = function(x, y, sel_col_x=NULL, sel_col_y=NULL,
     x = tidytable::dt_distinct(x, !!sel_col_x)
     x = tidytable::dt_pull(x, !!sel_col_x)
   }
-  if(any(c('tidytable', 'data.table') %in% class(x))){
+  if(any(c('tidytable', 'data.table') %in% class(y))){
+    require(tidytable)
     tryCatch({
       sel_col_y = ggplot2::enexpr(sel_col_y)
     })
@@ -148,7 +150,8 @@ overlap = function(x, y, sel_col_x=NULL, sel_col_y=NULL,
     }
     y = tidytable::dt_distinct(y, !!sel_col_y)
     y = tidytable::dt_pull(y, !!sel_col_y)
-  } else if(any(c('data.frame') %in% class(x))){
+  }
+  if(any(c('data.frame') %in% class(x))){
     tryCatch({
       sel_col_x = dplyr::enquo(sel_col_x)
     })
@@ -156,7 +159,8 @@ overlap = function(x, y, sel_col_x=NULL, sel_col_y=NULL,
       stop('sel_col_x cannot be NULL for data.frame objects')
     }
     x = dplyr::pull(x, !!sel_col_x)
-  } else if(any(c('data.frame') %in% class(y))){
+  }
+  if(any(c('data.frame') %in% class(y))){
     tryCatch({
       sel_col_y = dplyr::enquo(sel_col_y)
     })
@@ -165,8 +169,7 @@ overlap = function(x, y, sel_col_x=NULL, sel_col_y=NULL,
     }
     y = dplyr::pull(y, !!sel_col_y)
   }
-  if(to_return[1] == 'counts' & is.null(diff[1])){
-    # comparison
+  if(to_return[1] == 'counts' & is.na(diff[1])){
     cat('intersect(x,y):', length(base::intersect(x,y)), '\n')
     cat('setdiff(x,y):', length(base::setdiff(x,y)), '\n')
     cat('setdiff(y,x):', length(base::setdiff(y,x)), '\n')

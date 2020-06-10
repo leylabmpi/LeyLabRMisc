@@ -9,7 +9,8 @@ itol_boxplot(
   dataset_label,
   out_file,
   out_dir = NULL,
-  key_color = "#ff0000"
+  key_color = "#ff0000",
+  WIDTH = 200
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ itol_boxplot(
 \item{out_dir}{Where to write the output}
 
 \item{key_color}{The color for the legend key}
+
+\item{WIDTH}{Maximum width}
 }
 \description{
 https://itol.embl.de/help.cgi#boxplot

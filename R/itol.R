@@ -97,8 +97,10 @@ itol_multibar = function(df, dataset_label, out_file, out_dir=NULL, legend=NULL,
 #' @param out_file Name of the output file
 #' @param out_dir Where to write the output
 #' @param key_color The color for the legend key
+#' @param WIDTH Maximum width
 #' @return NULL
-itol_boxplot = function(df, dataset_label, out_file, out_dir=NULL, key_color='#ff0000'){
+itol_boxplot = function(df, dataset_label, out_file, out_dir=NULL,
+                        key_color='#ff0000', WIDTH=200){
   if(! is.null(out_dir)){
     out_file = file.path(out_dir, out_file)
   }
@@ -107,6 +109,7 @@ itol_boxplot = function(df, dataset_label, out_file, out_dir=NULL, key_color='#f
   cat('SEPARATOR SPACE\n', file=out_file, append=TRUE)
   cat(sprintf('DATASET_LABEL %s\n', dataset_label), file=out_file, append=TRUE)
   cat(sprintf('COLOR %s\n', key_color), file=out_file, append=TRUE)
+  cat(sprintf('WIDTH %s\n', WIDTH), file=out_file, append=TRUE)
 
   # data
   cat('DATA\n', file=out_file, append=TRUE)
