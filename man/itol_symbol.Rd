@@ -4,7 +4,14 @@
 \alias{itol_symbol}
 \title{create itol symbol file}
 \usage{
-itol_symbol(df, dataset_label, out_file, out_dir = NULL, MAXIMUM_SIZE = 50)
+itol_symbol(
+  df,
+  dataset_label,
+  out_file,
+  out_dir = NULL,
+  MAXIMUM_SIZE = 50,
+  COLOR = "#ff0000"
+)
 }
 \arguments{
 \item{df}{Dataframe, in which the rownames should correspond with the tree internal node labels, and other columns should be: symbol,size,color,fill,position,(label)}
@@ -16,6 +23,8 @@ itol_symbol(df, dataset_label, out_file, out_dir = NULL, MAXIMUM_SIZE = 50)
 \item{out_dir}{Where to write the output}
 
 \item{MAXIMUM_SIZE}{The max size of the symbols}
+
+\item{COLOR}{Legend color}
 }
 \description{
 https://itol.embl.de/help.cgi#symbols

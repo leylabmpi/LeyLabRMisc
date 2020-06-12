@@ -7,8 +7,10 @@
 #' @param out_file Name of the output file
 #' @param out_dir Where to write the output
 #' @param MAXIMUM_SIZE The max size of the symbols
+#' @param COLOR Legend color
 #' @return NULL
-itol_symbol = function(df, dataset_label, out_file, out_dir=NULL, MAXIMUM_SIZE=50){
+itol_symbol = function(df, dataset_label, out_file, out_dir=NULL,
+                       MAXIMUM_SIZE=50, COLOR="#ff0000"){
   if(! is.null(out_dir)){
     out_file = file.path(out_dir, out_file)
   }
@@ -16,7 +18,7 @@ itol_symbol = function(df, dataset_label, out_file, out_dir=NULL, MAXIMUM_SIZE=5
   cat('DATASET_SYMBOL\n', file=out_file)
   cat('SEPARATOR SPACE\n', file=out_file, append=TRUE)
   cat(sprintf('DATASET_LABEL %s\n', dataset_label), file=out_file, append=TRUE)
-  cat('COLOR #ff0000\n', file=out_file, append=TRUE)
+  cat(sprintf('COLOR %s\n', COLOR), file=out_file, append=TRUE)
   cat(sprintf('MAXIMUM_SIZE %s\n', MAXIMUM_SIZE), file=out_file, append=TRUE)
 
   # Data
@@ -36,8 +38,10 @@ itol_symbol = function(df, dataset_label, out_file, out_dir=NULL, MAXIMUM_SIZE=5
 #' @param out_dir Where to write the output
 #' @param legend A list that includes shapes, colors, and labels (see \code{\link{itol_colorstrip}})
 #' @param WIDTH Bar width
+#' @param COLOR Legend color
 #' @return NULL
-itol_multibar = function(df, dataset_label, out_file, out_dir=NULL, legend=NULL, WIDTH=200){
+itol_multibar = function(df, dataset_label, out_file, out_dir=NULL,
+                         legend=NULL, WIDTH=200, COLOR="#ff0000"){
   if(! is.null(out_dir)){
     out_file = file.path(out_dir, out_file)
   }
@@ -45,7 +49,7 @@ itol_multibar = function(df, dataset_label, out_file, out_dir=NULL, legend=NULL,
   cat('DATASET_MULTIBAR\n', file=out_file)
   cat('SEPARATOR SPACE\n', file=out_file, append=TRUE)
   cat(sprintf('DATASET_LABEL %s\n', dataset_label), file=out_file, append=TRUE)
-  cat('COLOR #ff0000\n', file=out_file, append=TRUE)
+  cat(sprintf('COLOR %s\n', COLOR), file=out_file, append=TRUE)
   cat(sprintf('WIDTH %s\n', WIDTH), file=out_file, append=TRUE)
 
   # Field labels
@@ -55,7 +59,7 @@ itol_multibar = function(df, dataset_label, out_file, out_dir=NULL, legend=NULL,
 
   # Field colors
   if(is.null(legend)){
-    cols = gsub('FF$', '', rainbow(ncol(df)))
+    cols = rainbow(ncol(df))
   } else {
     cols = legend$colors %>% as.character
   }
@@ -66,7 +70,7 @@ itol_multibar = function(df, dataset_label, out_file, out_dir=NULL, legend=NULL,
   cat(sprintf('LEGEND_TITLE %s\n', dataset_label), file=out_file, append=TRUE)
   if(is.null(legend)){
     shapes = rep(1, colnames(df) %>% length)
-    cols = gsub('FF$', '', rainbow(length(shapes)))
+    cols = rainbow(length(shapes))
     labs = paste(gsub(' ', '_', colnames(df)), collapse=' ')
   } else {
     stopifnot(all(colnames(legend) %in% c('shapes', 'colors', 'labels')))

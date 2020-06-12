@@ -10,7 +10,8 @@ itol_multibar(
   out_file,
   out_dir = NULL,
   legend = NULL,
-  WIDTH = 200
+  WIDTH = 200,
+  COLOR = "#ff0000"
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ itol_multibar(
 \item{legend}{A list that includes shapes, colors, and labels (see \code{\link{itol_colorstrip}})}
 
 \item{WIDTH}{Bar width}
+
+\item{COLOR}{Legend color}
 }
 \description{
 https://itol.embl.de/help.cgi#multibar
