@@ -173,7 +173,7 @@ itol_heatmap = function(df, dataset_label, out_file, out_dir=NULL, tree=NULL,
   }
   if(!is.null(tree)){
     cat('FIELD_TREE ', file=out_file, append=TRUE)
-    write.tree(tree, file=out_file, append=TRUE)
+    ape::write.tree(tree, file=out_file, append=TRUE)
   }
 
   # data
