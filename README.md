@@ -31,6 +31,18 @@ Feel free to contribute! Just clone the repo, make some changes, commit, and cre
 
 * If this repo will be inside another git repo, then use `git submodule`
   * See [this stack overflow post](https://stackoverflow.com/questions/1811730/how-do-i-work-with-a-git-repository-within-another-repository)
+  
+# Function overview
+
+* General functions for table + plot formatting
+* Functions for reading/writing files
+* Functions for running bash commands (with conda)
+* Functions to help with cluster job submission
+* Functions for creating iTOL input
+* Functions for machine learning
+* Functions for multivariate data analysis
+* Functions to help with using the phyloseq R package
+* Functions to help process metagenome profiling data
 
 # Manual & Tutorials
 

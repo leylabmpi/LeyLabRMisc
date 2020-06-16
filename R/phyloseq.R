@@ -36,6 +36,22 @@ phyloseq2df = function(physeq_obj, physeq_func, long=FALSE){
   return(suppressWarnings(tbl %>% as_tibble))
 }
 
+#' Transform abundances to relative
+#'
+#' A simple wrapper for transform_sample_counts()
+#'
+#' @param physeq_obj The phyloseq object
+#' @param percent_abund Fractional or percent abundance?
+#' @return A phyloseq object
+phyloseq_rel_abund <- function(physeq_obj, percent_abund=TRUE) {
+  if(percent_abund == TRUE){
+    physeq_obj = transform_sample_counts(physeq_obj, function(x) x / sum(x) * 100)
+  } else {
+    physeq_obj = transform_sample_counts(physeq_obj, function(x) x / sum(x) )
+  }
+  return(physeq_obj)
+}
+
 #' phyloseq::estimate_richness, but includes Faith's PD
 #'
 #' See physeq::estimate richness for full details

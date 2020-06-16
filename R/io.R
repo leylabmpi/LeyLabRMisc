@@ -117,3 +117,23 @@ Robj_md5sum = function(Robj){
   dput(Robj, file=F)
   as.character(tools::md5sum(c(F)))
 }
+
+#' Read the last N lines of a file
+#'
+#' @param x The file name
+#' @param n The last N lines to read
+#' @param ... Passed to scan()
+#' @return NULL
+readLinesTail = function(x, n, ...){
+  con = file(x)
+  open(con)
+  out = scan(con, n, what="char(0)", sep="\n", quiet=TRUE,...)
+  while(TRUE){
+    tmp = scan(con,1,what="char(0)",sep="\n",quiet=TRUE)
+    if(length(tmp)==0) {
+      close(con) ; break
+    }
+    out = c(out[-1],tmp)
+  }
+  out
+}

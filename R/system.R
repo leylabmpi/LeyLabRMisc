@@ -12,8 +12,6 @@
 #' @param quiet No printing
 #' @returns NULL
 bash_job = function(cmd, conda_env, stdout=TRUE, stderr=TRUE, print_output=TRUE){
-  # cmd : string; commandline job (eg., 'ls -thlc')
-  # conda_env : string; conda environment name
   cmd = sprintf('. ~/.bashrc; conda activate %s; %s', conda_env, cmd)
   cmd = sprintf('-c "%s"', cmd)
   ret = system2('bash', cmd, stdout=stdout, stderr=stderr)
