@@ -5,12 +5,16 @@
 #' @param physeq_obj The phyloseq object
 #' @param physeq_func Which object do you want ('otu_table', 'tax_table', or 'sample_data')
 #' @param long Do you want the table in "long" format ("gathered")
+#' @param flip Flip (transpose) the table?
 #' @return A tibble
-phyloseq2df = function(physeq_obj, physeq_func, long=FALSE){
+phyloseq2df = function(physeq_obj, physeq_func, long=FALSE, flip=FALSE){
   require(dplyr)
   tbl = physeq_obj %>%
     physeq_func %>%
     as.data.frame(stringsAsFactors = FALSE)
+  if(flip == TRUE){
+    tbl = tbl %>% t %>% as.data.frame
+  }
 
   func_str = as.character(substitute(physeq_func))
 

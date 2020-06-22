@@ -4,7 +4,7 @@
 \alias{phyloseq2df}
 \title{Convert a sub-object of a phyloseq object to a dataframe}
 \usage{
-phyloseq2df(physeq_obj, physeq_func, long = FALSE)
+phyloseq2df(physeq_obj, physeq_func, long = FALSE, flip = FALSE)
 }
 \arguments{
 \item{physeq_obj}{The phyloseq object}
@@ -12,6 +12,8 @@ phyloseq2df(physeq_obj, physeq_func, long = FALSE)
 \item{physeq_func}{Which object do you want ('otu_table', 'tax_table', or 'sample_data')}
 
 \item{long}{Do you want the table in "long" format ("gathered")}
+
+\item{flip}{Flip (transpose) the table?}
 }
 \value{
 A tibble
