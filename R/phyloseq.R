@@ -19,7 +19,11 @@ phyloseq2df = function(physeq_obj, physeq_func, long=FALSE, flip=FALSE){
   func_str = as.character(substitute(physeq_func))
 
   if(func_str == 'otu_table' || func_str == 'tax_table'){
-    tbl$OTU = rownames(tbl)
+    if(flip == TRUE){
+      tbl$Sample = rownames(tbl)
+    } else {
+      tbl$OTU = rownames(tbl)
+    }
   } else
     if(func_str == 'sample_data'){
       tbl$Sample = rownames(tbl)
@@ -27,8 +31,13 @@ phyloseq2df = function(physeq_obj, physeq_func, long=FALSE, flip=FALSE){
   rownames(tbl) = 1:nrow(tbl)
 
   if(func_str == 'otu_table' && long == TRUE){
-    tbl = tbl %>%
-      gather(Sample, Count, -OTU)
+    if(flip == TRUE){
+      tbl = tbl %>%
+        gather(OTU, Count, -Sample)
+    } else {
+      tbl = tbl %>%
+        gather(Sample, Count, -OTU)
+    }
   } else if(func_str == 'tax_table' && long == TRUE){
     tbl = tbl %>%
       gather(Tax_level, Tax_name, -OTU)
