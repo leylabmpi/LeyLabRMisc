@@ -174,9 +174,9 @@ overlap = function(x, y, sel_col_x=NULL, sel_col_y=NULL,
     cat('setdiff(x,y):', length(base::setdiff(x,y)), '\n')
     cat('setdiff(y,x):', length(base::setdiff(y,x)), '\n')
     cat('union(x,y):', length(base::union(x,y)), '\n')
-  } else if (to_return[1] == 'diff_x' | diff[1] == 'x'){
+  } else if (to_return[1] == 'diff_x' | (!is.na(diff[1]) & diff[1] == 'x')){
     return(setdiff(x, y))
-  } else if (to_return[1] == 'diff_y' | diff[1] == 'y'){
+  } else if (to_return[1] == 'diff_y' | (!is.na(diff[1]) & diff[1] == 'y')){
     return(setdiff(y, x))
   } else if (to_return[1] == 'diff_fuzzy'){
     x = base::setdiff(x,y)
