@@ -9,6 +9,7 @@
 }
 
 #' Calculate common alpha-diversity metrics
+#' You need the "vegan" package installed to your R project and loaded for this code to run
 #'
 #' Faith's Phylogenetic Diversity ("PD") can be calculated only
 #' if a tree is provided. The tree can have extra tips, but there
