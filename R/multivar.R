@@ -1,3 +1,4 @@
+# note: you will need to have installed and loaded the "vegan" package to run this function
 # calculate Faith's PD
 .calc_pd = function(mtx, tree){
   mtx %>%
