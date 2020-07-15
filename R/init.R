@@ -126,71 +126,78 @@ unique_n = function(x, label='items', sel_col=NULL, ret=FALSE){
 #' @param diff Alternative to "to_return". "x" or "y" = return setdiff; "int" = intersect, "union" = union
 #' @return NULL
 #'
-overlap = function(x, y, sel_col_x=NULL, sel_col_y=NULL,
-                   to_return = c('counts', 'diff_x', 'diff_y', 'diff_fuzzy'),
-                   diff = c(NA, 'x', 'y', 'int', 'union')){
-  if(any(c('tidytable', 'data.table') %in% class(x))){
+overlap = function (x, y, sel_col_x = NULL, sel_col_y = NULL,
+                    to_return = c("counts", "diff_x", "diff_y", "diff_fuzzy"),
+                    diff = c(NA, "x", "y", "int", "union")){
+  if (any(c("tidytable", "data.table") %in% class(x))) {
     require(tidytable)
     tryCatch({
       sel_col_x = ggplot2::enexpr(sel_col_x)
     })
-    if(is.null(sel_col_x)){
-      stop('sel_col_x cannot be NULL for data.table objects')
+    if (is.null(sel_col_x)) {
+      stop("sel_col_x cannot be NULL for data.table objects")
     }
     x = tidytable::dt_distinct(x, !!sel_col_x)
     x = tidytable::dt_pull(x, !!sel_col_x)
   }
-  if(any(c('tidytable', 'data.table') %in% class(y))){
+  if (any(c("tidytable", "data.table") %in% class(y))) {
     require(tidytable)
     tryCatch({
       sel_col_y = ggplot2::enexpr(sel_col_y)
     })
-    if(is.null(sel_col_y)){
-      stop('sel_col_y cannot be NULL for data.table objects')
+    if (is.null(sel_col_y)) {
+      stop("sel_col_y cannot be NULL for data.table objects")
     }
     y = tidytable::dt_distinct(y, !!sel_col_y)
     y = tidytable::dt_pull(y, !!sel_col_y)
   }
-  if(any(c('data.frame') %in% class(x))){
+  if (any(c("data.frame") %in% class(x))) {
     tryCatch({
       sel_col_x = dplyr::enquo(sel_col_x)
     })
-    if(is.null(sel_col_x)){
-      stop('sel_col_x cannot be NULL for data.frame objects')
+    if (is.null(sel_col_x)) {
+      stop("sel_col_x cannot be NULL for data.frame objects")
     }
     x = dplyr::pull(x, !!sel_col_x)
   }
-  if(any(c('data.frame') %in% class(y))){
+  if (any(c("data.frame") %in% class(y))) {
     tryCatch({
       sel_col_y = dplyr::enquo(sel_col_y)
     })
-    if(is.null(sel_col_y)){
-      stop('sel_col_y cannot be NULL for data.frame objects')
+    if (is.null(sel_col_y)) {
+      stop("sel_col_y cannot be NULL for data.frame objects")
     }
     y = dplyr::pull(y, !!sel_col_y)
   }
-  if(to_return[1] == 'counts' & is.na(diff[1])){
-    cat('intersect(x,y):', length(base::intersect(x,y)), '\n')
-    cat('setdiff(x,y):', length(base::setdiff(x,y)), '\n')
-    cat('setdiff(y,x):', length(base::setdiff(y,x)), '\n')
-    cat('union(x,y):', length(base::union(x,y)), '\n')
-  } else if (to_return[1] == 'diff_x' | (!is.na(diff[1]) & diff[1] == 'x')){
+  if (to_return[1] == "counts" & is.na(diff[1])) {
+    cat("intersect(x,y):", length(base::intersect(x, y)),
+        "\n")
+    cat("setdiff(x,y):", length(base::setdiff(x, y)), "\n")
+    cat("setdiff(y,x):", length(base::setdiff(y, x)), "\n")
+    cat("union(x,y):", length(base::union(x, y)), "\n")
+  }
+  else if (to_return[1] == "diff_x" | (!is.na(diff[1]) & diff[1] == "x")) {
     return(setdiff(x, y))
-  } else if (to_return[1] == 'diff_y' | (!is.na(diff[1]) & diff[1] == 'y')){
+  }
+  else if (to_return[1] == "diff_y" | (!is.na(diff[1]) & diff[1] == "y")) {
     return(setdiff(y, x))
-  } else if (to_return[1] == 'diff_fuzzy'){
-    x = base::setdiff(x,y)
-    y = base::setdiff(y,x)
-    d = cbind(expand.grid(x,y), as.vector(adist(x,y)))
-    colnames(d) = c('x', 'y', 'dist')
-    d = d[d$dist != 0,]
-    return(d[order(d$dist),])
-  } else if (diff[1] == 'int'){
-    return(intersect(x,y))
-  } else if (diff[1] == 'union'){
-    return(union(x,y))
-  } else {
-    stop('"to_return" value not recognized')
+  }
+  else if (to_return[1] == "diff_fuzzy") {
+    x = base::setdiff(x, y)
+    y = base::setdiff(y, x)
+    d = cbind(expand.grid(x, y), as.vector(adist(x, y)))
+    colnames(d) = c("x", "y", "dist")
+    d = d[d$dist != 0, ]
+    return(d[order(d$dist), ])
+  }
+  else if (!is.na(diff[1]) & diff[1] == "int") {
+    return(intersect(x, y))
+  }
+  else if (!is.na(diff[1]) & diff[1] == "union") {
+    return(union(x, y))
+  }
+  else {
+    stop("\"to_return\" value not recognized")
   }
 }
 
