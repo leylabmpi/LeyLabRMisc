@@ -1,3 +1,4 @@
+# note: you will need to have installed and loaded the "vegan" package to run this function
 # calculate Faith's PD
 .calc_pd = function(mtx, tree){
   mtx %>%
@@ -8,6 +9,7 @@
 }
 
 #' Calculate common alpha-diversity metrics
+#' You need the "vegan" package installed to your R project and loaded for this code to run
 #'
 #' Faith's Phylogenetic Diversity ("PD") can be calculated only
 #' if a tree is provided. The tree can have extra tips, but there
