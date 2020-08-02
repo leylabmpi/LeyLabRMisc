@@ -2,7 +2,8 @@
 % Please edit documentation in R/multivar.R
 \name{calc_alpha_div}
 \alias{calc_alpha_div}
-\title{Calculate common alpha-diversity metrics}
+\title{Calculate common alpha-diversity metrics
+You need the "vegan" package installed to your R project and loaded for this code to run}
 \usage{
 calc_alpha_div(df, tree = NULL, index = c("nobs", "shannon", "PD"))
 }

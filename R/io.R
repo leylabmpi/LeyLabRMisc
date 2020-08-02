@@ -49,8 +49,8 @@ path_get_label = function(file_path, index){
   }
   return(file_path[index])
 }
+
 #' convert a vector of file paths into a named list
-#'
 #'
 #' @param files Vector of file paths (eg., by using "list_files()")
 #' @param label_index Which item in the path to return? 1-indexing. If <1, samples selected from the end.
@@ -136,4 +136,17 @@ readLinesTail = function(x, n, ...){
     out = c(out[-1],tmp)
   }
   out
+}
+
+#' python's os.path.split() for R
+#'
+#' @param x The full file path
+#' @return A vector of all path parts
+split_path = function(x){
+  if (dirname(x) == x){
+    return(x)
+  }
+  else{
+    return(c(split_path(dirname(x)), basename(x)))
+  }
 }
