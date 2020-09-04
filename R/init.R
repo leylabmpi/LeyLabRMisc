@@ -169,7 +169,7 @@ overlap = function (x, y, sel_col_x = NULL, sel_col_y = NULL,
     }
     y = dplyr::pull(y, !!sel_col_y)
   }
-  if (to_return[1] == "counts" & is.null(diff[1])) {
+  if (to_return[1] == "counts" & is.na(diff[1])) {
     cat("intersect(x,y):", length(base::intersect(x, y)),
         "\n")
     cat("setdiff(x,y):", length(base::setdiff(x, y)), "\n")
