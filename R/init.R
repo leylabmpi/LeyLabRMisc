@@ -128,7 +128,7 @@ unique_n = function(x, label='items', sel_col=NULL, ret=FALSE){
 #'
 overlap = function (x, y, sel_col_x = NULL, sel_col_y = NULL,
                     to_return = c("counts", "diff_x", "diff_y", "diff_fuzzy"),
-                    diff = c(NULL, "x", "y", "int", "union", "fuzzy")){
+                    diff = c(NA, "x", "y", "int", "union", "fuzzy")){
   if (any(c("tidytable", "data.table") %in% class(x))) {
     require(tidytable)
     tryCatch({
@@ -176,13 +176,13 @@ overlap = function (x, y, sel_col_x = NULL, sel_col_y = NULL,
     cat("setdiff(y,x):", length(base::setdiff(y, x)), "\n")
     cat("union(x,y):", length(base::union(x, y)), "\n")
   }
-  else if (to_return[1] == "diff_x" | diff[1] == "x") {
+  else if (to_return[1] == "diff_x" | (!is.na(diff[1]) & diff[1] == "x")) {
     return(setdiff(x, y))
   }
-  else if (to_return[1] == "diff_y" | diff[1] == "y") {
+  else if (to_return[1] == "diff_y" | (!is.na(diff[1]) & diff[1] == "y")) {
     return(setdiff(y, x))
   }
-  else if (to_return[1] == "diff_fuzzy" | diff[1] == 'fuzzy') {
+  else if (to_return[1] == "diff_fuzzy" | (!is.na(diff[1])& diff[1] == 'fuzzy')) {
     x = base::setdiff(x, y)
     y = base::setdiff(y, x)
     d = cbind(expand.grid(x, y), as.vector(adist(x, y)))
@@ -190,10 +190,10 @@ overlap = function (x, y, sel_col_x = NULL, sel_col_y = NULL,
     d = d[d$dist != 0, ]
     return(d[order(d$dist), ])
   }
-  else if (diff[1] == "int") {
+  else if (!is.na(diff[1]) & diff[1] == "int") {
     return(intersect(x, y))
   }
-  else if (diff[1] == "union") {
+  else if (!is.na(diff[1]) & diff[1] == "union") {
     return(union(x, y))
   }
   else {
