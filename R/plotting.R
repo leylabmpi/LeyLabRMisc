@@ -126,3 +126,61 @@ fig_uuid = function(full=FALSE){
   id = paste0('fig-', id)
   return(id)
 }
+
+#' getting RColorBrewer entire palette
+.get_brewer_palette = function(){
+  # color palletes
+  qual_col_pals = RColorBrewer::brewer.pal.info
+  qual_col_pals$rowname = rownames(qual_col_pals)
+  qual_col_pals = subset(qual_col_pals, category == "qual")
+  # Create single vector with all colors
+  color_vector = unlist(mapply(RColorBrewer::brewer.pal, qual_col_pals$maxcolors,
+                               qual_col_pals$rowname))
+  return(color_vector)
+}
+
+#' Great a better coloring scheme for taxon abundance barcharts
+#'
+#' The default coloring scheme for ggplot2 makes it hard to
+#' distinguish among data points in complex bar charts (eg., taxa plots).
+#' This function is a wrapper around scale_color_continuous()
+#' which changes the color scheme used.
+#'
+#' @param return_hex Return a vector of color hexidecimals instead of a plotting object.
+#' @return ScaleContinuous/ggproto object or vector
+#' @examples
+#' ggplot(mpg, aes(fl, hwy, fill=model)) +
+#'   geom_bar(stat='identity') +
+#'   scale_fill_all()
+scale_fill_all = function(return_hex = FALSE, ...){
+  color_vector = .get_brewer_palette()
+  if(return_hex == TRUE){
+    return(color_vector)
+  } else {
+    return(scale_fill_manual(values = color_vector, ...))
+  }
+}
+
+#' Great a better coloring scheme for taxon abundance barcharts
+#'
+#' The default coloring scheme for ggplot2 makes it hard to
+#' distinguish among data points in complex bar charts (eg., taxa plots).
+#' This function is a wrapper around scale_color_continuous()
+#' which changes the color scheme used.
+#'
+#' @param return_hex Return a vector of color hexidecimals instead of a plotting object.
+#' @return ScaleContinuous/ggproto object or vector
+#' @examples
+#' ggplot(mpg, aes(cty, hwy, color=class)) +
+#'   geom_point() +
+#'   scale_color_all()
+scale_color_all = function(return_hex = FALSE, ...){
+  color_vector = .get_brewer_palette()
+  if(return_hex == TRUE){
+    return(color_vector)
+  } else {
+    return(scale_color_manual(values = color_vector, ...))
+  }
+}
+
+

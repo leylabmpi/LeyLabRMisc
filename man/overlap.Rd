@@ -10,7 +10,7 @@ overlap(
   sel_col_x = NULL,
   sel_col_y = NULL,
   to_return = c("counts", "diff_x", "diff_y", "diff_fuzzy"),
-  diff = c(NA, "x", "y", "int", "union")
+  diff = c(NA, "x", "y", "int", "union", "fuzzy")
 )
 }
 \arguments{
