@@ -1,6 +1,6 @@
 #' convert to numeric while avoiding factor conversion issues
 #'
-#' @param x an interable
+#' @param x an iterable
 #' @return a numeric object
 as.Num = function(x){
   as.numeric(as.character(x))

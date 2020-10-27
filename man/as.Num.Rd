@@ -7,7 +7,7 @@
 as.Num(x)
 }
 \arguments{
-\item{x}{an interable}
+\item{x}{an iterable}
 }
 \value{
 a numeric object
