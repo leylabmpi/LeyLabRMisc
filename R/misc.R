@@ -20,6 +20,8 @@ taxonomy_levels = function(){
 #' expand.grid.lower(1:3, 1:3)
 #' expand.grid.lower(1:3, 1:3, diag=TRUE)
 expand.grid.lower = function(x, y, diag=FALSE){
+  require(dplyr)
+  require(tidyr)
   m = expand.grid(x, y) %>%
     filter(Var1 != Var2) %>%
     mutate(Val = 1) %>%
