@@ -6,44 +6,44 @@
   dt_levs = list()
   if(as.character(class_level) %in% tax_levs[1:length(tax_levs)]){
     dt_levs[['Species']] = brk %>%
-      dt_mutate(Taxonomy = paste(Phylum, Class, Order, Family, Genus, Species, sep=';'))  %>%
-      dt_select(Taxonomy, Sample, Abundance)
+      mutate.(Taxonomy = paste(Phylum, Class, Order, Family, Genus, Species, sep=';'))  %>%
+      select.(Taxonomy, Sample, Abundance)
   }
   if(as.character(class_level) %in% tax_levs[2:length(tax_levs)]){
     dt_levs[['Genus']] = brk %>%
-      dt_mutate(Taxonomy = paste(Phylum, Class, Order, Family, Genus, sep=';')) %>%
-      dt_summarize(Abundance = sum(Abundance),
+      mutate.(Taxonomy = paste(Phylum, Class, Order, Family, Genus, sep=';')) %>%
+      summarize.(Abundance = sum(Abundance),
                    by = list(Taxonomy, Sample))
   }
   if(as.character(class_level) %in% tax_levs[3:length(tax_levs)]){
     dt_levs[['Family']] = brk %>%
-      dt_mutate(Taxonomy = paste(Phylum, Class, Order, Family, sep=';')) %>%
-      dt_summarize(Abundance = sum(Abundance),
+      mutate.(Taxonomy = paste(Phylum, Class, Order, Family, sep=';')) %>%
+      summarize.(Abundance = sum(Abundance),
                    by = list(Taxonomy, Sample))
   }
   if(as.character(class_level) %in% tax_levs[4:length(tax_levs)]){
     dt_levs[['Order']] = brk %>%
-      dt_mutate(Taxonomy = paste(Phylum, Class, Order, sep=';')) %>%
-      dt_summarize(Abundance = sum(Abundance),
+      mutate.(Taxonomy = paste(Phylum, Class, Order, sep=';')) %>%
+      summarize.(Abundance = sum(Abundance),
                    by = list(Taxonomy, Sample))
   }
   if(as.character(class_level) %in% tax_levs[5:length(tax_levs)]){
     dt_levs[['Class']] = brk %>%
-      dt_mutate(Taxonomy = paste(Phylum, Class, sep=';')) %>%
-      dt_summarize(Abundance = sum(Abundance),
+      mutate.(Taxonomy = paste(Phylum, Class, sep=';')) %>%
+      summarize.(Abundance = sum(Abundance),
                    by = list(Taxonomy, Sample))
   }
   if(as.character(class_level) %in% tax_levs[6:length(tax_levs)]){
     dt_levs[['Phylum']] = brk %>%
-      dt_rename('Taxonomy' = Phylum) %>%
-      dt_summarize(Abundance = sum(Abundance),
+      rename.('Taxonomy' = Phylum) %>%
+      summarize.(Abundance = sum(Abundance),
                    by = list(Taxonomy, Sample))
   }
   # combining & creating wide table
   brk = data.table::rbindlist(dt_levs, use.names=TRUE)
   rm(dt_levs)
   brk_w = brk %>%
-    dt_pivot_wider(names_from=Taxonomy, values_from=Abundance)
+    pivot_wider.(names_from=Taxonomy, values_from=Abundance)
 
   # correlation amoung features
   options(warn=-1)
@@ -64,7 +64,7 @@
   }
   if(length(to_rm) > 0){
     brk = brk %>%
-      dt_filter(Taxonomy %in% !!to_rm)
+      filter.(Taxonomy %in% !!to_rm)
   }
   return(brk)
 }
@@ -83,18 +83,18 @@ ml_tax_HFE = function(brk, tax_level, corr_cutoff=0.7, threads=2, quiet=TRUE){
   tax_level = enexpr(tax_level)
   if(as.character(tax_level) == 'Species'){
     brk = brk %>%
-      dt_mutate(Taxonomy = paste(Phylum, Class, Order, Family, Genus, Species, sep=';')) %>%
-      dt_select(Taxonomy, Abundance, Sample) %>%
-      dt_pivot_wider(names_from=Taxonomy, values_from=Abundance)
+      mutate.(Taxonomy = paste(Phylum, Class, Order, Family, Genus, Species, sep=';')) %>%
+      select.(Taxonomy, Abundance, Sample) %>%
+      pivot_wider.(names_from=Taxonomy, values_from=Abundance)
     return(brk)
   }
   if(threads > 1) doParallel::registerDoParallel(threads)
   brk = brk %>%
-    dt_group_split(!!tax_level) %>%
+    group_split.(!!tax_level) %>%
     plyr::llply(.HFE, class_level=!!tax_level,
                 corr_cutoff=corr_cutoff, quiet=quiet,
                 .parallel=threads > 1) %>%
     data.table::rbindlist(use.names=TRUE) %>%
-    dt_pivot_wider(names_from=Taxonomy, values_from=Abundance)
+    pivot_wider.(names_from=Taxonomy, values_from=Abundance)
   return(brk)
 }

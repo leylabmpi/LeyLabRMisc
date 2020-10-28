@@ -22,14 +22,14 @@ read_bracken = function(infile, nrows=Inf, keep_frac=TRUE,
     to_keep = '_num'
   }
   dt = data.table::fread(infile, sep='\t', nrows=nrows, check.names=TRUE, ...) %>%
-    tidytable::dt_select(-taxIDs, -dt_ends_with(!!to_rm)) %>%
-    tidytable::dt_mutate(taxonomy = gsub(';[pcofgs]__', ';', taxonomy),
+    tidytable::select.(-taxIDs, -ends_with.(!!to_rm)) %>%
+    tidytable::mutate.(taxonomy = gsub(';[pcofgs]__', ';', taxonomy),
                          taxonomy = gsub('^d__', '', taxonomy)) %>%
-    tidytable::dt_separate(taxonomy, tax_levs, sep=';') %>%
-    tidytable::dt_pivot_longer(cols=dt_ends_with(!!to_keep),
+    tidytable::separate.(taxonomy, tax_levs, sep=';') %>%
+    tidytable::pivot_longer.(cols=ends_with.(!!to_keep),
                                names_to='Sample',
                                values_to='Abundance') %>%
-    tidytable::dt_mutate(Sample = gsub('(_frac|_num)$', '', Sample))
+    tidytable::mutate.(Sample = gsub('(_frac|_num)$', '', Sample))
 
   return(dt)
 }

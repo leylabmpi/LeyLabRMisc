@@ -58,7 +58,7 @@ summary_x = function(x, label=NULL, sel_col=NULL, rnd=3){
     if(is.null(sel_col)){
       stop('sel_col cannot be NULL for data.table objects')
     }
-    x = tidytable::dt_pull(x, !!sel_col)
+    x = tidytable::pull.(x, !!sel_col)
   } else if(any(c('data.frame') %in% class(x))){
     tryCatch({
       sel_col = dplyr::enquo(sel_col)
@@ -95,8 +95,8 @@ unique_n = function(x, label='items', sel_col=NULL, ret=FALSE){
     if(is.null(sel_col)){
       stop('sel_col cannot be NULL for data.table objects')
     }
-    x = tidytable::dt_distinct(x, !!sel_col)
-    x = tidytable::dt_pull(x, !!sel_col)
+    x = tidytable::distinct.(x, !!sel_col)
+    x = tidytable::pull.(x, !!sel_col)
   } else if(any(c('data.frame') %in% class(x))){
     tryCatch({
       sel_col = dplyr::enquo(sel_col)
@@ -137,8 +137,8 @@ overlap = function (x, y, sel_col_x = NULL, sel_col_y = NULL,
     if (is.null(sel_col_x)) {
       stop("sel_col_x cannot be NULL for data.table objects")
     }
-    x = tidytable::dt_distinct(x, !!sel_col_x)
-    x = tidytable::dt_pull(x, !!sel_col_x)
+    x = tidytable::distinct.(x, !!sel_col_x)
+    x = tidytable::pull.(x, !!sel_col_x)
   }
   if (any(c("tidytable", "data.table") %in% class(y))) {
     require(tidytable)
@@ -148,8 +148,8 @@ overlap = function (x, y, sel_col_x = NULL, sel_col_y = NULL,
     if (is.null(sel_col_y)) {
       stop("sel_col_y cannot be NULL for data.table objects")
     }
-    y = tidytable::dt_distinct(y, !!sel_col_y)
-    y = tidytable::dt_pull(y, !!sel_col_y)
+    y = tidytable::distinct.(y, !!sel_col_y)
+    y = tidytable::pull.(y, !!sel_col_y)
   }
   if (any(c("data.frame") %in% class(x))) {
     tryCatch({

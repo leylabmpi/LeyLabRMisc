@@ -30,55 +30,55 @@ read_eggnog_mapper = function(infile=NULL, cmd=NULL, sep='\t', nrows=Inf, to_kee
 
   if(to_keep[1] == 'COG'){
     max_feats = X %>%
-      dt_mutate(n_feats = stringr::str_length(COG_Functional_Category)) %>%
-      dt_pull(n_feats) %>% max
+      mutate.(n_feats = stringr::str_length(COG_Functional_Category)) %>%
+      pull.(n_feats) %>% max
     new_cols = gsub('^', 'X', 1:(max_feats))
     F = '/ebio/abt3_projects/databases_no-backup/humann2/utility_mapping/COG_cateogories.tsv'
     message(glue::glue('You can get COG metadata at: {F}', F=F))
     COG = X %>%
-      dt_select(query_name, COG_Functional_Category) %>%
-      dt_separate(COG_Functional_Category, into=new_cols, sep='') %>%
-      dt_pivot_longer(cols=c(-query_name), names_to='X', values_to='COG_cat') %>%
-      dt_filter(!is.na(COG_cat)) %>%
-      dt_select(-X) %>%
-      dt_rename(seqid = query_name)
+      select.(query_name, COG_Functional_Category) %>%
+      separate.(COG_Functional_Category, into=new_cols, sep='') %>%
+      pivot_longer.(cols=c(-query_name), names_to='X', values_to='COG_cat') %>%
+      filter.(!is.na(COG_cat)) %>%
+      select.(-X) %>%
+      rename.(seqid = query_name)
     return(COG)
   } else if(to_keep[1] == 'KEGG pathway'){
     ## Formatting
     KEGG_ptw = X %>%
-      dt_select(query_name, KEGG_Pathway) %>%
-      dt_mutate(KEGG_Pathway = gsub(',map.+', '', KEGG_Pathway))
+      select.(query_name, KEGG_Pathway) %>%
+      mutate.(KEGG_Pathway = gsub(',map.+', '', KEGG_Pathway))
     ## Max pathways per seqid
     max_feats = KEGG_ptw %>%
-      dt_mutate(n_feats = stringr::str_count(KEGG_Pathway, ',')) %>%
-      dt_pull(n_feats) %>% max
+      mutate.(n_feats = stringr::str_count(KEGG_Pathway, ',')) %>%
+      pull.(n_feats) %>% max
     new_cols = gsub('^', 'X', 1:(max_feats+1))
     ## separating
     F = '/ebio/abt3_projects/databases_no-backup/humann2/utility_mapping/map_kegg-pwy_name_cat.txt.gz'
     message(glue::glue('You can get pathway metadata at: {F}', F=F))
     KEGG_Pathway = KEGG_ptw %>%
-      dt_separate(KEGG_Pathway, into=new_cols, sep=',') %>%
-      dt_pivot_longer(cols=c(-query_name), names_to='X', values_to='KEGG_pathway') %>%
-      dt_select(-X) %>%
-      dt_filter(!is.na(KEGG_pathway),
+      separate.(KEGG_Pathway, into=new_cols, sep=',') %>%
+      pivot_longer.(cols=c(-query_name), names_to='X', values_to='KEGG_pathway') %>%
+      select.(-X) %>%
+      filter.(!is.na(KEGG_pathway),
                 !grepl('^map', KEGG_pathway))
     return(KEGG_Pathway)
   } else if(to_keep[1] == 'CAZy'){
     max_feats = X %>%
-      dt_distinct(CAZy) %>%
-      dt_mutate(n_feats = stringr::str_count(CAZy, ',')) %>%
-      dt_pull(n_feats) %>% max
+      distinct.(CAZy) %>%
+      mutate.(n_feats = stringr::str_count(CAZy, ',')) %>%
+      pull.(n_feats) %>% max
     new_cols = gsub('^', 'X', 1:(max_feats + 1))
     CAZy_annot = X %>%
-      dt_select(query_name, CAZy) %>%
-      dt_separate(CAZy, into=new_cols, sep=',') %>%
-      dt_pivot_longer(cols=c(-query_name), names_to='X', values_to='CAZy') %>%
-      dt_filter(!is.na(CAZy)) %>%
-      dt_select(-X) %>%
-      dt_rename(seqid = query_name) %>%
-      dt_mutate(CAZy_module = gsub('[0-9]+$', '', CAZy),
-                CAZy = gsub('^([^0-9]+)([0-9])$', '\\10\\2', CAZy),
-                CAZy = gsub('^([^0-9]+)([0-9][0-9])$', '\\10\\2', CAZy))
+      select.(query_name, CAZy) %>%
+      separate.(CAZy, into=new_cols, sep=',') %>%
+      pivot_longer.(cols=c(-query_name), names_to='X', values_to='CAZy') %>%
+      filter.(!is.na(CAZy)) %>%
+      select.(-X) %>%
+      rename.(seqid = query_name) %>%
+      mutate.(CAZy_module = gsub('[0-9]+$', '', CAZy),
+              CAZy = gsub('^([^0-9]+)([0-9])$', '\\10\\2', CAZy),
+              CAZy = gsub('^([^0-9]+)([0-9][0-9])$', '\\10\\2', CAZy))
     return(CAZy_annot)
   } else {
     stop('to_keep option not recognized')
