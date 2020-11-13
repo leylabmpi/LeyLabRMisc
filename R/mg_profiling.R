@@ -14,6 +14,8 @@
 read_bracken = function(infile, nrows=Inf, keep_frac=TRUE,
                         tax_levs = c('Domain', 'Phylum', 'Class', 'Order',
                                      'Family', 'Genus', 'Species'), ...){
+  require(data.table)
+  require(tidytable)
   if(keep_frac){
     to_rm = '_num'
     to_keep = '_frac'
