@@ -4,9 +4,11 @@
 \alias{scale_color_all}
 \title{Great a better coloring scheme for taxon abundance barcharts}
 \usage{
-scale_color_all(return_hex = FALSE, ...)
+scale_color_all(..., return_hex = FALSE)
 }
 \arguments{
+\item{...}{Parameters passed to scale_colorl_manual()}
+
 \item{return_hex}{Return a vector of color hexidecimals instead of a plotting object.}
 }
 \value{

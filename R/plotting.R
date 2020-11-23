@@ -146,13 +146,14 @@ fig_uuid = function(full=FALSE){
 #' This function is a wrapper around scale_color_continuous()
 #' which changes the color scheme used.
 #'
+#' @param ... Parameters passed to scale_fill_manual()
 #' @param return_hex Return a vector of color hexidecimals instead of a plotting object.
 #' @return ScaleContinuous/ggproto object or vector
 #' @examples
 #' ggplot(mpg, aes(fl, hwy, fill=model)) +
 #'   geom_bar(stat='identity') +
 #'   scale_fill_all()
-scale_fill_all = function(return_hex = FALSE, ...){
+scale_fill_all = function(..., return_hex = FALSE){
   color_vector = .get_brewer_palette()
   if(return_hex == TRUE){
     return(color_vector)
@@ -168,13 +169,14 @@ scale_fill_all = function(return_hex = FALSE, ...){
 #' This function is a wrapper around scale_color_continuous()
 #' which changes the color scheme used.
 #'
+#' @param ... Parameters passed to scale_colorl_manual()
 #' @param return_hex Return a vector of color hexidecimals instead of a plotting object.
 #' @return ScaleContinuous/ggproto object or vector
 #' @examples
 #' ggplot(mpg, aes(cty, hwy, color=class)) +
 #'   geom_point() +
 #'   scale_color_all()
-scale_color_all = function(return_hex = FALSE, ...){
+scale_color_all = function(..., return_hex = FALSE){
   color_vector = .get_brewer_palette()
   if(return_hex == TRUE){
     return(color_vector)
