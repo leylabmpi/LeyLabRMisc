@@ -46,7 +46,7 @@ Feel free to contribute! Just clone the repo, make some changes, commit, and cre
 
 # Manual & Tutorials
 
-* [Manual pdf](./LeyLabRMisc_0.1.3.pdf)
+* [Manual pdf](./LeyLabRMisc_0.1.6.pdf)
 * Jupyter notebooks
   * [general commands](./notebooks/LeyLabRMisc_tutorial.ipynb)
 
