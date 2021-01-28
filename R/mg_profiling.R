@@ -13,7 +13,8 @@
 #' @return data.table
 read_bracken = function(infile, nrows=Inf, keep_frac=TRUE,
                         tax_levs = c('Domain', 'Phylum', 'Class', 'Order',
-                                     'Family', 'Genus', 'Species'), ...){
+                                     'Family', 'Genus', 'Species'),
+                        nThread = 4, ...){
   require(data.table)
   require(tidyselect)
   require(tidytable)
@@ -24,7 +25,8 @@ read_bracken = function(infile, nrows=Inf, keep_frac=TRUE,
     to_rm = '_frac'
     to_keep = '_num'
   }
-  dt = data.table::fread(infile, sep='\t', nrows=nrows, check.names=TRUE, ...) %>%
+  dt = data.table::fread(infile, sep='\t', nrows=nrows, check.names=TRUE,
+                         nThread=nThread, ...) %>%
     tidytable::select.(-taxIDs, -ends_with(!!to_rm)) %>%
     tidytable::mutate.(taxonomy = gsub(';[pcofgs]__', ';', taxonomy),
                          taxonomy = gsub('^d__', '', taxonomy)) %>%
