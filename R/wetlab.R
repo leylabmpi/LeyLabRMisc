@@ -63,10 +63,10 @@
 well2index = function(x, plate_type='96-well'){
   x = gsub('([A-Z])0([0-9])', '\\1\\2', as.character(x))
   if(plate_type == '96-well'){
-    idx = well96_index()
+    idx = .well96_index()
   } else
     if(plate_type == '384-well'){
-      idx = well384_index()
+      idx = .well384_index()
     } else {
       stop('Do not recoginize plate type')
     }

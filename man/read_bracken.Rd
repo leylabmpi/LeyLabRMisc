@@ -9,6 +9,7 @@ read_bracken(
   nrows = Inf,
   keep_frac = TRUE,
   tax_levs = c("Domain", "Phylum", "Class", "Order", "Family", "Genus", "Species"),
+  nThread = 4,
   ...
 )
 }
