@@ -26,6 +26,8 @@ read_bracken = function(infile, nrows=Inf, keep_frac=TRUE,
   dt = data.table::fread(infile, sep='\t', nrows=nrows, check.names=TRUE,
                          nThread=nThread, ...) %>%
     tidytable::select.(-taxIDs, -ends_with(!!to_rm)) %>%
+    tidytable::mutate.(taxonomy = gsub(';[pcofgs]__', ';', taxonomy),
+                       taxonomy = gsub('^d__', '', taxonomy)) %>%
     tidytable::separate.(taxonomy, tax_levs, sep=';') %>%
     tidytable::pivot_longer.(cols=ends_with(!!to_keep),
                                names_to='Sample',
@@ -35,6 +37,5 @@ read_bracken = function(infile, nrows=Inf, keep_frac=TRUE,
   return(dt)
 }
 
-#tidytable::mutate.(taxonomy = gsub(';[pcofgs]__', ';', taxonomy),
-#                   taxonomy = gsub('^d__', '', taxonomy)) %>%
+
 
