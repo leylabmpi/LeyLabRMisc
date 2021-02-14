@@ -7,6 +7,7 @@
 #' @param long Do you want the table in "long" format ("gathered")
 #' @param flip Flip (transpose) the table?
 #' @return A tibble
+#' @export
 phyloseq2df = function(physeq_obj, physeq_func, long=FALSE, flip=FALSE){
   require(dplyr)
   tbl = physeq_obj %>%
@@ -56,6 +57,7 @@ phyloseq2df = function(physeq_obj, physeq_func, long=FALSE, flip=FALSE){
 #' @param physeq_obj The phyloseq object
 #' @param percent_abund Fractional or percent abundance?
 #' @return A phyloseq object
+#' @export
 phyloseq_rel_abund <- function(physeq_obj, percent_abund=TRUE) {
   if(percent_abund == TRUE){
     physeq_obj = transform_sample_counts(physeq_obj, function(x) x / sum(x) * 100)
@@ -73,8 +75,8 @@ phyloseq_rel_abund <- function(physeq_obj, percent_abund=TRUE) {
 #' @param split Splitting the OTU table
 #' @param measures Which diversity measures (Faith's PD = "FaithPD)
 #' @return Dataframe
+#' @export
 estimate_richness_phy = function (physeq, split = TRUE, measures = NULL){
-  #' can calculate faith's PD (using Picante, "FaithPD")
   if (!any(otu_table(physeq) == 1)) {
     warning("The data you have provided does not have\n",
             "any singletons. This is highly suspicious. Results of richness\n",
@@ -156,16 +158,17 @@ estimate_richness_phy = function (physeq, split = TRUE, measures = NULL){
 #' @param measures Which diversity measures
 #' @param depth The sampling depth
 #' @return molten alpha diversity object
-estimate_rarified_richness <- function(psdata, measures, depth) {
+#' @export
+estimate_rarified_richness = function(psdata, measures, depth) {
   if(max(sample_sums(psdata)) < depth) return()
-  psdata <- prune_samples(sample_sums(psdata) >= depth, psdata)
+  psdata = phyloseq::prune_samples(sample_sums(psdata) >= depth, psdata)
 
-  rarified_psdata <- rarefy_even_depth(psdata, depth, verbose = FALSE)
+  rarified_psdata = phyloseq::rarefy_even_depth(psdata, depth, verbose = FALSE)
 
-  alpha_diversity <- estimate_richness_phy(rarified_psdata, measures = measures)
+  alpha_diversity = phyloseq::estimate_richness_phy(rarified_psdata, measures = measures)
 
   # as.matrix forces the use of melt.array, which includes the Sample names (rownames)
-  molten_alpha_diversity <- reshape2::melt(as.matrix(alpha_diversity),
+  molten_alpha_diversity = reshape2::melt(as.matrix(alpha_diversity),
                                            varnames = c('Sample', 'Measure'),
                                            value.name = 'Alpha_diversity')
 
@@ -180,15 +183,16 @@ estimate_rarified_richness <- function(psdata, measures, depth) {
 #' @param measures Which diversity measures (see vegan package)
 #' @param depths Which sequencing depths? Example: c(10, 100, 1000)
 #' @return A dataframe
-calculate_rarefaction_curves <- function(psdata, measures, depths, parallel=FALSE) {
-  names(depths) <- depths # this enables automatic addition of the Depth to the output by ldply
-  rarefaction_curve_data <- plyr::ldply(depths, estimate_rarified_richness, psdata = psdata,
+#' @export
+calculate_rarefaction_curves = function(psdata, measures, depths, parallel=FALSE) {
+  names(depths) = depths # this enables automatic addition of the Depth to the output by ldply
+  rarefaction_curve_data = plyr::ldply(depths, estimate_rarified_richness, psdata = psdata,
                                         measures = measures, .id = 'Depth',
                                         .progress = ifelse(interactive(), 'text', 'none'),
                                         .parallel = parallel)
 
   # convert Depth from factor to numeric
-  rarefaction_curve_data$Depth <- as.numeric(levels(rarefaction_curve_data$Depth))[rarefaction_curve_data$Depth]
+  rarefaction_curve_data$Depth = as.numeric(levels(rarefaction_curve_data$Depth))[rarefaction_curve_data$Depth]
 
   return(rarefaction_curve_data)
 }

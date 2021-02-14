@@ -6,6 +6,9 @@
 \usage{
 taxonomy_levels()
 }
+\value{
+character vector of taxonomic levels
+}
 \description{
 This just saves some typing, since I find myself constantly typing out:
 c('Domain', 'Phylum', 'Class', 'Order', 'Family', 'Genus', 'Species')

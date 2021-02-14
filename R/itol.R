@@ -9,6 +9,7 @@
 #' @param MAXIMUM_SIZE The max size of the symbols
 #' @param COLOR Legend color
 #' @return NULL
+#' @export
 itol_symbol = function(df, dataset_label, out_file, out_dir=NULL,
                        MAXIMUM_SIZE=50, COLOR="#ff0000"){
   if(! is.null(out_dir)){
@@ -40,6 +41,7 @@ itol_symbol = function(df, dataset_label, out_file, out_dir=NULL,
 #' @param WIDTH Bar width
 #' @param COLOR Legend color
 #' @return NULL
+#' @export
 itol_multibar = function(df, dataset_label, out_file, out_dir=NULL,
                          legend=NULL, WIDTH=200, COLOR="#ff0000"){
   if(! is.null(out_dir)){
@@ -91,7 +93,6 @@ itol_multibar = function(df, dataset_label, out_file, out_dir=NULL,
   cat('File written:', out_file, '\n')
 }
 
-
 #' create itol boxplot file
 #'
 #' https://itol.embl.de/help.cgi#boxplot
@@ -103,6 +104,7 @@ itol_multibar = function(df, dataset_label, out_file, out_dir=NULL,
 #' @param key_color The color for the legend key
 #' @param WIDTH Maximum width
 #' @return NULL
+#' @export
 itol_boxplot = function(df, dataset_label, out_file, out_dir=NULL,
                         key_color='#ff0000', WIDTH=200){
   if(! is.null(out_dir)){
@@ -134,6 +136,7 @@ itol_boxplot = function(df, dataset_label, out_file, out_dir=NULL,
 #' @param dist_method vegan::vegdist method for creating the correlation dendrogram
 #' @param color_scheme Heatmap color scheme. color = blue-orange-yellow; bw=white-grey-black
 #' @return NULL
+#' @export
 itol_heatmap = function(df, dataset_label, out_file, out_dir=NULL, tree=NULL,
                         dist_method='bray', color_scheme=c('color', 'bw')){
   if(! is.null(out_dir)){
@@ -201,7 +204,7 @@ itol_heatmap = function(df, dataset_label, out_file, out_dir=NULL, tree=NULL,
 #' @param out_dir Where to write the output
 #' @param legend Custom legend (see the function description)
 #' @return NULL
-#'
+#' @export
 #' @examples
 #' # creating a custom legend
 #' legend = data.frame(unique(iris$Species),
@@ -268,6 +271,7 @@ itol_colorstrip = function(df, dataset_label, out_file, out_dir=NULL, legend=NUL
 #' @param out_dir Where to write the output
 #' @param legend Specify particular legend (see \code{\link{itol_colorstrip}})
 #' @return NULL
+#' @export
 itol_externalshape = function(df, dataset_label, out_file, out_dir=NULL, legend=NULL, WIDTH=200){
   if(! is.null(out_dir)){
     out_file = file.path(out_dir, out_file)
@@ -329,6 +333,7 @@ itol_externalshape = function(df, dataset_label, out_file, out_dir=NULL, legend=
 #' @param legend Specify particular legend (see \code{\link{itol_colorstrip}})
 #' @param WIDTH Bar width
 #' @return NULL
+#' @export
 itol_simplebar = function(df, dataset_label, out_file, out_dir=NULL, legend=NULL, WIDTH=200){
   if(! is.null(out_dir)){
     out_file = file.path(out_dir, out_file)

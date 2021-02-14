@@ -19,6 +19,7 @@
 #' @param tree tree with tips matching taxa in the abundance table (only needed for PD)
 #' @param index which of the indices to calculate? (nobs = no. of observations, shannon = Shannon Index, PD = Faith's PD)
 #' @return a data.frame of alpha diversity values (and sample names)
+#' @export
 calc_alpha_div = function(df, tree=NULL, index=c('nobs', 'shannon', 'PD')){
   res = list()
   res[['Sample']] = rownames(df)
@@ -51,6 +52,7 @@ calc_alpha_div = function(df, tree=NULL, index=c('nobs', 'shannon', 'PD')){
 #' @param method distance method (vegdist distances; wunifrac=Weighted Unifrac; unifrac=Unweighted Unifrac)
 #' @param threads threads used for UniFrac calculations with rbiom
 #' @return data.frame
+#' @export
 calc_beta_div = function(df, tree=NULL,
                          method = c('wunifrac', 'unifrac', 'manhattan', 'euclidean', 'canberra', 'clark', 'bray',
                                     'kulczynski', 'jaccard', 'gower', 'altGower', 'morisita',
@@ -103,6 +105,7 @@ calc_beta_div = function(df, tree=NULL,
 #' @param label1 First PC label
 #' @param label2 Seconda PC label
 #' @return str, formatted as "metric, <PC1_perc_exp>%, <PC2_perc_exp>%"
+#' @export
 dist_format = function(dist, PC1_perc_exp, PC2_perc_exp, label1=1, label2=2){
   glue::glue('{dist}, PC{PC_L1}: {PC1}%, PC{PC_L2}: {PC2}%',
              dist=dist,
@@ -120,6 +123,7 @@ dist_format = function(dist, PC1_perc_exp, PC2_perc_exp, label1=1, label2=2){
 #' @param file file name to save to
 #' @param threads number of threads used for serializing
 #' @return the input distance matrix or list of distance matrices
+#' @export
 qsave_obj = function(x, file, msg = 'Writing file to: ', threads=1){
   if(!is.null(file)){
     message(msg, file)
@@ -156,6 +160,7 @@ qsave_obj = function(x, file, msg = 'Writing file to: ', threads=1){
 #'
 #' @param dist_mtx distance matrix object
 #' @return data.frame
+#' @export
 calc_PCoA = function(dist_mtx, k=2){
   # filtering NAs
   dist_mtx = as.matrix(dist_mtx)
@@ -192,6 +197,7 @@ calc_PCoA = function(dist_mtx, k=2){
 #' @param dist_mtx_file file name for saving the distance matrices (qs serialization; use ".qs" for the file extension)
 #' @param pcoa_file file name for saving the raw pcoa results
 #' @return a tibble of PCoA info for all selected "dists"
+#' @export
 tidy_pcoa = function(df, taxon_col, sample_col, abundance_col,
                      dists = c('bray', 'jaccard', 'wunifrac', 'unifrac'),
                      tree = NULL, threads=1, threads_unifrac=1, k=2,
@@ -246,6 +252,7 @@ tidy_pcoa = function(df, taxon_col, sample_col, abundance_col,
 #'
 #' @param dt data.table, data.frame, or tibble
 #' @return a symmetric matrix of distances
+#' @export
 beta2mtx = function(dt){
     dt = dt %>% as.data.table %>%
       filter.(Measure == measure) %>%

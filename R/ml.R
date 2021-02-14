@@ -79,6 +79,7 @@
 #' @param tax_level which taxonmoic level to use?
 #' @param corr_cutoff features with >cutoff will be filtered to just one
 #' @return data.table of filtered features
+#' @export
 ml_tax_HFE = function(brk, tax_level, corr_cutoff=0.7, threads=2, quiet=TRUE){
   tax_level = enexpr(tax_level)
   if(as.character(tax_level) == 'Species'){

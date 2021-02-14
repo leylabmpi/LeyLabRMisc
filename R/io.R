@@ -5,6 +5,7 @@
 #' @param full.names 	a logical value. If TRUE, the directory path is prepended to the file names to give a relative file path. If FALSE, the file names (rather than paths) are returned
 #' @param recursive logical. Should the listing recurse into directories?
 #' @return A character vector containing the names of the files in the specified directories
+#' @export
 list_files = function(path, pattern=NULL, full.names=TRUE, recursive=TRUE, ...){
   list.files(path, pattern, full.names = full.names, recursive = recursive, ...)
 }
@@ -17,6 +18,7 @@ list_files = function(path, pattern=NULL, full.names=TRUE, recursive=TRUE, ...){
 #' @param check.names format check column names
 #' @param ... passed to data.table::fread
 #' @return data.table
+#' @export
 Fread = function(infile=NULL, cmd=NULL, sep='\t', check.names=TRUE, ...){
   if(is.null(infile) & is.null(cmd)){
     stop('infile and cmd cannot both be NULL')
@@ -35,6 +37,7 @@ Fread = function(infile=NULL, cmd=NULL, sep='\t', check.names=TRUE, ...){
 #' @param file_path File path(s). If vector or list of paths provided, then a list will be returned
 #' @param index Which item in the path to return? 1-indexing. If <1, samples selected from the end. "O" will select the file name.
 #' @return string if 1 path, else list
+#' @export
 path_get_label = function(file_path, index){
   # if multiple input
   if(length(file_path) > 1){
@@ -54,7 +57,8 @@ path_get_label = function(file_path, index){
 #'
 #' @param files Vector of file paths (eg., by using "list_files()")
 #' @param label_index Which item in the path to return? 1-indexing. If <1, samples selected from the end.
-#'
+#' @return list of files
+#' @export
 #' @examples
 #'  files = c('/path/to/project/Sample1/table.txt', '/path/to/project/Sample2/table.txt')
 #'  files_to_list(files, -1)
@@ -78,6 +82,7 @@ files_to_list = function(files, label_index=-1){
 #' @param row.names either a logical value indicating whether the row names of x are to be written along with x, or a character vector of row names to be written.
 #' @param ... Passed to write.table (if data.frame) or fwrite (if data.table)
 #' @return NULL
+#' @export
 write_table = function(df, file, sep="\t", quote=FALSE, row.names=FALSE, ...){
   if('data.table' %in% class(df)){
     data.table::fwrite(df, file=file, sep=sep, quote=quote, row.names=row.names, ...)
@@ -92,6 +97,7 @@ write_table = function(df, file, sep="\t", quote=FALSE, row.names=FALSE, ...){
 #' @param dir path for the new directory (will create recursively)
 #' @param quite quite output
 #' @return NULL
+#' @export
 make_dir = function(dir, quiet=FALSE){
   if(! dir.exists(dir)){
     dir.create(dir, recursive = TRUE, showWarnings=FALSE)
@@ -112,6 +118,7 @@ make_dir = function(dir, quiet=FALSE){
 #'
 #' @param Robj Any R object
 #' @return md5sum
+#' @export
 Robj_md5sum = function(Robj){
   F = tempfile()
   dput(Robj, file=F)
@@ -124,6 +131,7 @@ Robj_md5sum = function(Robj){
 #' @param n The last N lines to read
 #' @param ... Passed to scan()
 #' @return NULL
+#' @export
 readLinesTail = function(x, n, ...){
   con = file(x)
   open(con)
@@ -142,6 +150,7 @@ readLinesTail = function(x, n, ...){
 #'
 #' @param x The full file path
 #' @return A vector of all path parts
+#' @export
 split_path = function(x){
   if (dirname(x) == x){
     return(x)

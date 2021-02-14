@@ -9,18 +9,59 @@
 #' @param conda_env The conda env to use
 #' @param stdout Print the stdout from the command?
 #' @param stderr Print the stderr from the command?
-#' @param quiet No printing
+#' @param print_output Pretty printing of the output to the console?
+#' @param return_output Return the bash command output?
+#' @param log_file Write stdout to log file (stderr written to log_file.err)
+#' @param verbose Write status messages?
+#' @param wait Wait for the process to finish?
 #' @returns NULL
-bash_job = function(cmd, conda_env, stdout=TRUE, stderr=TRUE, print_output=TRUE){
-  cmd = sprintf('. ~/.bashrc; conda activate %s; %s', conda_env, cmd)
-  cmd = sprintf('-c "%s"', cmd)
-  ret = system2('bash', cmd, stdout=stdout, stderr=stderr)
-  if(print_output==TRUE){
-    cat(paste(ret, collapse='\n'))
-    return(NULL)
+#' @export
+#' @examples
+#' # simple
+#' bash_job('ls -thlc')
+#' # write to log file
+#' bash_job('ls -thlc', log_file='log.txt')
+#' # use conda env
+#' bash_job('conda list', conda_env='base')
+bash_job = function(cmd, conda_env=NULL, stdout=TRUE, stderr=TRUE,
+                    print_output=TRUE, return_output=FALSE,
+                    log_file=NULL, verbose=TRUE, wait=TRUE){
+  if(!is.null(conda_env)){
+    CMD = sprintf('. ~/.bashrc; conda activate %s;', conda_env)
   } else {
-    return(ret)
+    CMD = ''
   }
+  CMD = sprintf('%s %s', CMD, cmd)
+  if(!is.null(log_file)){
+    stdout = log_file
+    stderr = paste0(log_file, '.err')
+  }
+  if('sys' %in% rownames(installed.packages())){
+    require(sys)
+    CMD = c('-c', '.', CMD)
+    if(verbose == TRUE){
+      message(sprintf('bash %s', paste(CMD, collapse=' ')))
+    }
+    if(wait == TRUE){
+      ret = exec_wait('bash', CMD, std_out=stdout, std_err=stderr)
+    } else {
+      ret = exec_background('bash', CMD, std_out=stdout, std_err=stderr)
+    }
+
+  } else {
+    CMD = sprintf('-c "%s"', CMD)
+    if(verbose == TRUE){
+      message(sprintf('bash %s', CMD))
+    }
+    ret = system2('bash', CMD, stdout=stdout, stderr=stderr, wait=TRUE)
+  }
+  if(print_output == TRUE){
+      cat(paste(ret, collapse='\n'))
+  }
+  if(return_output == TRUE){
+      return(ret)
+  }
+  return(invisible())
 }
 
 #' pretty printing of a text file via cat
@@ -29,6 +70,7 @@ bash_job = function(cmd, conda_env, stdout=TRUE, stderr=TRUE, print_output=TRUE)
 #'
 #' @param file_name the name of the file to print
 #' @return NULL
+#' @export
 cat_file = function(file_name){
   cmd = paste('cat', file_name, collapse=' ')
   system(cmd, intern=TRUE) %>% paste(collapse='\n') %>% cat
@@ -41,6 +83,7 @@ cat_file = function(file_name){
 #' @param email The email address. If NULL, then username used
 #' @param email_ext The part after the "at" symbol
 #' @return The output of the system() call
+#' @export
 send_email = function(body, subject='R job complete', email=NULL, email_ext='tuebingen.mpg.de'){
   if(is.null(email)){
     email = sprintf('%s@%s', Sys.info()['user'], email_ext)
@@ -55,6 +98,7 @@ send_email = function(body, subject='R job complete', email=NULL, email_ext='tue
 #' This is most useful for working with IRkernl in Jupyter notebooks
 #' @param conda_env The name of the conda env to list
 #' @return NULL
+#' @export
 condaInfo = function(conda_env){
   cat(paste(bash_job('conda list', conda_env), collapse='\n'))
 }
@@ -65,6 +109,7 @@ condaInfo = function(conda_env){
 #' @param pipeline_dir The path to the pipeline_directory
 #' @param conda_env The conda env that has snakemake installed
 #' @return The environment info
+#' @export
 snakemakeInfo = function(config_file, pipeline_dir, conda_env){
   snakefile = file.path(pipeline_dir, 'Snakefile')
   cmd = sprintf('snakemake --list-conda-envs --configfile %s --directory %s --snakefile %s -F',
@@ -90,6 +135,7 @@ snakemakeInfo = function(config_file, pipeline_dir, conda_env){
 #' @param pipeline_path The path to the pipeline directory
 #' @param head_n The number of lines to print from the readme
 #' @return NULL
+#' @export
 pipelineInfo = function(pipeline_path, head_n=10){
   # readme
   readme_path = file.path(pipeline_path, 'README.md')

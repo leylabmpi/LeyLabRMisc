@@ -7,6 +7,7 @@
 #' @param r The result of resampling of a tuning wrapper
 #' @param trafo Should the units of the hyperparameter path be converted to the transformed scale?
 #' @return data.frame
+#' @export
 mlr_getNestedTuneResultsOptPathDf = function(r, trafo = FALSE) {
   checkmate::assertClass(r, "ResampleResult")
   checkmate::assertList(r$extract)
@@ -36,6 +37,7 @@ mlr_getNestedTuneResultsOptPathDf = function(r, trafo = FALSE) {
 #'   \item threads int; number of threads to use for Boruta (default: 1)
 #' }
 #' @return Nothing, but "boruta.filter" filter will be registered
+#' @export
 mlr_boruta_filter = function(){
   mlr::makeFilter(
     name = "boruta.filter",

@@ -2,16 +2,19 @@
 #'
 #' @param x an iterable
 #' @return a numeric object
+#' @export
 as.Num = function(x){
   as.numeric(as.character(x))
 }
 
 #' rowMeans that works inside a dplyr::mutate() call
+#' @export
 row_means = function(..., na.rm=TRUE){
   rowMeans(cbind(...), na.rm=na.rm)
 }
 
 #' rowSums that works inside a dplyr::mutate() call
+#' @export
 row_sums = function(..., na.rm=TRUE){
   rowSums(cbind(...), na.rm=na.rm)
 }
@@ -21,6 +24,7 @@ row_sums = function(..., na.rm=TRUE){
 #' @param df dataframe object
 #' @param n Number of lines to print
 #' @return a dataframe object
+#' @export
 dfhead = function(df, n=3){
   print(dim(df))
   head(df, n=n)
@@ -33,6 +37,7 @@ dfhead = function(df, n=3){
 #' @param nrows number of rows to print
 #' @param ncols number of columns to print
 #' @return NULL
+#' @export
 df.dims = function(nrows=4, ncols=20){
   options(repr.matrix.max.rows=nrows, repr.matrix.max.cols=ncols)
 }
@@ -47,6 +52,7 @@ df.dims = function(nrows=4, ncols=20){
 #' @param sel_col If "x" is data.table or data.frame, which column to assess?
 #' @param rnd number of digits to round sd and stderr to
 #' @return a matrix
+#' @export
 summary_x = function(x, label=NULL, sel_col=NULL, rnd=3){
   if(is.null(label)){
     label = deparse(substitute(x))
@@ -87,6 +93,7 @@ summary_x = function(x, label=NULL, sel_col=NULL, rnd=3){
 #' @param sel_col If x is data.table or data.frame, which column to assess?
 #' @param ret Return the unique values?
 #' @returns NULL
+#' @export
 unique_n = function(x, label='items', sel_col=NULL, ret=FALSE){
   if(any(c('tidytable', 'data.table') %in% class(x))){
     tryCatch({
@@ -125,7 +132,7 @@ unique_n = function(x, label='items', sel_col=NULL, ret=FALSE){
 #' @param to_return (depreciated) "counts" = print overlap counts; "diff_x-or-y" = return setdiff; "diff_fuzzy" = return closest matches for those that differ (ordered best to worst)
 #' @param diff Alternative to "to_return". "x" or "y" = return setdiff; "int" = intersect, "union" = union
 #' @return NULL
-#'
+#' @export
 overlap = function (x, y, sel_col_x = NULL, sel_col_y = NULL,
                     to_return = c("counts", "diff_x", "diff_y", "diff_fuzzy"),
                     diff = c(NA, "x", "y", "int", "union", "fuzzy")){
@@ -205,6 +212,7 @@ overlap = function (x, y, sel_col_x = NULL, sel_col_y = NULL,
 #'
 #' @param Robj Vector with the names of R objects as characters
 #' @return A list with the name of R objects as names and the formatted size of the objects
+#' @export
 size_objects <- function(Robj){
     sapply(Robj,function(x){format(object.size(get(x)), units = 'auto')})
 }

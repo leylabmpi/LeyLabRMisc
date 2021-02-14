@@ -11,6 +11,9 @@ files_to_list(files, label_index = -1)
 
 \item{label_index}{Which item in the path to return? 1-indexing. If <1, samples selected from the end.}
 }
+\value{
+list of files
+}
 \description{
 convert a vector of file paths into a named list
 }

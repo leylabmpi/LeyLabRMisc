@@ -8,8 +8,8 @@ calc_beta_div(
   df,
   tree = NULL,
   method = c("wunifrac", "unifrac", "manhattan", "euclidean", "canberra", "clark",
-    "bray", "kulczynski", "jaccard", "gower", "altGower", "morisita", "horn", "mountford",
-    "raup", "binomial", "chao", "cao", "mahalanobis"),
+    "bray", "kulczynski", "jaccard", "gower", "altGower", "morisita", "horn",
+    "mountford", "raup", "binomial", "chao", "cao", "mahalanobis"),
   threads = 1
 )
 }

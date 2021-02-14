@@ -4,7 +4,17 @@
 \alias{bash_job}
 \title{bash job using conda env}
 \usage{
-bash_job(cmd, conda_env, stdout = TRUE, stderr = TRUE, print_output = TRUE)
+bash_job(
+  cmd,
+  conda_env = NULL,
+  stdout = TRUE,
+  stderr = TRUE,
+  print_output = TRUE,
+  return_output = FALSE,
+  log_file = NULL,
+  verbose = TRUE,
+  wait = TRUE
+)
 }
 \arguments{
 \item{cmd}{The bash command in a string format}
@@ -15,11 +25,27 @@ bash_job(cmd, conda_env, stdout = TRUE, stderr = TRUE, print_output = TRUE)
 
 \item{stderr}{Print the stderr from the command?}
 
-\item{quiet}{No printing}
+\item{print_output}{Pretty printing of the output to the console?}
+
+\item{return_output}{Return the bash command output?}
+
+\item{log_file}{Write stdout to log file (stderr written to log_file.err)}
+
+\item{verbose}{Write status messages?}
+
+\item{wait}{Wait for the process to finish?}
 }
 \description{
 The conda setup is assumed to be in your ~/.bashrc
 If print_output == TRUE: the stdout/stderr will be printed instead of returned
 Else: the stdout/stderr with be returned by the function
 stderr/stdout is printed unless print_output==FALSE
+}
+\examples{
+# simple
+bash_job('ls -thlc')
+# write to log file
+bash_job('ls -thlc', log_file='log.txt')
+# use conda env
+bash_job('conda list', conda_env='base')
 }

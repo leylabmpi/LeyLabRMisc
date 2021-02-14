@@ -15,7 +15,6 @@ estimate_richness_phy(physeq, split = TRUE, measures = NULL)
 }
 \value{
 Dataframe
-can calculate faith's PD (using Picante, "FaithPD")
 }
 \description{
 See physeq::estimate richness for full details

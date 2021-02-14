@@ -6,6 +6,7 @@
 #' @param h figure height
 #' @param res figure resolution (DPI)
 #' @return NULL
+#' @export
 p.dims = function(w=5, h=5, res=200){
   options(repr.plot.width = w, repr.plot.height = h, repr.plot.res = res)
 }
@@ -23,6 +24,7 @@ p.dims = function(w=5, h=5, res=200){
 #' @param width Figure width. If NA, uses global options
 #' @param height Figure height. If NA, uses global options
 #' @return NULL
+#' @export
 Plot = function(p, file=NULL, path=NULL, suffix='', saveObj=TRUE, saveImg=FALSE, width=NA, height=NA, ...){
   # file path
   if(is.null(path)){
@@ -85,6 +87,7 @@ Plot = function(p, file=NULL, path=NULL, suffix='', saveObj=TRUE, saveImg=FALSE,
 #' @param plot_object A ggplot object
 #' @param output_path Where to write the output
 #' @return NULL
+#' @export
 extract_pltdt = function(plot_object, output_path){
   require(ggplot2)
   # Extract data tables
@@ -102,6 +105,7 @@ extract_pltdt = function(plot_object, output_path){
 #' create UUID for figure file name
 #' @param full Full length uuid or trimmed to just 24 char?
 #' @return character object
+#' @export
 fig_uuid = function(full=FALSE){
   baseuuid = paste(sample(c(letters[1:6],0:9),30,replace=TRUE),collapse="")
 
@@ -149,6 +153,7 @@ fig_uuid = function(full=FALSE){
 #' @param ... Parameters passed to scale_fill_manual()
 #' @param return_hex Return a vector of color hexidecimals instead of a plotting object.
 #' @return ScaleContinuous/ggproto object or vector
+#' @export
 #' @examples
 #' ggplot(mpg, aes(fl, hwy, fill=model)) +
 #'   geom_bar(stat='identity') +
@@ -172,6 +177,7 @@ scale_fill_all = function(..., return_hex = FALSE){
 #' @param ... Parameters passed to scale_colorl_manual()
 #' @param return_hex Return a vector of color hexidecimals instead of a plotting object.
 #' @return ScaleContinuous/ggproto object or vector
+#' @export
 #' @examples
 #' ggplot(mpg, aes(cty, hwy, color=class)) +
 #'   geom_point() +

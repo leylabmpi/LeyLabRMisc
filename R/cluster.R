@@ -7,6 +7,7 @@
 #' @param scheduler The clustermq.scheduler option. Use "multicore" for local jobs.
 #' @param template The clustermq.template option. It defaults to ~.clustermq.tmpl
 #' @return NULL
+#' @export
 #' @examples
 #' clustermq_setup()              # sge job
 #' clustermq_setup('multicore')   # local job
@@ -32,6 +33,7 @@ clustermq_setup = function(scheduler = c('sge', 'multicore'),
 #'
 #' @param base_dir The base directory will the logfiles will be located.
 #' @return logfile path
+#' @export
 #' @examples
 #' clustermq_setup()
 #' tmpl = list(job_mem = '8G', log_file = clustermq_logfile())
@@ -59,6 +61,7 @@ clustermq_logfile = function(base_dir = '/ebio/abt3_scratch/'){
 #' @param logfile_dir The base directory containing all of the logfiles.
 #' If not provided, then this is obtained by getOption('clustermq.logfile')
 #' @return logfile paths or NULL
+#' @export
 #' @examples
 #' clustermq_setup()
 #' tmpl = list(job_mem = '8G', log_file = clustermq_logfile())

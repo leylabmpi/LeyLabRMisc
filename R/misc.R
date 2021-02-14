@@ -2,6 +2,8 @@
 #'
 #' This just saves some typing, since I find myself constantly typing out:
 #' c('Domain', 'Phylum', 'Class', 'Order', 'Family', 'Genus', 'Species')
+#' @return character vector of taxonomic levels
+#' @export
 taxonomy_levels = function(){
   x = c('Domain', 'Phylum', 'Class', 'Order', 'Family', 'Genus', 'Species')
   return(x)
@@ -16,6 +18,7 @@ taxonomy_levels = function(){
 #' @param y a vector
 #' @param diag include same-same comparisons ('a' <=> 'b')?
 #' @return a data.frame of all non-reciprical comparisons
+#' @export
 #' @examples
 #' expand.grid.lower(1:3, 1:3)
 #' expand.grid.lower(1:3, 1:3, diag=TRUE)
