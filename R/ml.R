@@ -13,31 +13,31 @@
     dt_levs[['Genus']] = brk %>%
       mutate.(Taxonomy = paste(Phylum, Class, Order, Family, Genus, sep=';')) %>%
       summarize.(Abundance = sum(Abundance),
-                   by = list(Taxonomy, Sample))
+                  .by = c(Taxonomy, Sample))
   }
   if(as.character(class_level) %in% tax_levs[3:length(tax_levs)]){
     dt_levs[['Family']] = brk %>%
       mutate.(Taxonomy = paste(Phylum, Class, Order, Family, sep=';')) %>%
       summarize.(Abundance = sum(Abundance),
-                   by = list(Taxonomy, Sample))
+                  .by = c(Taxonomy, Sample))
   }
   if(as.character(class_level) %in% tax_levs[4:length(tax_levs)]){
     dt_levs[['Order']] = brk %>%
       mutate.(Taxonomy = paste(Phylum, Class, Order, sep=';')) %>%
       summarize.(Abundance = sum(Abundance),
-                   by = list(Taxonomy, Sample))
+                  .by = c(Taxonomy, Sample))
   }
   if(as.character(class_level) %in% tax_levs[5:length(tax_levs)]){
     dt_levs[['Class']] = brk %>%
       mutate.(Taxonomy = paste(Phylum, Class, sep=';')) %>%
       summarize.(Abundance = sum(Abundance),
-                   by = list(Taxonomy, Sample))
+                  .by = c(Taxonomy, Sample))
   }
   if(as.character(class_level) %in% tax_levs[6:length(tax_levs)]){
     dt_levs[['Phylum']] = brk %>%
       rename.('Taxonomy' = Phylum) %>%
       summarize.(Abundance = sum(Abundance),
-                   by = list(Taxonomy, Sample))
+                  .by = c(Taxonomy, Sample))
   }
   # combining & creating wide table
   brk = data.table::rbindlist(dt_levs, use.names=TRUE)
