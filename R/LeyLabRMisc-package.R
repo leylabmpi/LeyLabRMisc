@@ -2,5 +2,6 @@
 # @import tidytable
 # @import tidyselect
 # @rawNamespace import(rlang, except = `:=`)
-#' @importFrom rlang `:=`
+#' @importFrom magrittr `%>%`
+#' @importFrom rlang `:=` .data as_label as_name enquo enquos eval_tidy expr sym syms
 NULL
