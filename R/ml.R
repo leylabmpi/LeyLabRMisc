@@ -64,12 +64,12 @@
   }
   if(length(to_rm) > 0){
     brk = brk %>%
-      filter.(Taxonomy %in% !!to_rm)
+      filter.(! Taxonomy %in% !!to_rm)
   }
   return(brk)
 }
 
-#' Hierachical Feature Selection
+#' Hierarchical Feature Selection
 #'
 #' For each clade (defined by tax_level), aggregate species abundances at each taxonomic
 #' level up to the user-defined "tax_level", then filter out taxa that correlate strongly
