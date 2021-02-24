@@ -4,7 +4,14 @@
 \alias{.HFE}
 \title{supporting function for HFE}
 \usage{
-.HFE(brk, class_level, corr_cutoff = 0.5, quiet = TRUE)
+.HFE(
+  brk,
+  class_level,
+  corr_cutoff = 0.5,
+  freqCut = 99/1,
+  uniqueCut = 1,
+  quiet = TRUE
+)
 }
 \description{
 supporting function for HFE
