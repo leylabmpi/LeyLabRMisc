@@ -3,6 +3,8 @@
 export(Fread)
 export(Plot)
 export(Robj_md5sum)
+export(ancombc_tidy)
+export(ancombc_unbiased_abundances)
 export(as.Num)
 export(bash_job)
 export(beta2mtx)
