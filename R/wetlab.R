@@ -60,6 +60,7 @@
 #' @param x A vector of well IDs
 #' @param plate_type Either 96-well or 384-well
 #' @return A vector of plate positions
+#' @export
 well2index = function(x, plate_type='96-well'){
   x = gsub('([A-Z])0([0-9])', '\\1\\2', as.character(x))
   if(plate_type == '96-well'){

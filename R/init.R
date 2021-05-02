@@ -53,9 +53,12 @@ df.dims = function(nrows=4, ncols=20){
 #' @param rnd number of digits to round sd and stderr to
 #' @return a matrix
 #' @export
+#' @examples
+#' summary_x(iris$Sepal.Length)
 summary_x = function(x, label=NULL, sel_col=NULL, rnd=3){
   if(is.null(label)){
-    label = deparse(substitute(x))
+    label = as.character(deparse(substitute(x)))
+    label = gsub('.+\\$', '', label)
   }
   if(any(c('tidytable', 'data.table') %in% class(x))){
     tryCatch({

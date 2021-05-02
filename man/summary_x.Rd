@@ -22,3 +22,6 @@ a matrix
 sd = standard deviation
 stderr = standard error of the mean (sd(x) / sqrt(length(x)))
 }
+\examples{
+summary_x(iris$Sepal.Length)
+}
