@@ -23,43 +23,31 @@
 #' bash_job('ls -thlc', log_file='log.txt')
 #' # use conda env
 #' bash_job('conda list', conda_env='base')
-bash_job = function(cmd, conda_env=NULL, stdout=TRUE, stderr=TRUE,
-                    print_output=TRUE, return_output=FALSE,
-                    log_file=NULL, verbose=TRUE, wait=TRUE){
-  if(!is.null(conda_env)){
-    CMD = sprintf('. ~/.bashrc; conda activate %s;', conda_env)
-  } else {
-    CMD = ''
+bash_job = function (cmd, conda_env = NULL, stdout = TRUE, stderr = TRUE,
+                     print_output = TRUE, return_output = FALSE, log_file = NULL,
+                     verbose = TRUE, wait = TRUE){
+  if (!is.null(conda_env)) {
+    CMD = sprintf(". ~/.bashrc; conda activate %s;", conda_env)
   }
-  CMD = sprintf('%s %s', CMD, cmd)
-  if(!is.null(log_file)){
+  else {
+    CMD = ""
+  }
+  CMD = sprintf("%s %s", CMD, cmd)
+  if (!is.null(log_file)) {
     stdout = log_file
-    stderr = paste0(log_file, '.err')
+    stderr = paste0(log_file, ".err")
   }
-  if('sys' %in% rownames(installed.packages())){
-    require(sys)
-    CMD = c('-c', '.', CMD)
-    if(verbose == TRUE){
-      message(sprintf('bash %s', paste(CMD, collapse=' ')))
-    }
-    if(wait == TRUE){
-      ret = exec_wait('bash', CMD, std_out=stdout, std_err=stderr)
-    } else {
-      ret = exec_background('bash', CMD, std_out=stdout, std_err=stderr)
-    }
-
-  } else {
-    CMD = sprintf('-c "%s"', CMD)
-    if(verbose == TRUE){
-      message(sprintf('bash %s', CMD))
-    }
-    ret = system2('bash', CMD, stdout=stdout, stderr=stderr, wait=TRUE)
+  CMD = sprintf("-c \"%s\"", CMD)
+  if (verbose == TRUE) {
+    message(sprintf("bash %s", CMD))
   }
-  if(print_output == TRUE){
-      cat(paste(ret, collapse='\n'))
+  ret = system2("bash", CMD, stdout = stdout,
+                stderr = stderr, wait = TRUE)
+  if (print_output == TRUE) {
+    cat(paste(ret, collapse = "\n"))
   }
-  if(return_output == TRUE){
-      return(ret)
+  if (return_output == TRUE) {
+    return(ret)
   }
   return(invisible())
 }
