@@ -12,20 +12,26 @@ list_files = function(path, pattern=NULL, full.names=TRUE, recursive=TRUE, ...){
 
 #' Simple wrapper around data.table::fread
 #'
-#' @param infile input file name
-#' @param cmd command instead of input file (eg., "gunzip -c INFILE")
-#' @param sep value delimiter
-#' @param check.names format check column names
-#' @param ... passed to data.table::fread
+#' @param infile Input file name
+#' @param cmd Command instead of input file (eg., "gunzip -c INFILE")
+#' @param sep Value delimiter
+#' @param check.names Format check column names
+#' @param tmp_dir Temp file directory. Scratch directory by default
+#' @param ... Passed to data.table::fread
 #' @return data.table
 #' @export
-Fread = function(infile=NULL, cmd=NULL, sep='\t', check.names=TRUE, ...){
+Fread = function(infile=NULL, cmd=NULL, sep='\t', check.names=TRUE,
+                 tmpdir = file.path('/ebio', 'abt3_scratch', Sys.info()[['user']], 'R_tmp'),
+                 ...){
+  if(! dir.exists(tmpdir)){
+    make_dir(tmpdir)
+  }
   if(is.null(infile) & is.null(cmd)){
     stop('infile and cmd cannot both be NULL')
   } else if(is.null(cmd)){
-    return(data.table::fread(infile, sep=sep, check.names=check.names, ...))
+    return(data.table::fread(infile, sep=sep, check.names=check.names, tmpdir=tmpdir, ...))
   } else if(is.null(infile)){
-    return(data.table::fread(cmd=cmd, sep=sep, check.names=check.names, ...))
+    return(data.table::fread(cmd=cmd, sep=sep, check.names=check.names, tmpdir=tmpdir, ...))
   }
 }
 

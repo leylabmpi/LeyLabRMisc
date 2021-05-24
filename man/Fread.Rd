@@ -4,18 +4,27 @@
 \alias{Fread}
 \title{Simple wrapper around data.table::fread}
 \usage{
-Fread(infile = NULL, cmd = NULL, sep = "\\t", check.names = TRUE, ...)
+Fread(
+  infile = NULL,
+  cmd = NULL,
+  sep = "\\t",
+  check.names = TRUE,
+  tmpdir = file.path("/ebio", "abt3_scratch", Sys.info()[["user"]], "R_tmp"),
+  ...
+)
 }
 \arguments{
-\item{infile}{input file name}
+\item{infile}{Input file name}
 
-\item{cmd}{command instead of input file (eg., "gunzip -c INFILE")}
+\item{cmd}{Command instead of input file (eg., "gunzip -c INFILE")}
 
-\item{sep}{value delimiter}
+\item{sep}{Value delimiter}
 
-\item{check.names}{format check column names}
+\item{check.names}{Format check column names}
 
-\item{...}{passed to data.table::fread}
+\item{...}{Passed to data.table::fread}
+
+\item{tmp_dir}{Temp file directory. Scratch directory by default}
 }
 \value{
 data.table
