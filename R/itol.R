@@ -227,7 +227,7 @@ itol_colorstrip = function(df, dataset_label, out_file, out_dir=NULL, legend=NUL
   cat(sprintf('LEGEND_TITLE %s\n', dataset_label), file=out_file, append=TRUE)
   if(is.null(legend)){
     shapes = rep(1, df[,2] %>% unique %>% length)
-    cols = gsub('FF$', '', rainbow(length(shapes)))
+    cols = gsub("#[A-Z0-9]{6}FF$", '', rainbow(length(shapes)))
     labs = paste(gsub(' ', '_', df[,2] %>% unique), collapse=' ')
   } else {
     stopifnot(all(colnames(legend) %in% c('shapes', 'colors', 'labels')))
@@ -290,7 +290,7 @@ itol_externalshape = function(df, dataset_label, out_file, out_dir=NULL, legend=
 
   # Field colors
   if(is.null(legend)){
-    cols = gsub('FF$', '', rainbow(ncol(df)))
+    cols = gsub("#[A-Z0-9]{6}FF$", '', rainbow(ncol(df)))
   } else {
     cols = legend$colors %>% as.character
   }
@@ -301,7 +301,7 @@ itol_externalshape = function(df, dataset_label, out_file, out_dir=NULL, legend=
   cat(sprintf('LEGEND_TITLE %s\n', dataset_label), file=out_file, append=TRUE)
   if(is.null(legend)){
     shapes = rep(1, colnames(df) %>% length)
-    cols = gsub('FF$', '', rainbow(length(shapes)))
+    cols = gsub("#[A-Z0-9]{6}FF$", "", rainbow(length(shapes)))
     labs = paste(gsub(' ', '_', colnames(df)), collapse=' ')
   } else {
     stopifnot(all(colnames(legend) %in% c('shapes', 'colors', 'labels')))
@@ -352,7 +352,7 @@ itol_simplebar = function(df, dataset_label, out_file, out_dir=NULL, legend=NULL
 
   # Field colors
   if(is.null(legend)){
-    cols = gsub('FF$', '', rainbow(ncol(df)))
+    cols = gsub("#[A-Z0-9]{6}FF$", '', rainbow(ncol(df)))
   } else {
     cols = legend$colors %>% as.character
   }
@@ -363,7 +363,7 @@ itol_simplebar = function(df, dataset_label, out_file, out_dir=NULL, legend=NULL
   cat(sprintf('LEGEND_TITLE %s\n', dataset_label), file=out_file, append=TRUE)
   if(is.null(legend)){
     shapes = rep(1, colnames(df) %>% length)
-    cols = gsub('FF$', '', rainbow(length(shapes)))
+    cols = gsub("#[A-Z0-9]{6}FF$", '', rainbow(length(shapes)))
     labs = paste(gsub(' ', '_', colnames(df)), collapse=' ')
   } else {
     stopifnot(all(colnames(legend) %in% c('shapes', 'colors', 'labels')))
