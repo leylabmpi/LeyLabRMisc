@@ -19,9 +19,9 @@ Plot(
 \arguments{
 \item{p}{Plot object (ggplot2, base, etc)}
 
-\item{file}{File name to write}
+\item{file}{File name to write. If NULL, the name will be based on the md5sum of the object, so the name will change if the object changes.}
 
-\item{path}{Path to write to}
+\item{path}{Path to write to. If NULL, the path will be .figures/.}
 
 \item{suffix}{File name suffix (eg., '.png')}
 

@@ -165,3 +165,32 @@ split_path = function(x){
     return(c(split_path(dirname(x)), basename(x)))
   }
 }
+
+
+#' Save object as RDS, with name automatically defined
+#'
+#' Similar to the Plot() function, but for any R object.
+#' This is useful for quickly saving data for use in other sessions.
+#' For example, if one must compile tables of all p-values for manuscript submission.
+#' @param object
+#' @param file File name to write. If NULL, the name will be based on the md5sum of the object, so the name will change if the object changes.
+#' @param path Path to write to. If NULL, the path will be .data/.
+#' @param suffix File name suffix,
+#' @return NULL
+#' @export
+to_rds = function(obj, file=NULL, path=NULL, suffix=''){
+  # file path
+  if(is.null(path)){
+    path = file.path(getwd(), '.data')
+    if(! dir.exists(path)){
+      dir.create(path, showWarnings=FALSE)
+    }
+  }
+  # saving object
+  if(is.null(file)){
+    file = paste0(Robj_md5sum(obj), suffix, '.RDS')
+  }
+  file = file.path(path, file)
+  saveRDS(obj, file=file)
+  cat('File written:', file, '\n')
+}

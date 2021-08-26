@@ -16,8 +16,8 @@ p.dims = function(w=5, h=5, res=200){
 #' This is most useful for working with IRkernl in Jupyter notebooks
 #'
 #' @param p Plot object (ggplot2, base, etc)
-#' @param file File name to write
-#' @param path Path to write to
+#' @param file File name to write. If NULL, the name will be based on the md5sum of the object, so the name will change if the object changes.
+#' @param path Path to write to. If NULL, the path will be .figures/.
 #' @param suffix File name suffix (eg., '.png')
 #' @param saveObj Write the Robj to a file?
 #' @param saveImg Write the image to a file?
