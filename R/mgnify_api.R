@@ -90,7 +90,7 @@ mgnify_request_get = function(url, page=1, query=list(), verbose=TRUE, ...){
   # to data.frame
   response = jsonlite::fromJSON(response, flatten = TRUE)
   if(verbose == TRUE && page == 1 && !is.null(names(response))){
-    message('Total pages:', response$meta$pagination$pages)
+    message('Total pages: ', response$meta$pagination$pages)
   }
   if(class(response$data) == 'list'){
     response = .flatten_nested(response)
@@ -140,7 +140,9 @@ mgnify_request = function(url, max_pages=NULL, query=list(), verbose=TRUE,
   page = 1
   # cache
   if(use_cache == TRUE && file.exists(cache_file)){
-    message('use_cache==TRUE; Reading cache file: ', cache_file)
+    if(verbose == TRUE){
+      message('use_cache==TRUE; Reading cache file: ', cache_file)
+    }
     responses = readRDS(cache_file)
     page = length(responses) -1
     if(page < 1){
@@ -160,7 +162,7 @@ mgnify_request = function(url, max_pages=NULL, query=list(), verbose=TRUE,
     call_status = ret$status
     responses[[ret$page]] = ret$data
     # pages
-    if(is.null(max_pages) | max_pages > ret$pages){
+    if(is.null(max_pages) || max_pages > ret$pages){
       max_pages = ret$pages
     }
     if(ret$page >= max_pages){
@@ -169,7 +171,9 @@ mgnify_request = function(url, max_pages=NULL, query=list(), verbose=TRUE,
     # cache
     if(!is.null(cache_file) && page %% cache_break == 0){
       saveRDS(responses, cache_file)
-      message('Cache file written: ', cache_file)
+      if(verbose == TRUE){
+        message('Cache file written: ', cache_file)
+      }
     }
     # iter
     page = ret$page + 1
@@ -177,10 +181,12 @@ mgnify_request = function(url, max_pages=NULL, query=list(), verbose=TRUE,
   # cache
   if(file.exists(cache_file)){
     file.remove(cache_file)
-    message('Cache file removed: ', cache_file)
+    if(verbose == TRUE){
+      message('Cache file removed: ', cache_file)
+    }
   }
   # binding data.frames
-  if(is.null(responses) | length(responses) == 0){
+  if(is.null(responses) || length(responses) == 0){
     return(NULL)
   }
   responses = .add_columns(responses)
@@ -230,7 +236,7 @@ mgnify_request = function(url, max_pages=NULL, query=list(), verbose=TRUE,
 #' mgnify_get(lineage='root:Host-associated', instrument_platform = 'ILLUMINA',
 #'             instrument_model = 'HiSeq', max_pages=8)
 #' mgnify_get(accession = 'SRS2472313')
-mgnify_get= function(
+mgnify_get = function(
   accession = NULL,  # accession
   section=c('samples', 'studies', 'analyses', 'biomes', 'experiment-types'),
   search = NULL,  # 'soil'
@@ -292,4 +298,3 @@ mgnify_get= function(
               use_cache=use_cache,
               ...)
 }
-
