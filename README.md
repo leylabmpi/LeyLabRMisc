@@ -43,6 +43,7 @@ Feel free to contribute! Just clone the repo, make some changes, commit, and cre
 * Functions for multivariate data analysis
 * Functions to help with using the phyloseq R package
 * Functions to help process metagenome profiling data
+* Functions to interface with the MGnify and ENA APIs
 
 # Manual & Tutorials
 
