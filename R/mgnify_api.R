@@ -42,21 +42,6 @@
   return(Lret)
 }
 
-# # replicate vector values in list to match longest vector in the list
-# .replicate = function(L){
-#   max_len = max(unlist(lapply(L, length)))
-#   for(n in names(L)){
-#     if(length(L[[n]]) < max_len){
-#       L[[n]] = rep(L[[n]], max_len)[1:max_len]
-#     }
-#   }
-#   if(! all(unlist(lapply(L, length)) == max_len)){
-#     stop('could not create vectors of same length')
-#   }
-#   return(L)
-# }
-# #df = ena_get_studies()
-
 # flatten a nested list; return a list
 .flatten_nested = function(response){
   if(is.null(response)){
@@ -86,27 +71,24 @@
 #' @examples
 #' mgnify_request_get('https://www.ebi.ac.uk/metagenomics/api/v1/samples', query=list(instrument_platform = 'ILLUMINA'))
 mgnify_request_get = function(url, page=1, query=list(), verbose=TRUE, ...){
-  require(httr)
-  require(RCurl)
-  require(jsonlite)
   # setting page
   if(!is.null(query)){
     query$page = page
   }
   # GET
-  request = GET(url = url, query = query, ...)
-  if(http_type(request) != 'application/json') {
+  request = httr::GET(url = url, query = query, ...)
+  if(httr::http_type(request) != 'application/json') {
     warning('API did not return json', call. = FALSE)
     return(NULL)
   }
   # response
-  response = content(request, as = "text", encoding = "UTF-8")
+  response = httr::content(request, as = "text", encoding = "UTF-8")
   if(is.null(response) || request$status_code != 200){
-    warn_for_status(request)
+    httr::warn_for_status(request)
     return(NULL)
   }
   # to data.frame
-  response = fromJSON(response, flatten = TRUE)
+  response = jsonlite::fromJSON(response, flatten = TRUE)
   if(verbose == TRUE && page == 1 && !is.null(names(response))){
     message('Total pages:', response$meta$pagination$pages)
   }
@@ -135,7 +117,6 @@ mgnify_request_get = function(url, page=1, query=list(), verbose=TRUE, ...){
               data = response$data))
 }
 
-
 #' GET request from the ENA
 #'
 #' @param url ENA API url
@@ -149,7 +130,7 @@ mgnify_request_get = function(url, page=1, query=list(), verbose=TRUE, ...){
 #' @return data.frame
 #' @export
 #' @examples
-#' x = mgnify_request('https://www.ebi.ac.uk/metagenomics/api/v1/biomes', max_pages = 2)
+#' mgnify_request('https://www.ebi.ac.uk/metagenomics/api/v1/biomes', max_pages = 3)
 mgnify_request = function(url, max_pages=NULL, query=list(), verbose=TRUE,
                        cache_file='mgnify_request.RDS', cache_break=10,
                        use_cache=TRUE, ...){

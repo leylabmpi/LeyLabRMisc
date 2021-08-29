@@ -32,8 +32,8 @@ ena_get_filereport = function(
   url = paste0(url, '?accession=', accession,
                '&result=read_run&fields=',
                paste(fields, collapse=','))
-  request = GET(url = url, ...)
-  response = content(request, as = "text", encoding = "UTF-8")
+  request = httr::GET(url = url, ...)
+  response = httr::content(request, as = "text", encoding = "UTF-8")
   read.delim(text=response, sep='\t')
 }
 
@@ -56,8 +56,8 @@ ena_get_search_fields = function(
   ...
 ){
   url = paste(gsub('/$', '', base_url), '/searchFields?result=', section[1], sep='')
-  request = GET(url = url, ...)
-  response = content(request, as = "text", encoding = "UTF-8")
+  request = httr::GET(url = url, ...)
+  response = httr::content(request, as = "text", encoding = "UTF-8")
   read.delim(text=response, sep='\t')
 }
 
