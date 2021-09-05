@@ -62,5 +62,3 @@ ena_get_search_fields = function(
 }
 
 
-
-

@@ -21,15 +21,13 @@ bash_job(
 
 \item{conda_env}{The conda env to use}
 
-\item{stdout}{Print the stdout from the command?}
+\item{stdout}{If TRUE, print the stdout; if file path, write to file}
 
-\item{stderr}{Print the stderr from the command?}
+\item{stderr}{If TRUE, print the stderr; if file path, write to file}
 
 \item{print_output}{Pretty printing of the output to the console?}
 
 \item{return_output}{Return the bash command output?}
-
-\item{log_file}{Write stdout to log file (stderr written to log_file.err)}
 
 \item{verbose}{Write status messages?}
 
@@ -44,8 +42,10 @@ stderr/stdout is printed unless print_output==FALSE
 \examples{
 # simple
 bash_job('ls -thlc')
-# write to log file
-bash_job('ls -thlc', log_file='log.txt')
-# use conda env
+# write stderr to log file
+bash_job('ls -thlc', stderr='log.txt')
+# use conda environment
 bash_job('conda list', conda_env='base')
+# return output
+files = bash_job('find . -name \\\\"*ipynb\\\\"', return_output=TRUE, print_output=FALSE, verbose=FALSE)
 }

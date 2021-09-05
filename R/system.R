@@ -7,11 +7,10 @@
 #'
 #' @param cmd The bash command in a string format
 #' @param conda_env The conda env to use
-#' @param stdout Print the stdout from the command?
-#' @param stderr Print the stderr from the command?
+#' @param stdout If TRUE, print the stdout; if file path, write to file
+#' @param stderr If TRUE, print the stderr; if file path, write to file
 #' @param print_output Pretty printing of the output to the console?
 #' @param return_output Return the bash command output?
-#' @param log_file Write stdout to log file (stderr written to log_file.err)
 #' @param verbose Write status messages?
 #' @param wait Wait for the process to finish?
 #' @returns NULL
@@ -19,13 +18,20 @@
 #' @examples
 #' # simple
 #' bash_job('ls -thlc')
-#' # write to log file
-#' bash_job('ls -thlc', log_file='log.txt')
-#' # use conda env
+#' # write stderr to log file
+#' bash_job('ls -thlc', stderr='log.txt')
+#' # use conda environment
 #' bash_job('conda list', conda_env='base')
+#' # return output
+#' files = bash_job('find . -name \\"*ipynb\\"', return_output=TRUE, print_output=FALSE, verbose=FALSE)
 bash_job = function (cmd, conda_env = NULL, stdout = TRUE, stderr = TRUE,
                      print_output = TRUE, return_output = FALSE, log_file = NULL,
                      verbose = TRUE, wait = TRUE){
+  for(x in c(stderr, stdout)){
+    if(is.character(stderr)){
+      dir.create(dirname(x), recursive = TRUE, showWarnings = FALSE)
+    }
+  }
   if (!is.null(conda_env)) {
     CMD = sprintf(". ~/.bashrc; conda activate %s;", conda_env)
   }
@@ -33,10 +39,6 @@ bash_job = function (cmd, conda_env = NULL, stdout = TRUE, stderr = TRUE,
     CMD = ""
   }
   CMD = sprintf("%s %s", CMD, cmd)
-  if (!is.null(log_file)) {
-    stdout = log_file
-    stderr = paste0(log_file, ".err")
-  }
   CMD = sprintf("-c \"%s\"", CMD)
   if (verbose == TRUE) {
     message(sprintf("bash %s", CMD))

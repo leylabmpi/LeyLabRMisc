@@ -39,5 +39,5 @@ data.frame
 GET request from the ENA
 }
 \examples{
-x = mgnify_request('https://www.ebi.ac.uk/metagenomics/api/v1/biomes', max_pages = 2)
+mgnify_request('https://www.ebi.ac.uk/metagenomics/api/v1/biomes', max_pages = 3)
 }
