@@ -76,7 +76,7 @@ files_to_list = function(files, label_index=-1){
   return(L)
 }
 
-#' writing table convience function
+#' writing table convenience function
 #'
 #' This is most useful for working with IRkernl in Jupyter notebooks.
 #' If a data.table is provided, then fwrite is used; otherwise, write.table is used.
@@ -86,16 +86,30 @@ files_to_list = function(files, label_index=-1){
 #' @param sep the field separator string. Values within each row of x are separated by this string
 #' @param quote a logical value (TRUE or FALSE) or a numeric vector. If TRUE, any character or factor columns will be surrounded by double quotes.
 #' @param row.names either a logical value indicating whether the row names of x are to be written along with x, or a character vector of row names to be written.
+#' @param verbose verbose messaging?
 #' @param ... Passed to write.table (if data.frame) or fwrite (if data.table)
 #' @return NULL
 #' @export
-write_table = function(df, file, sep="\t", quote=FALSE, row.names=FALSE, ...){
+write_table = function(df, file, sep="\t", quote=FALSE, row.names=FALSE, verbose=TRUE, ...){
+  # convert to data.table?
+  df = tryCatch(
+    {data.table::as.data.table(df)},
+    error = function(cond){
+      if(verbose){
+        message('WARNING: could not convert to data.table; cannot use fwrite')
+      }
+      df
+    }
+  )
+  # write
   if('data.table' %in% class(df)){
     data.table::fwrite(df, file=file, sep=sep, quote=quote, row.names=row.names, ...)
   } else {
     write.table(df, file=file, sep=sep, quote=quote, row.names=row.names, ...)
   }
-  cat('File written:', file, '\n')
+  if(verbose){
+    cat('File written:', file, '\n')
+  }
 }
 
 #' A helper function for creating a directory (recursively)
