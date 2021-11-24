@@ -13,6 +13,9 @@
   quiet = TRUE
 )
 }
+\value{
+data.table
+}
 \description{
 supporting function for HFE
 }

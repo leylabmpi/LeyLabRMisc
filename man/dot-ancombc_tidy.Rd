@@ -6,6 +6,11 @@
 \usage{
 .ancombc_tidy(var, L)
 }
+\arguments{
+\item{var}{variable}
+
+\item{L}{list}
+}
 \description{
 tidy ancom-bc output
 }

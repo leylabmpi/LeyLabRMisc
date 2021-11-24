@@ -25,6 +25,7 @@ p.dims = function(w=5, h=5, res=200){
 #' @param height Figure height. If NA, uses global options
 #' @return NULL
 #' @export
+#' @importFrom ggplot2 ggsave
 Plot = function(p, file=NULL, path=NULL, suffix='', saveObj=TRUE, saveImg=FALSE, width=NA, height=NA, ...){
   # file path
   if(is.null(path)){
@@ -132,13 +133,15 @@ fig_uuid = function(full=FALSE){
 }
 
 #' getting RColorBrewer entire palette
+#' @return color vector
 .get_brewer_palette = function(){
   # color palletes
   qual_col_pals = RColorBrewer::brewer.pal.info
   qual_col_pals$rowname = rownames(qual_col_pals)
   qual_col_pals = subset(qual_col_pals, category == "qual")
   # Create single vector with all colors
-  color_vector = unlist(mapply(RColorBrewer::brewer.pal, qual_col_pals$maxcolors,
+  color_vector = unlist(mapply(RColorBrewer::brewer.pal,
+                               qual_col_pals$maxcolors,
                                qual_col_pals$rowname))
   return(color_vector)
 }
@@ -154,6 +157,7 @@ fig_uuid = function(full=FALSE){
 #' @param return_hex Return a vector of color hexidecimals instead of a plotting object.
 #' @return ScaleContinuous/ggproto object or vector
 #' @export
+#' @importFrom ggplot2 scale_fill_manual
 #' @examples
 #' ggplot(mpg, aes(fl, hwy, fill=model)) +
 #'   geom_bar(stat='identity') +
@@ -163,7 +167,7 @@ scale_fill_all = function(..., return_hex = FALSE){
   if(return_hex == TRUE){
     return(color_vector)
   } else {
-    return(scale_fill_manual(values = color_vector, ...))
+    return(ggplot2::scale_fill_manual(values = color_vector, ...))
   }
 }
 
@@ -178,6 +182,7 @@ scale_fill_all = function(..., return_hex = FALSE){
 #' @param return_hex Return a vector of color hexidecimals instead of a plotting object.
 #' @return ScaleContinuous/ggproto object or vector
 #' @export
+#' @importFrom ggplot2 scale_color_manual
 #' @examples
 #' ggplot(mpg, aes(cty, hwy, color=class)) +
 #'   geom_point() +
@@ -187,7 +192,7 @@ scale_color_all = function(..., return_hex = FALSE){
   if(return_hex == TRUE){
     return(color_vector)
   } else {
-    return(scale_color_manual(values = color_vector, ...))
+    return(ggplot2::scale_color_manual(values = color_vector, ...))
   }
 }
 

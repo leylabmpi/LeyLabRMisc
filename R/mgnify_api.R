@@ -1,4 +1,5 @@
-# adding columns to a data.frame, as needed
+#' adding columns to a data.frame, as needed
+#' @return data.frame
 ..add_columns = function(df, cols){
   for(x in setdiff(cols, colnames(df))){
     df[,x] = NA
@@ -6,13 +7,15 @@
   return(df)
 }
 
-# adding columns to a data.frame, as needed
+#' adding columns to a data.frame, as needed
+#' @return list
 .add_columns = function(L){
   all_cols = unique(unlist(lapply(L, colnames)))
   lapply(L, ..add_columns, cols=all_cols)
 }
 
-# recursive search in a nested list; return flattened list
+#' recursive search in a nested list; return flattened list
+#' @return list
 .rec_search = function(L, Lret=list(), full_path=c()){
   if(is.null(names(L))){
     return(NULL)
@@ -42,7 +45,7 @@
   return(Lret)
 }
 
-# flatten a nested list; return a list
+#' flatten a nested list; return a list
 .flatten_nested = function(response){
   if(is.null(response)){
     return(NULL)

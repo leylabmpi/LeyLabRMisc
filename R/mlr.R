@@ -8,6 +8,7 @@
 #' @param trafo Should the units of the hyperparameter path be converted to the transformed scale?
 #' @return data.frame
 #' @export
+#' @importFrom data.table rbindlist
 mlr_getNestedTuneResultsOptPathDf = function(r, trafo = FALSE) {
   checkmate::assertClass(r, "ResampleResult")
   checkmate::assertList(r$extract)

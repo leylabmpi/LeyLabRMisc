@@ -15,8 +15,10 @@
 #' @param nrows Number of table rows to read. If Inf, all lines will be read.
 #' @param to_keep Which functional grouping to keep (eg., KEGG pathways)?
 #' @param column_names The column names to use for the table (use NULL if the input table has column names)
-#' @export
 #' @return data.table
+#' @export
+#' @import tidytable
+#' @importFrom glue glue
 read_eggnog_mapper = function(infile=NULL, cmd=NULL, sep='\t', nrows=Inf, to_keep = c('COG', 'KEGG pathway', 'CAZy'),
                               column_names = c("query_name", "seed_eggNOG_ortholog", "seed_ortholog_evalue",
                                                "seed_ortholog_score", "Predicted_taxonomic_group", "Predicted_protein_name",

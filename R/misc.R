@@ -19,6 +19,8 @@ taxonomy_levels = function(){
 #' @param diag include same-same comparisons ('a' <=> 'b')?
 #' @return a data.frame of all non-reciprical comparisons
 #' @export
+#' @importFrom dplyr filter mutate
+#' @importFrom tidyr spread
 #' @examples
 #' expand.grid.lower(1:3, 1:3)
 #' expand.grid.lower(1:3, 1:3, diag=TRUE)
@@ -26,9 +28,9 @@ expand.grid.lower = function(x, y, diag=FALSE){
   require(dplyr)
   require(tidyr)
   m = expand.grid(x, y) %>%
-    filter(Var1 != Var2) %>%
-    mutate(Val = 1) %>%
-    spread(Var2, Val) %>%
+    dplyr::filter(Var1 != Var2) %>%
+    dplyr::mutate(Val = 1) %>%
+    tidyr::spread(Var2, Val) %>%
     as.data.frame
   rownames(m) = m$Var1
   m$Var1 = NULL

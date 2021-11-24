@@ -1,10 +1,13 @@
 #' tidy ancom-bc output
+#' @param var variable
+#' @param L list
+#' @importFrom dplyr mutate
+#' @importFrom tidyr pivot_longer
 .ancombc_tidy = function(var, L){
   L[[var]] %>%
-    mutate(feature = rownames(.)) %>%
-    pivot_longer(cols=c(-feature), names_to='covariate', values_to='value') %>%
-    mutate(variable = var)
-
+    dplyr::mutate(feature = rownames(.)) %>%
+    tidyr::pivot_longer(cols=c(-feature), names_to='covariate', values_to='value') %>%
+    dplyr::mutate(variable = var)
 }
 
 #' Tidy ANCOM-BC output
@@ -14,12 +17,13 @@
 #' @param ancombc_out output object from the ancombc() function
 #' @return a tibble of tidy data
 #' @export
+#' @importFrom tidyr pivot_wider
 ancombc_tidy = function(ancombc_out){
   vars = ancombc_out$res %>% names
   vars %>%
     lapply(.ancombc_tidy, L=ancombc_out$res) %>%
     do.call(rbind, .) %>%
-    pivot_wider(names_from=variable, values_from=value)
+    tidyr::pivot_wider(names_from=variable, values_from=value)
 }
 
 #' Get unbiased abundances from ANCOM-BC output

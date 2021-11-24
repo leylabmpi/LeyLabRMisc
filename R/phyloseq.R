@@ -8,6 +8,8 @@
 #' @param flip Flip (transpose) the table?
 #' @return A tibble
 #' @export
+#' @importFrom tidyr gather
+#' @importFrom tibble as_tibble
 phyloseq2df = function(physeq_obj, physeq_func, long=FALSE, flip=FALSE){
   require(dplyr)
   tbl = physeq_obj %>%
@@ -34,20 +36,20 @@ phyloseq2df = function(physeq_obj, physeq_func, long=FALSE, flip=FALSE){
   if(func_str == 'otu_table' && long == TRUE){
     if(flip == TRUE){
       tbl = tbl %>%
-        gather(OTU, Count, -Sample)
+        tidyr::gather(OTU, Count, -Sample)
     } else {
       tbl = tbl %>%
-        gather(Sample, Count, -OTU)
+        tidyr::gather(Sample, Count, -OTU)
     }
   } else if(func_str == 'tax_table' && long == TRUE){
     tbl = tbl %>%
-      gather(Tax_level, Tax_name, -OTU)
+      tidyr::gather(Tax_level, Tax_name, -OTU)
   } else if(func_str == 'sample_data' && long == TRUE){
     tbl = tbl %>%
-      gather(Metadata_key, Metadata_value, -Sample)
+      tidyr::gather(Metadata_key, Metadata_value, -Sample)
   }
 
-  return(suppressWarnings(tbl %>% as_tibble))
+  return(suppressWarnings(tibble::as_tibble(tbl)))
 }
 
 #' Transform abundances to relative
@@ -60,9 +62,9 @@ phyloseq2df = function(physeq_obj, physeq_func, long=FALSE, flip=FALSE){
 #' @export
 phyloseq_rel_abund <- function(physeq_obj, percent_abund=TRUE) {
   if(percent_abund == TRUE){
-    physeq_obj = transform_sample_counts(physeq_obj, function(x) x / sum(x) * 100)
+    physeq_obj = phyloseq::transform_sample_counts(physeq_obj, function(x) x / sum(x) * 100)
   } else {
-    physeq_obj = transform_sample_counts(physeq_obj, function(x) x / sum(x) )
+    physeq_obj = phyloseq::transform_sample_counts(physeq_obj, function(x) x / sum(x) )
   }
   return(physeq_obj)
 }
@@ -85,11 +87,11 @@ estimate_richness_phy = function (physeq, split = TRUE, measures = NULL){
             "We recommended that you find the un-trimmed data and retry.")
   }
   if (!split) {
-    OTU <- taxa_sums(physeq)
+    OTU <- phyloseq::taxa_sums(physeq)
   }
   else if (split) {
-    OTU <- as(otu_table(physeq), "matrix")
-    if (taxa_are_rows(physeq)) {
+    OTU <- as(phyloseq::otu_table(physeq), "matrix")
+    if (phyloseq::taxa_are_rows(physeq)) {
       OTU <- t(OTU)
     }
   }
@@ -123,9 +125,9 @@ estimate_richness_phy = function (physeq, split = TRUE, measures = NULL){
                                                              index = "invsimpson")))
   }
   if ("Fisher" %in% measures) {
-    fisher = tryCatch(fisher.alpha(OTU, se = TRUE), warning = function(w) {
+    fisher = tryCatch(preseqR::fisher.alpha(OTU, se = TRUE), warning = function(w) {
       warning("phyloseq::estimate_richness: Warning in fisher.alpha(). See `?fisher.fit` or ?`fisher.alpha`. Treat fisher results with caution")
-      suppressWarnings(fisher.alpha(OTU, se = TRUE)[, c("alpha",
+      suppressWarnings(preseqR::fisher.alpha(OTU, se = TRUE)[, c("alpha",
                                                         "se")])
     })
     if (!is.null(dim(fisher))) {
@@ -171,7 +173,7 @@ estimate_rarified_richness = function(psdata, measures, depth) {
   molten_alpha_diversity = reshape2::melt(as.matrix(alpha_diversity),
                                            varnames = c('Sample', 'Measure'),
                                            value.name = 'Alpha_diversity')
-
+  # return
   return(molten_alpha_diversity)
 }
 
@@ -193,6 +195,6 @@ calculate_rarefaction_curves = function(psdata, measures, depths, parallel=FALSE
 
   # convert Depth from factor to numeric
   rarefaction_curve_data$Depth = as.numeric(levels(rarefaction_curve_data$Depth))[rarefaction_curve_data$Depth]
-
+  # return
   return(rarefaction_curve_data)
 }

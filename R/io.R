@@ -20,6 +20,7 @@ list_files = function(path, pattern=NULL, full.names=TRUE, recursive=TRUE, ...){
 #' @param ... Passed to data.table::fread
 #' @return data.table
 #' @export
+#' @importFrom data.table fread
 Fread = function(infile=NULL, cmd=NULL, sep='\t', check.names=TRUE,
                  tmpdir = file.path('/ebio', 'abt3_scratch', Sys.info()[['user']], 'R_tmp'),
                  ...){
@@ -90,6 +91,7 @@ files_to_list = function(files, label_index=-1){
 #' @param ... Passed to write.table (if data.frame) or fwrite (if data.table)
 #' @return NULL
 #' @export
+#' @importFrom data.table as.data.table fwrite
 write_table = function(df, file, sep="\t", quote=FALSE, row.names=FALSE, verbose=TRUE, ...){
   # convert to data.table?
   df = tryCatch(
@@ -163,7 +165,7 @@ readLinesTail = function(x, n, ...){
     }
     out = c(out[-1],tmp)
   }
-  out
+  return(out)
 }
 
 #' python's os.path.split() for R
@@ -186,10 +188,10 @@ split_path = function(x){
 #' Similar to the Plot() function, but for any R object.
 #' This is useful for quickly saving data for use in other sessions.
 #' For example, if one must compile tables of all p-values for manuscript submission.
-#' @param object
+#' @param object Any R object
 #' @param file File name to write. If NULL, the name will be based on the md5sum of the object, so the name will change if the object changes.
 #' @param path Path to write to. If NULL, the path will be .data/.
-#' @param suffix File name suffix,
+#' @param suffix File name suffix
 #' @return NULL
 #' @export
 to_rds = function(obj, file=NULL, path=NULL, suffix=''){

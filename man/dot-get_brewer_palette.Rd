@@ -6,6 +6,9 @@
 \usage{
 .get_brewer_palette()
 }
+\value{
+color vector
+}
 \description{
 getting RColorBrewer entire palette
 }

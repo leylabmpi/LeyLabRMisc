@@ -12,6 +12,8 @@
 #' @param ... Params passed to fread()
 #' @return data.table
 #' @export
+#' @import tidytable
+#' @importFrom data.table fread
 read_bracken = function(infile, nrows=Inf, keep_frac=TRUE,
                         tax_levs = c('Domain', 'Phylum', 'Class', 'Order',
                                      'Family', 'Genus', 'Species'),

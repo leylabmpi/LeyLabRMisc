@@ -11,7 +11,9 @@ to_rds(obj, file = NULL, path = NULL, suffix = "")
 
 \item{path}{Path to write to. If NULL, the path will be .data/.}
 
-\item{suffix}{File name suffix,}
+\item{suffix}{File name suffix}
+
+\item{object}{Any R object}
 }
 \description{
 Similar to the Plot() function, but for any R object.

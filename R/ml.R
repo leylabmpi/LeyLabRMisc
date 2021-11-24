@@ -1,4 +1,7 @@
 #' supporting function for HFE
+#' @importFrom data.table rbindlist
+#' @import tidytable
+#' @return data.table
 .HFE = function(brk, class_level, corr_cutoff=0.5, freqCut = 99/1, uniqueCut = 1, quiet=TRUE){
   tax_levs = c('Species', 'Genus', 'Family', 'Order', 'Class', 'Phylum', 'Domain')
   class_level = enexpr(class_level)
@@ -101,10 +104,12 @@
 #' @param uniqueCut as in caret::nearZeroVar; use NULL to skip
 #' @return data.table of filtered features
 #' @export
+#' @import tidytable
+#' @importFrom data.table rbindlist
 ml_tax_HFE = function(brk, tax_level, corr_cutoff=0.7, threads=2, freqCut = 95/1, uniqueCut = 5, quiet=TRUE){
   require(caret)
   require(plyr)
-  tax_level = enexpr(tax_level)
+  tax_level = rlang::enexpr(tax_level)
   if(as.character(tax_level) == 'Species'){
     brk = brk %>%
       mutate.(Taxonomy = paste(Phylum, Class, Order, Family, Genus, Species, sep=';')) %>%

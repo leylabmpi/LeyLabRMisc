@@ -13,7 +13,6 @@
 #' clustermq_setup('multicore')   # local job
 clustermq_setup = function(scheduler = c('sge', 'multicore'),
                            template = file.path(Sys.getenv("HOME"), '.clustermq.tmpl')){
-  require(clustermq)
   options(
     clustermq.scheduler = scheduler[1],
     clustermq.template = template
@@ -40,7 +39,6 @@ clustermq_setup = function(scheduler = c('sge', 'multicore'),
 #' fx = function(x, y) x * 2 + y
 #' Q(fx, x=1:3, const=list(y=10), n_jobs=10, job_size=1, template=tmpl)
 clustermq_logfile = function(base_dir = '/ebio/abt3_scratch/'){
-  require(uuid)
   d = file.path(base_dir, Sys.info()[['user']], 'clustermq', uuid::UUIDgenerate())
   dir.create(d, recursive = TRUE, showWarnings=FALSE)
   options(clustermq.logfile = d)
