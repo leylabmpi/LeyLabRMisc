@@ -15,3 +15,15 @@ Imports:
     dplyr,
     tidyr,
     ggplot2
+Suggests:
+    data.table,
+    tidytable,
+    plyr,
+    doParallel,
+    vegan,
+    ape,
+    mlr,
+    phyloseq,
+    preseqR,
+    picante,
+    PhyloMeasures
