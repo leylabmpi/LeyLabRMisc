@@ -7,14 +7,14 @@
 itol_boxplot(
   df,
   dataset_label,
-  out_file,
-  out_dir = NULL,
+  out_file = "itol_boxplot.txt",
+  out_dir = getwd(),
   key_color = "#ff0000",
   WIDTH = 200
 )
 }
 \arguments{
-\item{df}{Dataframe, in which the rownames should correspond with the tree labels; the columns must specify: minimum,q1,median,q3,maximum,extreme_value1,extreme_value2}
+\item{df}{A data.frame, tibble, or data.table (see above)}
 
 \item{dataset_label}{What to label the itol dataset}
 
@@ -28,4 +28,17 @@ itol_boxplot(
 }
 \description{
 https://itol.embl.de/help.cgi#boxplot
+}
+\details{
+If a data.frame is provided, the row names must exactly match the tree node labels.
+If a data.table or tibble is provided, the first column values must exactly match the tree node labels.
+Columns in the table must include: minimum,q1,median,q3,maximum,(extreme_value1),(extreme_value2)
+}
+\examples{
+# data.frame
+df = data.frame(minimum = c(1,2,1), q1 = c(2,3,3), median = c(3,5,4), q3 = c(4,6,5), maximum = c(5,8,6), row.names = LETTERS[1:3])
+itol_boxplot(df, 'test_label')
+# data.table
+dt = data.table(taxa = LETTERS[1:3], minimum = c(1,2,1), q1 = c(2,3,3), median = c(3,5,4), q3 = c(4,6,5), maximum = c(5,8,6))
+itol_boxplot(dt, 'test_label')
 }

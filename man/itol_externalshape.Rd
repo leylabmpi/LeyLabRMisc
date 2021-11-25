@@ -7,14 +7,14 @@
 itol_externalshape(
   df,
   dataset_label,
-  out_file,
-  out_dir = NULL,
+  out_file = "itol_externalshape.txt",
+  out_dir = getwd(),
   legend = NULL,
   WIDTH = 200
 )
 }
 \arguments{
-\item{df}{Dataframe, in which the rownames should correspond with the tree labels; other columns should be values corresponding to symbol size}
+\item{df}{A data.frame, tibble, or data.table (see above)}
 
 \item{dataset_label}{What to label the itol dataset}
 
@@ -26,4 +26,16 @@ itol_externalshape(
 }
 \description{
 https://itol.embl.de/help.cgi#shapes
+}
+\details{
+If a data.frame is provided, the row names must exactly match the tree node labels. The 1st column with be used for plotting.
+If a data.table or tibble is provided, the first column values must exactly match the tree node labels. The 2nd column will be used for plotting.
+}
+\examples{
+# data.frame input
+df = data.frame(shape = c(1,1,2), row.names = LETTERS[1:3])
+itol_externalshape(df, 'test_label')
+# data.table
+dt = data.table(taxa = LETTERS[1:3], shape = c(1,1,2))
+itol_externalshape(dt, 'test_label')
 }

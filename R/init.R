@@ -99,7 +99,6 @@ summary_x = function(x, label=NULL, sel_col=NULL, rnd=3){
 #' @export
 #' @importFrom dplyr enquo pull
 #' @importFrom ggplot2 enexpr
-#' @importFrom tidytable distinct. pull.
 unique_n = function(x, label='items', sel_col=NULL, ret=FALSE){
   if(any(c('tidytable', 'data.table') %in% class(x))){
     tryCatch({
@@ -141,7 +140,6 @@ unique_n = function(x, label='items', sel_col=NULL, ret=FALSE){
 #' @export
 #' @importFrom dplyr enquo pull
 #' @importFrom ggplot2 enexpr
-#' @importFrom tidytable distinct. pull.
 overlap = function (x, y, sel_col_x = NULL, sel_col_y = NULL,
                     to_return = c("counts", "diff_x", "diff_y", "diff_fuzzy"),
                     diff = c(NA, "x", "y", "int", "union", "fuzzy")){

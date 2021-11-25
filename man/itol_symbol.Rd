@@ -7,14 +7,14 @@
 itol_symbol(
   df,
   dataset_label,
-  out_file,
-  out_dir = NULL,
+  out_file = "itol_symbol.txt",
+  out_dir = getwd(),
   MAXIMUM_SIZE = 50,
   COLOR = "#ff0000"
 )
 }
 \arguments{
-\item{df}{Dataframe, in which the rownames should correspond with the tree internal node labels, and other columns should be: symbol,size,color,fill,position,(label)}
+\item{df}{A data.frame, tibble, or data.table (see above)}
 
 \item{dataset_label}{What to label the itol dataset}
 
@@ -28,4 +28,17 @@ itol_symbol(
 }
 \description{
 https://itol.embl.de/help.cgi#symbols
+}
+\details{
+If a data.frame is provided, the row names must exactly match the tree node labels.
+If a data.table or tibble is provided, the first column values must exactly match the tree node labels.
+Columns in the table must include: symbol,size,color,fill,position,(label)
+}
+\examples{
+# data.frame
+df = data.frame(symbol = c(3,1), size = c(5,10), color = c('#0000ff', '#00ff00'), fill = c(0,1), position = c(0, 0.5), row.names = LETTERS[1:2])
+itol_symbol(df, 'test_label')
+# data.table
+dt = data.table(taxa = LETTERS[1:2], symbol = c(3,1), size = c(5,10), color = c('#0000ff', '#00ff00'), fill = c(0,1), position = c(0, 0.5))
+itol_symbol(dt, 'test_label')
 }

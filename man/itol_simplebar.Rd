@@ -7,14 +7,14 @@
 itol_simplebar(
   df,
   dataset_label,
-  out_file,
-  out_dir = NULL,
+  out_file = "itol_simplebar.txt",
+  out_dir = getwd(),
   legend = NULL,
   WIDTH = 200
 )
 }
 \arguments{
-\item{df}{Dataframe, the rownames should correspond with the tree labels}
+\item{df}{A data.frame, tibble, or data.table (see above)}
 
 \item{dataset_label}{What to label the itol dataset}
 
@@ -28,4 +28,16 @@ itol_simplebar(
 }
 \description{
 https://itol.embl.de/help.cgi#bar
+}
+\details{
+If a data.frame is provided, the row names must exactly match the tree node labels. The 1st column with be used for plotting.
+If a data.table or tibble is provided, the first column values must exactly match the tree node labels. The 2nd column will be used for plotting.
+}
+\examples{
+# data.frame input
+df = data.frame(values = c(1,1,2), row.names = LETTERS[1:3])
+itol_simplebar(df, 'test_label')
+# data.table
+dt = data.table(taxa = LETTERS[1:3], values = c(1,1,2))
+itol_simplebar(dt, 'test_label')
 }

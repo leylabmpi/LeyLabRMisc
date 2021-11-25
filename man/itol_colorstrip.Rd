@@ -2,12 +2,18 @@
 % Please edit documentation in R/itol.R
 \name{itol_colorstrip}
 \alias{itol_colorstrip}
-\title{create itol colorstrip file}
+\title{Create itol colorstrip file}
 \usage{
-itol_colorstrip(df, dataset_label, out_file, out_dir = NULL, legend = NULL)
+itol_colorstrip(
+  df,
+  dataset_label,
+  out_file = "itol_colorstrip.txt",
+  out_dir = getwd(),
+  legend = NULL
+)
 }
 \arguments{
-\item{df}{Dataframe, in which the rownames should correspond with the tree labels; the plotting parameter should be column 1}
+\item{df}{A data.frame, tibble, or data.table (see above)}
 
 \item{dataset_label}{What to label the itol dataset}
 
@@ -21,6 +27,9 @@ itol_colorstrip(df, dataset_label, out_file, out_dir = NULL, legend = NULL)
 https://itol.embl.de/help.cgi#strip
 }
 \details{
+If a data.frame is provided, the row names must exactly match the tree node labels. The 1st column with be used for plotting.
+If a data.table or tibble is provided, the first column values must exactly match the tree node labels. The 2nd column will be used for plotting.
+
 Custom Legend: requires a data.frame with the number of rows equaling the number of unique
 values in the legend.
 \itemize{
@@ -30,9 +39,15 @@ values in the legend.
 }
 }
 \examples{
+# data.frame input
+df = data.frame(values = c('x','x','y'), row.names = LETTERS[1:3])
+itol_colorstrip(df, 'test_label')
+# data.table
+dt = data.table(taxa = LETTERS[1:3], values = c('x','x','y'))
+itol_colorstrip(dt, 'test_label')
 # creating a custom legend
 legend = data.frame(unique(iris$Species),
 colors = c('#00FF00', '#FFCC33', '#FF0000'),
 shapes = rep(1, length(unique(iris$Species))))
-legend
+print(legend)
 }

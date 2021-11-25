@@ -2,7 +2,11 @@
 #'
 #' https://itol.embl.de/help.cgi#symbols
 #'
-#' @param df Dataframe, in which the rownames should correspond with the tree internal node labels, and other columns should be: symbol,size,color,fill,position,(label)
+#' If a data.frame is provided, the row names must exactly match the tree node labels.
+#' If a data.table or tibble is provided, the first column values must exactly match the tree node labels.
+#' Columns in the table must include: symbol,size,color,fill,position,(label)
+#'
+#' @param df A data.frame, tibble, or data.table (see above)
 #' @param dataset_label What to label the itol dataset
 #' @param out_file Name of the output file
 #' @param out_dir Where to write the output
@@ -10,11 +14,28 @@
 #' @param COLOR Legend color
 #' @return NULL
 #' @export
-itol_symbol = function(df, dataset_label, out_file, out_dir=NULL,
+#' @examples
+#' # data.frame
+#' df = data.frame(symbol = c(3,1), size = c(5,10), color = c('#0000ff', '#00ff00'), fill = c(0,1), position = c(0, 0.5), row.names = LETTERS[1:2])
+#' itol_symbol(df, 'test_label')
+#' # data.table
+#' dt = data.table(taxa = LETTERS[1:2], symbol = c(3,1), size = c(5,10), color = c('#0000ff', '#00ff00'), fill = c(0,1), position = c(0, 0.5))
+#' itol_symbol(dt, 'test_label')
+itol_symbol = function(df, dataset_label, out_file='itol_symbol.txt', out_dir=getwd(),
                        MAXIMUM_SIZE=50, COLOR="#ff0000"){
+  # Output
   if(! is.null(out_dir)){
     out_file = file.path(out_dir, out_file)
   }
+  # Input format
+  if(length(intersect(c('tidytable', 'data.table', 'tbl'), class(df))) > 0){
+    df = as.data.frame(df)
+    rownames(df) = df[,1]
+    df[,1] = NULL
+  }
+  cols = c('symbol', 'size', 'color', 'fill', 'position')
+  if('label' %in% colnames(df)){ cols = c(cols, 'label') }
+  df = df[,cols]
   # Main params
   cat('DATASET_SYMBOL\n', file=out_file)
   cat('SEPARATOR SPACE\n', file=out_file, append=TRUE)
@@ -33,7 +54,11 @@ itol_symbol = function(df, dataset_label, out_file, out_dir=NULL,
 #'
 #' https://itol.embl.de/help.cgi#multibar
 #'
-#' @param df Dataframe, in which the rownames should correspond with the tree labels
+#' If a data.frame is provided, the row names must exactly match the tree node labels.
+#' If a data.table or tibble is provided, the first column values must exactly match the tree node labels.
+#' All other columns are assumed to be values for plotting.
+#'
+#' @param df A data.frame, tibble, or data.table (see above)
 #' @param dataset_label What to label the itol dataset
 #' @param out_file Name of the output file
 #' @param out_dir Where to write the output
@@ -42,11 +67,26 @@ itol_symbol = function(df, dataset_label, out_file, out_dir=NULL,
 #' @param COLOR Legend color
 #' @return NULL
 #' @export
-itol_multibar = function(df, dataset_label, out_file, out_dir=NULL,
+#' @examples
+#' # data.frame
+#' df = data.frame(value1 = c(1,2,3), value2 = c(3,2,1), row.names = LETTERS[1:3])
+#' itol_multibar(df, 'test_label')
+#' # data.table
+#' dt = data.table(taxa = LETTERS[1:3], value1 = c(1,2,3), value2 = c(3,2,1))
+#' itol_multibar(dt, 'test_label')
+itol_multibar = function(df, dataset_label, out_file='itol_multibar.txt', out_dir=getwd(),
                          legend=NULL, WIDTH=200, COLOR="#ff0000"){
+  # Output
   if(! is.null(out_dir)){
     out_file = file.path(out_dir, out_file)
   }
+  # Input format
+  if(length(intersect(c('tidytable', 'data.table', 'tbl'), class(df))) > 0){
+    df = as.data.frame(df)
+    rownames(df) = df[,1]
+    df[,1] = NULL
+  }
+
   # Main params
   cat('DATASET_MULTIBAR\n', file=out_file)
   cat('SEPARATOR SPACE\n', file=out_file, append=TRUE)
@@ -97,7 +137,11 @@ itol_multibar = function(df, dataset_label, out_file, out_dir=NULL,
 #'
 #' https://itol.embl.de/help.cgi#boxplot
 #'
-#' @param df Dataframe, in which the rownames should correspond with the tree labels; the columns must specify: minimum,q1,median,q3,maximum,extreme_value1,extreme_value2
+#' If a data.frame is provided, the row names must exactly match the tree node labels.
+#' If a data.table or tibble is provided, the first column values must exactly match the tree node labels.
+#' Columns in the table must include: minimum,q1,median,q3,maximum,(extreme_value1),(extreme_value2)
+#'
+#' @param df A data.frame, tibble, or data.table (see above)
 #' @param dataset_label What to label the itol dataset
 #' @param out_file Name of the output file
 #' @param out_dir Where to write the output
@@ -105,11 +149,30 @@ itol_multibar = function(df, dataset_label, out_file, out_dir=NULL,
 #' @param WIDTH Maximum width
 #' @return NULL
 #' @export
-itol_boxplot = function(df, dataset_label, out_file, out_dir=NULL,
-                        key_color='#ff0000', WIDTH=200){
+#' @examples
+#' # data.frame
+#' df = data.frame(minimum = c(1,2,1), q1 = c(2,3,3), median = c(3,5,4), q3 = c(4,6,5), maximum = c(5,8,6), row.names = LETTERS[1:3])
+#' itol_boxplot(df, 'test_label')
+#' # data.table
+#' dt = data.table(taxa = LETTERS[1:3], minimum = c(1,2,1), q1 = c(2,3,3), median = c(3,5,4), q3 = c(4,6,5), maximum = c(5,8,6))
+#' itol_boxplot(dt, 'test_label')
+itol_boxplot = function(df, dataset_label, out_file='itol_boxplot.txt',
+                        out_dir=getwd(), key_color='#ff0000', WIDTH=200){
+  # Output
   if(! is.null(out_dir)){
     out_file = file.path(out_dir, out_file)
   }
+  # Input format
+  if(length(intersect(c('tidytable', 'data.table', 'tbl'), class(df))) > 0){
+    df = as.data.frame(df)
+    rownames(df) = df[,1]
+    df[,1] = NULL
+  }
+  cols = c('minimum','q1','median','q3','maximum')
+  if('extreme_value1' %in% colnames(df)){ cols = c(cols, 'extreme_value1') }
+  if('extreme_value2' %in% colnames(df)){ cols = c(cols, 'extreme_value2') }
+  df = df[,cols]
+
   # Main params
   cat('DATASET_BOXPLOT\n', file=out_file)
   cat('SEPARATOR SPACE\n', file=out_file, append=TRUE)
@@ -128,7 +191,11 @@ itol_boxplot = function(df, dataset_label, out_file, out_dir=NULL,
 #'
 #' https://itol.embl.de/help.cgi#heatmap
 #'
-#' @param df Dataframe, in which the rownames should correspond with the tree labels; all columns should be numeric values for the heatmap
+#' If a data.frame is provided, the row names must exactly match the tree node labels.
+#' If a data.table or tibble is provided, the first column values must exactly match the tree node labels.
+#' All other columns are assumed to be values for plotting.
+#'
+#' @param df A data.frame, tibble, or data.table (see above)
 #' @param dataset_label What to label the itol dataset
 #' @param out_file Name of the output file
 #' @param out_dir Where to write the output
@@ -137,10 +204,26 @@ itol_boxplot = function(df, dataset_label, out_file, out_dir=NULL,
 #' @param color_scheme Heatmap color scheme. color = blue-orange-yellow; bw=white-grey-black
 #' @return NULL
 #' @export
-itol_heatmap = function(df, dataset_label, out_file, out_dir=NULL, tree=NULL,
-                        dist_method='bray', color_scheme=c('color', 'bw')){
+#' @examples
+#' # data.frame
+#' df = data.frame(sample1 = c(1,2,3), sample2 = c(3,2,1), row.names = LETTERS[1:3])
+#' itol_heatmap(df, 'test_label')
+#' # data.table
+#' dt = data.table(taxa = LETTERS[1:3], sample1 = c(1,2,3), sample2 = c(3,2,1))
+#' itol_heatmap(dt, 'test_label')
+itol_heatmap = function(df, dataset_label, out_file='itol_heatmap.txt',
+                        out_dir=getwd(), tree=NULL, dist_method='bray',
+                        color_scheme=c('color', 'bw')){
+  # Output
   if(! is.null(out_dir)){
     out_file = file.path(out_dir, out_file)
+  }
+
+  # Input format
+  if(length(intersect(c('tidytable', 'data.table', 'tbl'), class(df))) > 0){
+    df = as.data.frame(df)
+    rownames(df) = df[,1]
+    df[,1] = NULL
   }
 
   # Main params
@@ -186,9 +269,12 @@ itol_heatmap = function(df, dataset_label, out_file, out_dir=NULL, tree=NULL,
   cat('File written:', out_file, '\n')
 }
 
-#' create itol colorstrip file
+#' Create itol colorstrip file
 #'
 #' https://itol.embl.de/help.cgi#strip
+#'
+#' If a data.frame is provided, the row names must exactly match the tree node labels. The 1st column with be used for plotting.
+#' If a data.table or tibble is provided, the first column values must exactly match the tree node labels. The 2nd column will be used for plotting.
 #'
 #' Custom Legend: requires a data.frame with the number of rows equaling the number of unique
 #' values in the legend.
@@ -198,7 +284,7 @@ itol_heatmap = function(df, dataset_label, out_file, out_dir=NULL, tree=NULL,
 #'   \item "labels" => legend labels
 #' }
 #'
-#' @param df Dataframe, in which the rownames should correspond with the tree labels; the plotting parameter should be column 1
+#' @param df A data.frame, tibble, or data.table (see above)
 #' @param dataset_label What to label the itol dataset
 #' @param out_file Name of the output file
 #' @param out_dir Where to write the output
@@ -206,17 +292,33 @@ itol_heatmap = function(df, dataset_label, out_file, out_dir=NULL, tree=NULL,
 #' @return NULL
 #' @export
 #' @examples
+#' # data.frame input
+#' df = data.frame(values = c('x','x','y'), row.names = LETTERS[1:3])
+#' itol_colorstrip(df, 'test_label')
+#' # data.table
+#' dt = data.table(taxa = LETTERS[1:3], values = c('x','x','y'))
+#' itol_colorstrip(dt, 'test_label')
 #' # creating a custom legend
 #' legend = data.frame(unique(iris$Species),
 #' colors = c('#00FF00', '#FFCC33', '#FF0000'),
 #' shapes = rep(1, length(unique(iris$Species))))
-#' legend
-itol_colorstrip = function(df, dataset_label, out_file, out_dir=NULL, legend=NULL){
-  df = data.frame(tip = rownames(df),
-                  feature = as.character(df[,1]))
+#' print(legend)
+itol_colorstrip = function(df, dataset_label, out_file='itol_colorstrip.txt',
+                           out_dir=getwd(), legend=NULL){
+  # Output
   if(! is.null(out_dir)){
     out_file = file.path(out_dir, out_file)
   }
+
+  # Input format
+  if(length(intersect(c('tidytable', 'data.table', 'tbl'), class(df))) > 0){
+    df = as.data.frame(df)
+    rownames(df) = df[,1]
+    df[,1] = NULL
+  }
+  df = data.frame(tip = rownames(df),
+                  feature = as.character(df[,1]))
+
   # main options
   cat('DATASET_COLORSTRIP\n', file=out_file)
   cat('SEPARATOR SPACE\n', file=out_file, append=TRUE)
@@ -265,17 +367,36 @@ itol_colorstrip = function(df, dataset_label, out_file, out_dir=NULL, legend=NUL
 #'
 #' https://itol.embl.de/help.cgi#shapes
 #'
-#' @param df Dataframe, in which the rownames should correspond with the tree labels; other columns should be values corresponding to symbol size
+#' If a data.frame is provided, the row names must exactly match the tree node labels. The 1st column with be used for plotting.
+#' If a data.table or tibble is provided, the first column values must exactly match the tree node labels. The 2nd column will be used for plotting.
+#'
+#' @param df A data.frame, tibble, or data.table (see above)
 #' @param dataset_label What to label the itol dataset
 #' @param out_file Name of the output file
 #' @param out_dir Where to write the output
 #' @param legend Specify particular legend (see \code{\link{itol_colorstrip}})
 #' @return NULL
 #' @export
-itol_externalshape = function(df, dataset_label, out_file, out_dir=NULL, legend=NULL, WIDTH=200){
+#' @examples
+#' # data.frame input
+#' df = data.frame(shape = c(1,1,2), row.names = LETTERS[1:3])
+#' itol_externalshape(df, 'test_label')
+#' # data.table
+#' dt = data.table(taxa = LETTERS[1:3], shape = c(1,1,2))
+#' itol_externalshape(dt, 'test_label')
+itol_externalshape = function(df, dataset_label, out_file='itol_externalshape.txt',
+                              out_dir=getwd(), legend=NULL, WIDTH=200){
+  # Output
   if(! is.null(out_dir)){
     out_file = file.path(out_dir, out_file)
   }
+  # Input format
+  if(length(intersect(c('tidytable', 'data.table', 'tbl'), class(df))) > 0){
+    df = as.data.frame(df)
+    rownames(df) = df[,1]
+    df[,1] = NULL
+  }
+
   # Main params
   cat('DATASET_EXTERNALSHAPE\n', file=out_file)
   cat('SEPARATOR SPACE\n', file=out_file, append=TRUE)
@@ -326,7 +447,10 @@ itol_externalshape = function(df, dataset_label, out_file, out_dir=NULL, legend=
 #'
 #' https://itol.embl.de/help.cgi#bar
 #'
-#' @param df Dataframe, the rownames should correspond with the tree labels
+#' If a data.frame is provided, the row names must exactly match the tree node labels. The 1st column with be used for plotting.
+#' If a data.table or tibble is provided, the first column values must exactly match the tree node labels. The 2nd column will be used for plotting.
+#'
+#' @param df A data.frame, tibble, or data.table (see above)
 #' @param dataset_label What to label the itol dataset
 #' @param out_file Name of the output file
 #' @param out_dir Where to write the output
@@ -334,10 +458,26 @@ itol_externalshape = function(df, dataset_label, out_file, out_dir=NULL, legend=
 #' @param WIDTH Bar width
 #' @return NULL
 #' @export
-itol_simplebar = function(df, dataset_label, out_file, out_dir=NULL, legend=NULL, WIDTH=200){
+#' @examples
+#' # data.frame input
+#' df = data.frame(values = c(1,1,2), row.names = LETTERS[1:3])
+#' itol_simplebar(df, 'test_label')
+#' # data.table
+#' dt = data.table(taxa = LETTERS[1:3], values = c(1,1,2))
+#' itol_simplebar(dt, 'test_label')
+itol_simplebar = function(df, dataset_label, out_file='itol_simplebar.txt',
+                          out_dir=getwd(), legend=NULL, WIDTH=200){
+  # Output
   if(! is.null(out_dir)){
     out_file = file.path(out_dir, out_file)
   }
+  # Input format
+  if(length(intersect(c('tidytable', 'data.table', 'tbl'), class(df))) > 0){
+    df = as.data.frame(df)
+    rownames(df) = df[,1]
+    df[,1] = NULL
+  }
+
   # Main params
   cat('DATASET_SIMPLEBAR\n', file=out_file)
   cat('SEPARATOR SPACE\n', file=out_file, append=TRUE)

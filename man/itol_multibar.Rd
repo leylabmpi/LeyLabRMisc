@@ -7,15 +7,15 @@
 itol_multibar(
   df,
   dataset_label,
-  out_file,
-  out_dir = NULL,
+  out_file = "itol_multibar.txt",
+  out_dir = getwd(),
   legend = NULL,
   WIDTH = 200,
   COLOR = "#ff0000"
 )
 }
 \arguments{
-\item{df}{Dataframe, in which the rownames should correspond with the tree labels}
+\item{df}{A data.frame, tibble, or data.table (see above)}
 
 \item{dataset_label}{What to label the itol dataset}
 
@@ -31,4 +31,17 @@ itol_multibar(
 }
 \description{
 https://itol.embl.de/help.cgi#multibar
+}
+\details{
+If a data.frame is provided, the row names must exactly match the tree node labels.
+If a data.table or tibble is provided, the first column values must exactly match the tree node labels.
+All other columns are assumed to be values for plotting.
+}
+\examples{
+# data.frame
+df = data.frame(value1 = c(1,2,3), value2 = c(3,2,1), row.names = LETTERS[1:3])
+itol_multibar(df, 'test_label')
+# data.table
+dt = data.table(taxa = LETTERS[1:3], value1 = c(1,2,3), value2 = c(3,2,1))
+itol_multibar(dt, 'test_label')
 }
