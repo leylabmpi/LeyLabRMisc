@@ -13,6 +13,7 @@
 #' clustermq_setup('multicore')   # local job
 clustermq_setup = function(scheduler = c('sge', 'multicore'),
                            template = file.path(Sys.getenv("HOME"), '.clustermq.tmpl')){
+  require(clustermq)
   options(
     clustermq.scheduler = scheduler[1],
     clustermq.template = template
