@@ -1,3 +1,20 @@
+#' Wrapper for calling other init functions
+#'
+#' @param nrows passed to df.dims()
+#' @param ncols passed to df.dims()
+#' @param threads passed to data.table::setDTthreads()
+#' @param scheduler passed to clustermq_setup()
+#' @return NULL
+#' @export
+Init = function(nrows = 4, ncols = 20, threads = 4,
+                scheduler = c("multicore", "sge")){
+  require(data.table)
+  data.table::setDTthreads(threads)
+  require(clustermq)
+  clustermq_setup(scheduler=scheduler)
+  df.dims(nrows = 4, ncols = 20)
+}
+
 #' convert to numeric while avoiding factor conversion issues
 #'
 #' @param x an iterable
