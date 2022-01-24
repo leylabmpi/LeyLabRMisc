@@ -94,8 +94,8 @@ summary_x = function(x, label=NULL, sel_col=NULL, rnd=3){
     }
     x = dplyr::pull(x, !!sel_col)
   }
-  x = as.matrix(summary(x))
   sd_x = sd(x)
+  x = as.matrix(summary(x))
   y = matrix(round(sd_x, rnd), dimnames=list('sd', 'V1'))
   z = matrix(round(sd_x / sqrt(length(x)), rnd), dimnames=list('sd_err_of_mean', 'V1'))
   x = t(rbind(rbind(x,y), z))
