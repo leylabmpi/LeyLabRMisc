@@ -33,7 +33,7 @@ bash_job = function (cmd, conda_env = NULL, stdout = TRUE, stderr = TRUE,
     }
   }
   if (!is.null(conda_env)) {
-    CMD = sprintf(". ~/.bashrc; conda activate %s;", conda_env)
+    CMD = sprintf(". ~/.bashrc && conda activate %s &&", conda_env)
   }
   else {
     CMD = ""
