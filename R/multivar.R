@@ -268,8 +268,10 @@ tidy_pcoa = function(df, taxon_col, sample_col, abundance_col,
 #'     calc_PCoA() %>%
 #'     pcoa2df
 beta2mtx = function(dt, measure){
-    dt = dt %>% as.data.table %>%
+    dt = dt %>%
+      as.data.table %>%
       filter.(Measure == measure) %>%
+      select.(Measure, SampleX, SampleY, Value) %>%
       pivot_wider.(names_from = SampleY, values_from = Value) %>%
       select.(-Measure) %>%
       as.data.frame
