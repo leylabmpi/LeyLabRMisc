@@ -139,6 +139,7 @@ qsave_obj = function(x, file, msg = 'Writing file to: ', threads=1){
 #' @param k The number of PCs to keep
 #' @return A data.frame of PCoA points for the top k PCs
 #' @importFrom glue glue
+#' @export
 pcoa2df = function(pcoa, k=3){
   df = pcoa$points %>% as.data.frame
   if(ncol(df) < k){
