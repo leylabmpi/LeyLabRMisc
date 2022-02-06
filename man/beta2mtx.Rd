@@ -4,10 +4,12 @@
 \alias{beta2mtx}
 \title{Convert tidy beta diversity table to a wide distance matrix}
 \usage{
-beta2mtx(dt)
+beta2mtx(dt, measure)
 }
 \arguments{
 \item{dt}{data.table, data.frame, or tibble}
+
+\item{measure}{which beta diversity measure (Measure column) to use?}
 }
 \value{
 a symmetric matrix of distances
@@ -17,4 +19,9 @@ The input should have the columns: Measure, SampleX, SampleY, Value
 }
 \details{
 The output can be used for creating a PCoA. dendrogram, etc
+}
+\examples{
+beta2mtx(beta_div_table, measure='braycurtis') \%>\%
+    calc_PCoA() \%>\%
+    pcoa2df
 }

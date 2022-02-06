@@ -139,7 +139,7 @@ qsave_obj = function(x, file, msg = 'Writing file to: ', threads=1){
 #' @param k The number of PCs to keep
 #' @return A data.frame of PCoA points for the top k PCs
 #' @importFrom glue glue
-.tidy_PCoA = function(pcoa, k=3){
+pcoa2df = function(pcoa, k=3){
   df = pcoa$points %>% as.data.frame
   if(ncol(df) < k){
     k = ncol(df)
@@ -235,7 +235,7 @@ tidy_pcoa = function(df, taxon_col, sample_col, abundance_col,
     qsave_obj(file=dist_mtx_file, msg='Writing distance matrices to: ', threads=threads) %>%
     lapply(calc_PCoA, k=k) %>%
     qsave_obj(file=pcoa_file, msg='Writing PCoA objects to: ', threads=threads) %>%
-    lapply(.tidy_PCoA, k=k) %>%
+    lapply(pcoa2df, k=k) %>%
     data.table::rbindlist(use.names=TRUE, fill=TRUE, idcol='distance') %>%
     as_tibble %>%
     dplyr::mutate(distance_percExp12 = mapply(dist_format, distance, PC1_perc_exp, PC2_perc_exp,
@@ -258,10 +258,15 @@ tidy_pcoa = function(df, taxon_col, sample_col, abundance_col,
 #' The output can be used for creating a PCoA. dendrogram, etc
 #'
 #' @param dt data.table, data.frame, or tibble
+#' @param measure which beta diversity measure (Measure column) to use?
 #' @return a symmetric matrix of distances
 #' @export
 #' @import tidytable
-beta2mtx = function(dt){
+#' @examples
+#' beta2mtx(beta_div_table, measure='braycurtis') %>%
+#'     calc_PCoA() %>%
+#'     pcoa2df
+beta2mtx = function(dt, measure){
     dt = dt %>% as.data.table %>%
       filter.(Measure == measure) %>%
       pivot_wider.(names_from = SampleY, values_from = Value) %>%
