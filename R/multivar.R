@@ -272,7 +272,7 @@ beta2mtx = function(dt, measure){
       as.data.table %>%
       filter.(Measure == measure) %>%
       select.(Measure, SampleX, SampleY, Value) %>%
-      pivot_wider.(names_from = SampleY, values_from = Value) %>%
+      pivot_wider.(names_from = SampleY, values_from = Value, values_fill = 0) %>%
       select.(-Measure) %>%
       as.data.frame
     rownames(dt) = dt$SampleX
