@@ -36,7 +36,7 @@ read_eggnog_mapper = function(infile=NULL, cmd=NULL, sep='\t', nrows=Inf, to_kee
       mutate.(n_feats = stringr::str_length(COG_Functional_Category)) %>%
       pull.(n_feats) %>% max
     new_cols = gsub('^', 'X', 1:(max_feats))
-    F = '/ebio/abt3_projects/databases_no-backup/humann2/utility_mapping/COG_cateogories.tsv'
+    F = '/ebio/abt3_projects2/databases_no-backup/humann2/utility_mapping/COG_cateogories.tsv'
     message(glue::glue('You can get COG metadata at: {F}', F=F))
     COG = X %>%
       select.(query_name, COG_Functional_Category) %>%
@@ -57,7 +57,7 @@ read_eggnog_mapper = function(infile=NULL, cmd=NULL, sep='\t', nrows=Inf, to_kee
       pull.(n_feats) %>% max
     new_cols = gsub('^', 'X', 1:(max_feats+1))
     ## separating
-    F = '/ebio/abt3_projects/databases_no-backup/humann2/utility_mapping/map_kegg-pwy_name_cat.txt.gz'
+    F = '/ebio/abt3_projects2/databases_no-backup/humann2/utility_mapping/map_kegg-pwy_name_cat.txt.gz'
     message(glue::glue('You can get pathway metadata at: {F}', F=F))
     KEGG_Pathway = KEGG_ptw %>%
       separate.(KEGG_Pathway, into=new_cols, sep=',') %>%
