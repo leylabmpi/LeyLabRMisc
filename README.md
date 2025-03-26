@@ -10,6 +10,7 @@ Feel free to contribute! Just clone the repo, make some changes, commit, and cre
 * Nick Youngblut <nyoungb2@gmail.com>
 * Jacobo de la Cuesta <jacobo.delacuesta@tuebingen.mpg.de>
 * Albane Ruaud <albane.ruaud@tuebingen.mpg.de>
+* Alexander Tyakht <alexander.tyakht@tuebingen.mpg.de>
 
 # Install
 
