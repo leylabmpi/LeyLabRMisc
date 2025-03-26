@@ -124,8 +124,8 @@ unique_n = function(x, label='items', sel_col=NULL, ret=FALSE){
     if(is.null(sel_col)){
       stop('sel_col cannot be NULL for data.table objects')
     }
-    x = tidytable::distinct.(x, !!sel_col)
-    x = tidytable::pull.(x, !!sel_col)
+    x = tidytable::distinct(x, !!sel_col)
+    x = tidytable::pull(x, !!sel_col)
   } else if(any(c('data.frame') %in% class(x))){
     tryCatch({
       sel_col = dplyr::enquo(sel_col)
