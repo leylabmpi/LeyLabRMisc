@@ -84,7 +84,7 @@ summary_x = function(x, label=NULL, sel_col=NULL, rnd=3){
     if(is.null(sel_col)){
       stop('sel_col cannot be NULL for data.table objects')
     }
-    x = tidytable::pull.(x, !!sel_col)
+    x = tidytable::pull(x, !!sel_col)
   } else if(any(c('data.frame') %in% class(x))){
     tryCatch({
       sel_col = dplyr::enquo(sel_col)
